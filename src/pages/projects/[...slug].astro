@@ -3,6 +3,7 @@ import type { GetStaticPaths, GetStaticPathsResult } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 
 import Layout from "@/layouts/Layout.astro";
+import { dateSorter } from "@/utils/collectionUtils";
 
 // SSG
 // NB: refactor to utils if reused -- getStaticPathsForCollection(collectionName)
