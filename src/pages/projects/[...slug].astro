@@ -1,12 +1,14 @@
 ---
-import type { GetStaticPaths } from "astro";
+import type { GetStaticPaths, GetStaticPathsResult } from "astro";
 import { getCollection } from "astro:content";
 
+// TODO: refactor if reused
 export async function getStaticPaths() {
-  const projectEntries = await getCollection("projects");
-  for (const entry of projectEntries) {
-    console.log(entry);
+  let paths: GetStaticPathsResult = [];
+
+  for (const entry of await getCollection("projects")) {
+    paths.push({ params: { slug: entry.slug } });
   }
-  return [];
+  return paths;
 }
 ---
