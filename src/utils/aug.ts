@@ -3,6 +3,8 @@ import {
   type AnyEntryMap,
   type CollectionEntry,
   getCollection,
+  getEntry,
+  type DataEntryMap,
 } from "astro:content";
 import path from "path";
 
@@ -70,3 +72,17 @@ export async function getCollectionAug<C extends keyof AnyEntryMap>(
   let entries = await getCollection(collection);
   return Promise.all(entries.map(augmentEntry));
 }
+
+// export async function getEntryAug<
+//   C extends keyof AnyEntryMap,
+//   E extends keyof AnyEntryMap[C],
+// >(collection: C, id: E): Promise<any> {
+//   let entry = await getEntry(collection, id);
+//   return augmentEntry(await getEntry(collection, id));
+// }
+// // ): Promise<
+// //   Omit<CollectionEntry<C>, "slug"> & {
+// //     slug: string;
+// //     date: Date;
+// //   }
+// //   DataEntryMap
