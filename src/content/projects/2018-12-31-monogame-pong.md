@@ -14,14 +14,14 @@ public class Game : Microsoft.Xna.Framework.Game
 {
     public GraphicsDeviceManager graphicsDevice;
     public SpriteBatch spriteBatch;
-    
+
     public Game()
     {
         graphicsDevice = new GraphicsDeviceManager(this)
         {
             PreferMultiSampling = true
         };
-        
+
     }
 
     protected override void Initialize()
@@ -46,8 +46,8 @@ public class Game : Microsoft.Xna.Framework.Game
         {
             Exit();
         }
-        
-        
+
+
         base.Update(gameTime);
     }
 
@@ -66,6 +66,7 @@ public class Game : Microsoft.Xna.Framework.Game
 I'd say C# is in of itself, quite structured (namespaces, statically typed, etc..) however, this segmentation of the game class into the key sections as it is here (basically: keeping Logic, Drawing and Loading code, etc distinctly separate) makes the workflow even more clean and manageable.
 
 ## AI
+
 The AI internally simulates the paths the balls will follow through a bunch of geometry.
 
 Essentially, if you know the velocity vector and the position of the ball, then (as the ball will always travel in a straight line) you have all the information needed to figure out the path that ball will follow. If the path intersects some boundary, the gradient of the line will simply be inverted.
