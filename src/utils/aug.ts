@@ -65,5 +65,15 @@ export async function getCollectionAug<C extends keyof AnyEntryMap>(
 ): Promise<CollectionEntryAug<C>[]> {
   let entries = await getCollection(collection);
   let augmentedEntries = await Promise.all(entries.map(augmentEntry));
-  return augmentedEntries.sort((a, b) => b.date - a.date);
+
+  // sort by date, then by slug
+  return augmentedEntries.sort((a, b) => {
+    if (a.date > b.date) {
+      return -1;
+    } else if (a.date < b.date) {
+      return 1;
+    } else {
+      return a.slug.localeCompare(b.slug);
+    }
+  });
 }
