@@ -1,15 +1,15 @@
 ---
 import type { GetStaticPaths, GetStaticPathsResult } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
-import { parseFilepath, augmentEntry } from "@/utils/aug";
+import { parseFilepath, augmentEntry, getCollectionAug } from "@/utils/aug";
 
 // SSG
 // NB: refactor to utils if reused -- getStaticPathsForCollection(collectionName)
 export async function getStaticPaths() {
   let paths: GetStaticPathsResult = [];
 
-  for (const rawEntry of await getCollection("projects")) {
-    let entry = await augmentEntry(rawEntry);
+  for (const entry of await getCollectionAug("projects")) {
+    // let entry = await augmentEntry(rawEntry);
     console.debug("[SSG] Processing entry:", entry);
 
     // entry.id is relative filepath -- see: https://docs.astro.build/en/reference/api-reference/#id
