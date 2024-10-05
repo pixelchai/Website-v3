@@ -1,0 +1,19 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getCollectionAug } from "@/utils/aug";
+
+const entries = await getCollectionAug("projects");
+---
+
+<Layout>
+  <h1>Projects</h1>
+  <ul>
+    {
+      entries.map((entry) => (
+        <li>
+          <a href={`/projects/${entry.slug}`}>{entry.data.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

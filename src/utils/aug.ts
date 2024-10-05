@@ -64,5 +64,6 @@ export async function getCollectionAug<C extends keyof AnyEntryMap>(
   collection: C,
 ): Promise<CollectionEntryAug<C>[]> {
   let entries = await getCollection(collection);
-  return Promise.all(entries.map(augmentEntry));
+  let augmentedEntries = await Promise.all(entries.map(augmentEntry));
+  return augmentedEntries.sort((a, b) => b.date - a.date);
 }
