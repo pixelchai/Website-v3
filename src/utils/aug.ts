@@ -2,7 +2,6 @@ import {
   type AnyEntryMap,
   type CollectionEntry,
   getCollection,
-  type CollectionKey,
 } from "astro:content";
 import path from "path";
 
@@ -38,6 +37,7 @@ export async function parseFilepath(filepath: string): Promise<{
 
 export type CollectionEntryAug<C extends keyof AnyEntryMap> =
   // the type of 'slug' is relaxed to be any string
+  // also a new property 'date' is added
   Omit<CollectionEntry<C>, "slug"> & {
     slug: string;
     date: Date;
