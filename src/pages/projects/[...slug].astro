@@ -1,7 +1,12 @@
 ---
 import type { GetStaticPaths, GetStaticPathsResult } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
-import { parseFilepath, augmentEntry, getCollectionAug } from "@/utils/aug";
+import {
+  parseFilepath,
+  augmentEntry,
+  getCollectionAug,
+  type CollectionEntryAug,
+} from "@/utils/aug";
 
 // SSG
 // NB: refactor to utils if reused -- getStaticPathsForCollection(collectionName)
@@ -26,7 +31,7 @@ export async function getStaticPaths() {
 
 // template
 type Props = {
-  entry: CollectionEntry<"projects">;
+  entry: CollectionEntryAug<"projects">;
 };
 
 const { entry } = Astro.props;

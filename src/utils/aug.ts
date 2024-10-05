@@ -1,10 +1,8 @@
 import {
-  getEntries,
   type AnyEntryMap,
   type CollectionEntry,
   getCollection,
-  getEntry,
-  type DataEntryMap,
+  type CollectionKey,
 } from "astro:content";
 import path from "path";
 
@@ -38,18 +36,19 @@ export async function parseFilepath(filepath: string): Promise<{
   return { slug, date };
 }
 
+export type CollectionEntryAug<C extends keyof AnyEntryMap> =
+  // the type of 'slug' is relaxed to be any string
+  Omit<CollectionEntry<C>, "slug"> & {
+    slug: string;
+    date: Date;
+  };
+
 /**
  * Augment an entry with slug and date properties, parsed from its filepath.
  */
 export async function augmentEntry<C extends keyof AnyEntryMap>(
   entry: CollectionEntry<C>,
-): Promise<
-  // the type of 'slug' is relaxed to be any string
-  Omit<CollectionEntry<C>, "slug"> & {
-    slug: string;
-    date: Date;
-  }
-> {
+): Promise<CollectionEntryAug<C>> {
   let { slug, date } = await parseFilepath(entry.id);
 
   return {
@@ -63,26 +62,7 @@ export async function augmentEntry<C extends keyof AnyEntryMap>(
 
 export async function getCollectionAug<C extends keyof AnyEntryMap>(
   collection: C,
-): Promise<
-  (Omit<CollectionEntry<C>, "slug"> & {
-    slug: string;
-    date: Date;
-  })[]
-> {
+): Promise<CollectionEntryAug<C>[]> {
   let entries = await getCollection(collection);
   return Promise.all(entries.map(augmentEntry));
 }
-
-// export async function getEntryAug<
-//   C extends keyof AnyEntryMap,
-//   E extends keyof AnyEntryMap[C],
-// >(collection: C, id: E): Promise<any> {
-//   let entry = await getEntry(collection, id);
-//   return augmentEntry(await getEntry(collection, id));
-// }
-// // ): Promise<
-// //   Omit<CollectionEntry<C>, "slug"> & {
-// //     slug: string;
-// //     date: Date;
-// //   }
-// //   DataEntryMap
