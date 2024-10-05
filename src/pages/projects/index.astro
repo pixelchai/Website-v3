@@ -1,8 +1,8 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { getCollectionAug } from "@/utils/aug";
+import { getCollection } from "astro:content";
 
-const entries = await getCollectionAug("projects");
+const entries = await getCollection("projects");
 ---
 
 <Layout>

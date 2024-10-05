@@ -1,12 +1,7 @@
 ---
 import type { GetStaticPaths, GetStaticPathsResult } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
-import {
-  parseFilepath,
-  augmentEntry,
-  getCollectionAug,
-  type CollectionEntryAug,
-} from "@/utils/aug";
+
 import Layout from "@/layouts/Layout.astro";
 
 // SSG
@@ -14,7 +9,7 @@ import Layout from "@/layouts/Layout.astro";
 export async function getStaticPaths() {
   let paths: GetStaticPathsResult = [];
 
-  for (const entry of await getCollectionAug("projects")) {
+  for (const entry of await getCollection("projects")) {
     console.debug("[SSG] Processing entry:", entry.slug);
     paths.push({ params: { slug: entry.slug }, props: { entry } });
   }
@@ -23,7 +18,7 @@ export async function getStaticPaths() {
 
 // template
 type Props = {
-  entry: CollectionEntryAug<"projects">;
+  entry: CollectionEntry<"projects">;
 };
 
 const { entry } = Astro.props;
@@ -32,6 +27,6 @@ const { Content } = await entry.render();
 
 <Layout>
   <h1>{entry.data.title}</h1>
-  <h2>{entry.date.toISOString()}</h2>
+  <h2>{entry.data.date.toISOString()}</h2>
   <Content />
 </Layout>
