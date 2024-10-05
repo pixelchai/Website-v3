@@ -6,6 +6,8 @@ const projectsCollection = defineCollection({
     title: z.string(),
     subtitle: z.string(),
     date: z.date(),
+
+    thumb: z.string().optional(),
   }),
 });
 

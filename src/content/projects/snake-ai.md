@@ -2,6 +2,8 @@
 title: Snake AI
 subtitle: Feed Forward Neural Networks evolving to play Snake
 date: 2019-01-01
+
+thumb: /res/content/snake-ai
 ---
 
 Here, I am using an evolutionary algorithm to try and optimise the weights of feed forward neural networks such that they can play snake.
