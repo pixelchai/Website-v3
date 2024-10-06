@@ -22,6 +22,7 @@ const tailwindTheme = {
     b: "#0000ff",
   },
   extend: {
+    // https://tailwindcss.com/docs/customizing-spacing
     spacing: {
       navbar: constants.navbarHeight,
     },
