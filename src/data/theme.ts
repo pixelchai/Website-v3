@@ -22,7 +22,7 @@ const tailwindTheme = {
     b: "#0000ff",
   },
   extend: {
-    height: {
+    spacing: {
       navbar: constants.navbarHeight,
     },
   },
