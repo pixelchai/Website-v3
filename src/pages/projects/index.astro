@@ -4,6 +4,9 @@ import { dateSorter } from "@/utils/collectionUtils";
 import Image from "astro/components/Image.astro";
 import { getCollection } from "astro:content";
 
+import src from "/res/content/snake-ai/thumb.gif";
+import { Picture } from "astro:assets";
+
 const entries = (await getCollection("projects")).sort(dateSorter);
 ---
 
@@ -15,14 +18,20 @@ const entries = (await getCollection("projects")).sort(dateSorter);
         <li>
           {/* <img src={entry.data.thumb} alt={entry.data.title} /> */}
           <>
-            {entry.data.thumb && (
+            {/* {entry.data.thumb && (
               <Image
                 src={entry.data.thumb}
                 alt={entry.data.title}
                 width={200}
                 height={200}
               />
-            )}
+            )} */}
+            <Picture
+              src={src}
+              alt={entry.data.title}
+              formats={["avif", "webp", "jpg"]}
+              densities={[0.25, 0.5, 1, 1.5, 2, 4]}
+            />
           </>
           <a href={`/projects/${entry.slug}`}>{entry.data.title}</a>
         </li>
