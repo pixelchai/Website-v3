@@ -1,19 +1,15 @@
 ---
-import type { GetStaticPaths, GetStaticPathsResult } from "astro";
+import type { GetStaticPathsResult } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
-import {
-  parseFilepath,
-  augmentEntry,
-  getCollectionAug,
-  type CollectionEntryAug,
-} from "@/utils/aug";
+
+import Layout from "@/layouts/Layout.astro";
 
 // SSG
 // NB: refactor to utils if reused -- getStaticPathsForCollection(collectionName)
 export async function getStaticPaths() {
   let paths: GetStaticPathsResult = [];
 
-  for (const entry of await getCollectionAug("projects")) {
+  for (const entry of await getCollection("projects")) {
     console.debug("[SSG] Processing entry:", entry.slug);
     paths.push({ params: { slug: entry.slug }, props: { entry } });
   }
@@ -22,22 +18,15 @@ export async function getStaticPaths() {
 
 // template
 type Props = {
-  entry: CollectionEntryAug<"projects">;
+  entry: CollectionEntry<"projects">;
 };
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>{entry.data.title}</h1>
-    <h2>{entry.date.toISOString()}</h2>
-    <Content />
-  </body>
-</html>
+<Layout>
+  <h1>{entry.data.title}</h1>
+  <h2>{entry.data.date.toISOString()}</h2>
+  <Content />
+</Layout>
