@@ -1,20 +1,20 @@
 ---
+import Picture from "@/components/Picture.astro";
 import Layout from "@/layouts/Layout.astro";
 import { dateSorter } from "@/utils/collectionUtils";
 import Image from "astro/components/Image.astro";
 import { getCollection } from "astro:content";
 
-import src from "/res/content/snake-ai/thumb.gif";
-import { Picture, getImage } from "astro:assets";
+// import src from "/res/content/snake-ai/thumb.gif";
 
 const entries = (await getCollection("projects")).sort(dateSorter);
 
-const optimised = await getImage({
-  src: src,
-  formats: ["avif", "webp", "jpg"],
-  // densities: [0.25],
-  widths: [200],
-});
+// const optimised = await getImage({
+//   src: src,
+//   formats: ["avif", "webp", "jpg"],
+//   // densities: [0.25],
+//   widths: [200],
+// });
 ---
 
 <Layout>
@@ -33,14 +33,17 @@ const optimised = await getImage({
                 height={200}
               />
             )} */}
-            <Picture
+            {/* <Picture
               src={src}
               alt={entry.data.title}
               formats={["avif"]}
               densities={[0.5, 1, 1.5, 2]}
-            />
+            /> */}
             {/* <img src={optimised.srcSet.values[0].url} alt={entry.data.title} /> */}
             {/* {console.log(optimised)} */}
+            {entry.data.thumb && (
+              <Picture src={entry.data.thumb} alt={entry.data.title} />
+            )}
           </>
           <a href={`/projects/${entry.slug}`}>{entry.data.title}</a>
         </li>
