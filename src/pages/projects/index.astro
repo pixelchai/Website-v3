@@ -23,28 +23,9 @@ const entries = (await getCollection("projects")).sort(dateSorter);
     {
       entries.map((entry) => (
         <li>
-          {/* <img src={entry.data.thumb} alt={entry.data.title} /> */}
-          <>
-            {/* {entry.data.thumb && (
-              <Image
-                src={entry.data.thumb}
-                alt={entry.data.title}
-                width={200}
-                height={200}
-              />
-            )} */}
-            {/* <Picture
-              src={src}
-              alt={entry.data.title}
-              formats={["avif"]}
-              densities={[0.5, 1, 1.5, 2]}
-            /> */}
-            {/* <img src={optimised.srcSet.values[0].url} alt={entry.data.title} /> */}
-            {/* {console.log(optimised)} */}
-            {entry.data.thumb && (
-              <Picture src={entry.data.thumb} alt={entry.data.title} />
-            )}
-          </>
+          {entry.data.thumb && (
+            <Picture src={entry.data.thumb} alt={entry.data.title} />
+          )}
           <a href={`/projects/${entry.slug}`}>{entry.data.title}</a>
         </li>
       ))
