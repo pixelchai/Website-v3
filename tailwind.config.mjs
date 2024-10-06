@@ -11,6 +11,16 @@ export default {
       xl: "1440px",
       "2xl": "1920px",
     },
+    colors: {
+      // light
+      cl: "#FEFBF4",
+      // dark
+      cd: "#36322E",
+
+      r: "#ff0000",
+      g: "#00ff00",
+      b: "#0000ff",
+    },
   },
   plugins: [],
 };
