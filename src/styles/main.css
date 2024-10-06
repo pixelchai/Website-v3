@@ -10,5 +10,5 @@
 
 /* Page height */
 .page-y{
-    @apply h-full py-1 2xs:py-2 xs:py-3 sm:py-4 md:py-7 lg:py-10 xl:py-12 2xl:py-12;
+    @apply h-full py-1 2xs:py-2 xs:py-3 sm:py-4 md:py-5 lg:py-5 xl:py-5;
 }
