@@ -1,5 +1,5 @@
 const constants = {
-  navbarHeight: "1rem",
+  navbarHeight: "10rem",
 };
 
 const tailwindTheme = {
