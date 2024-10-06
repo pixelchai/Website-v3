@@ -5,5 +5,10 @@
 /* Page width */
 /* Single source of truth for styling the page's width, for use in navbars, etc */
 .page-x{
-    @apply mx-auto px-2 2xs:px-3 xs:px-5 sm:px-8;
+    @apply mx-auto px-3 2xs:px-3 xs:px-5 sm:px-9 md:px-14 lg:px-[4.75rem] xl:px-[6rem] 2xl:px-[20rem];
+}
+
+/* Page height */
+.page-y{
+    @apply h-full py-1 2xs:py-2 xs:py-3 sm:py-4 md:py-7 lg:py-10 xl:py-12 2xl:py-12;
 }
