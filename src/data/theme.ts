@@ -1,5 +1,9 @@
-const constants = {
-  navbarHeight: "10rem",
+const extend = {
+  // https://tailwindcss.com/docs/customizing-spacing
+  // 'spacing' values can be used for height padding, margin, etc.
+  spacing: {
+    navbar: "10rem",
+  },
 };
 
 const tailwindTheme = {
@@ -21,17 +25,12 @@ const tailwindTheme = {
     g: "#00ff00",
     b: "#0000ff",
   },
-  extend: {
-    // https://tailwindcss.com/docs/customizing-spacing
-    spacing: {
-      navbar: constants.navbarHeight,
-    },
-  },
+  extend,
 };
 
 const theme = {
   ...tailwindTheme,
-  ...constants,
+  ...extend,
 };
 
 export { theme, tailwindTheme };
