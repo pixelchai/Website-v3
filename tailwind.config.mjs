@@ -13,7 +13,8 @@ export default {
     },
     colors: {
       light: "#FEFBF4",
-      dark: "#36322E",
+      dark: "#624112",
+      xdark: "#36322E",
 
       r: "#ff0000",
       g: "#00ff00",
