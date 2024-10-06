@@ -5,7 +5,7 @@
 /* Page width */
 /* Single source of truth for styling the page's width, for use in navbars, etc */
 .page-x{
-    @apply mx-auto px-3 2xs:px-3 xs:px-5 sm:px-9 md:px-14 lg:px-[4.75rem] xl:px-[6rem] 2xl:px-[20rem];
+    @apply mx-auto px-3 2xs:px-3 xs:px-5 sm:px-9 md:px-14 lg:px-[8rem] xl:px-[14rem] 2xl:px-[20rem];
 }
 
 /* Page height */

@@ -9,7 +9,16 @@ import "@/styles/main.css";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Title</title>
   </head>
-  <body class="page-x page-y">
-    <slot />
+  <body>
+    <!-- navbar -->
+    <div class="w-full bg-neutral-900 h-[4rem] col-neutral-0 text-white">
+      <div class="page-x flex">
+        <span>Heloo</span>
+      </div>
+    </div>
+    <div class="page-x page-y">
+      <!-- content -->
+      <slot />
+    </div>
   </body>
 </html>
