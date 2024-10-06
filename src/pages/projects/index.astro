@@ -23,7 +23,7 @@ const entries = (await getCollection("projects")).sort(dateSorter);
     {
       entries.map((entry) => (
         <li>
-          <div class="bg-slate-100 flex flex-col">
+          <div class="bg-red-200 flex flex-col">
             {entry.data.thumb && (
               <Picture
                 src={entry.data.thumb}
