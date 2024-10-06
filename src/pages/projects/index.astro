@@ -24,7 +24,11 @@ const entries = (await getCollection("projects")).sort(dateSorter);
       entries.map((entry) => (
         <li>
           {entry.data.thumb && (
-            <Picture src={entry.data.thumb} alt={entry.data.title} />
+            <Picture
+              src={entry.data.thumb}
+              alt={entry.data.title}
+              width={100}
+            />
           )}
           <a href={`/projects/${entry.slug}`}>{entry.data.title}</a>
         </li>

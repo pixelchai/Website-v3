@@ -5,21 +5,24 @@ import { Picture as AstroPicture } from "astro:assets";
 interface Props {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
 }
 
-const props = Astro.props;
+const { src, alt, ...rest } = Astro.props;
 const imageLoaders = import.meta.glob<{ default: ImageMetadata }>("/res/**/*");
-if (!imageLoaders[props.src]) {
-  throw new Error(`${props.src} not found in /res folder!`);
+if (!imageLoaders[src]) {
+  throw new Error(`${src} not found in /res folder!`);
 }
-const importedImage = imageLoaders[props.src]();
+const importedImage = imageLoaders[src]();
 ---
 
 <>
   <AstroPicture
     src={importedImage}
-    alt={props.alt}
+    alt={alt}
     formats={["avif"]}
     densities={[0.5, 1, 1.5, 2]}
+    {...rest}
   />
 </>
