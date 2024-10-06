@@ -13,7 +13,17 @@ const entries = (await getCollection("projects")).sort(dateSorter);
     {
       entries.map((entry) => (
         <li>
-          <img src={entry.data.thumb} alt={entry.data.title} />
+          {/* <img src={entry.data.thumb} alt={entry.data.title} /> */}
+          <>
+            {entry.data.thumb && (
+              <Image
+                src={entry.data.thumb}
+                alt={entry.data.title}
+                width={200}
+                height={200}
+              />
+            )}
+          </>
           <a href={`/projects/${entry.slug}`}>{entry.data.title}</a>
         </li>
       ))
