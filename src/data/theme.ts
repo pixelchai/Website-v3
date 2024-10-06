@@ -2,7 +2,7 @@ const extend = {
   // https://tailwindcss.com/docs/customizing-spacing
   // 'spacing' values can be used for height padding, margin, etc.
   spacing: {
-    navbar: "10rem",
+    navbar: "4rem",
   },
 };
 
