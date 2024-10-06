@@ -1,3 +1,7 @@
+const constants = {
+  navbarHeight: "1rem",
+};
+
 const tailwindTheme = {
   screens: {
     "2xs": "375px",
@@ -17,11 +21,16 @@ const tailwindTheme = {
     g: "#00ff00",
     b: "#0000ff",
   },
+  extend: {
+    height: {
+      navbar: constants.navbarHeight,
+    },
+  },
 };
 
 const theme = {
   ...tailwindTheme,
-  navbarHeight: "1rem",
+  ...constants,
 };
 
 export { theme, tailwindTheme };
