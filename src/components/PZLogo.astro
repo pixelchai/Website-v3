@@ -1,5 +1,5 @@
 ---
-
+const { ...rest } = Astro.props;
 ---
 
 <svg
@@ -8,9 +8,10 @@
   version="1.0"
   x="0px"
   y="0px"
+  width="100"
   viewBox="0 0 37.5024 15.755"
-  style="background-color: #fafafa;enable-background:new 0 0 37.5024 15.755;"
   xml:space="preserve"
+  {...rest}
 >
   <g id="layer_shade">
     <path
