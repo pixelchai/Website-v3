@@ -31,10 +31,10 @@
         @apply h-full 
                py-1 
                2xs:py-2 
-               xs:py-3 
+               /* xs:py-3 
                sm:py-4 
                md:py-5 
                lg:py-5 
-               xl:py-5;
+               xl:py-5; */
     }
 }
