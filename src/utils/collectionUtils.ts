@@ -25,15 +25,3 @@ export function dateSorter<C extends keyof AnyEntryMap>(
     return a.slug.localeCompare(b.slug);
   }
 }
-
-export async function getStaticPathsForCollection(
-  collectionName: keyof ContentEntryMap,
-) {
-  let paths: GetStaticPathsResult = [];
-
-  for (const entry of await getCollection(collectionName)) {
-    console.debug(`[SSG][${collectionName}] Processing entry: ${entry.slug}`);
-    paths.push({ params: { slug: entry.slug }, props: { entry } });
-  }
-  return paths;
-}
