@@ -38,3 +38,8 @@
                xl:py-5; */
     }
 }
+
+/* Fix code font size */
+.astro-code{
+    @apply text-sm;
+}
