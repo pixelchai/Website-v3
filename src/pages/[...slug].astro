@@ -1,45 +1,33 @@
 ---
-import { type CollectionEntry } from "astro:content";
-import { getStaticPathsForCollection } from "@/utils/collectionUtils";
+import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import type { ContentEntryMap } from "astro:content";
-import assert from "assert";
 
-export const collections: (keyof ContentEntryMap)[] = ["articles", "projects"];
-
+// SSG
 export async function getStaticPaths() {
+  // collections for which to generate paths
+  // generate all /<collectionName>/<entrySlug> paths
+  const collections: (keyof ContentEntryMap)[] = ["articles", "projects"];
+
   let paths = [];
   for (const collectionName of collections) {
-    const collectionPaths = await getStaticPathsForCollection(collectionName);
-    for (const path of collectionPaths) {
+    for (const entry of await getCollection(collectionName)) {
+      console.debug(`[SSG][${collectionName}] Processing entry: ${entry.slug}`);
       paths.push({
-        ...path,
-        params: {
-          ...path.params,
-          slug: `${collectionName}/${path.params.slug}`,
-        },
-        props: {
-          ...path.props,
-          collectionName,
-        },
+        params: { slug: `${collectionName}/${entry.slug}` },
+        props: { entry },
       });
     }
   }
-  console.log(paths);
   return paths;
 }
 
-console.log(Astro.props);
-
+// templating
 const collectionName = Astro.props.collectionName as keyof ContentEntryMap;
-assert(
-  collections.includes(collectionName),
-  `Invalid collection: ${collectionName}`
-);
 
 type Props = {
   collectionName: keyof ContentEntryMap;
-  entry: ContentEntryMap[typeof collectionName];
+  entry: CollectionEntry<typeof collectionName>;
 };
 
 const { entry } = Astro.props;
