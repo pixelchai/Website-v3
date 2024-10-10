@@ -8,13 +8,17 @@ const commonSchema = {
   thumb: z.string().optional(),
 };
 
-const projectsCollection = defineCollection({
-  type: "content",
-  schema: z.object({
-    ...commonSchema,
-  }),
-});
-
 export const collections = {
-  projects: projectsCollection,
+  projects: defineCollection({
+    type: "content",
+    schema: z.object({
+      ...commonSchema,
+    }),
+  }),
+  articles: defineCollection({
+    type: "content",
+    schema: z.object({
+      ...commonSchema,
+    }),
+  }),
 };

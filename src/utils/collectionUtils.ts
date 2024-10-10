@@ -32,7 +32,7 @@ export async function getStaticPathsForCollection(
   let paths: GetStaticPathsResult = [];
 
   for (const entry of await getCollection(collectionName)) {
-    console.debug("[SSG] Processing entry:", entry.slug);
+    console.debug(`[SSG][${collectionName}] Processing entry: ${entry.slug}`);
     paths.push({ params: { slug: entry.slug }, props: { entry } });
   }
   return paths;

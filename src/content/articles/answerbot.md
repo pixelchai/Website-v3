@@ -1,6 +1,7 @@
 ---
 title: AnswerBot
 subtitle: A search engine for parsing and answering plain English questions using NLP techniques.
+date: 2018-09-20
 
 thumb: /res/content/answerbot/demo3.png
 ---
