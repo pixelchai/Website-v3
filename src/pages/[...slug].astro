@@ -1,0 +1,41 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import type { ContentEntryMap } from "astro:content";
+
+// SSG
+export async function getStaticPaths() {
+  // collections for which to generate paths
+  // generate all /<collectionName>/<entrySlug> paths
+  const collections: (keyof ContentEntryMap)[] = ["articles", "projects"];
+
+  let paths = [];
+  for (const collectionName of collections) {
+    for (const entry of await getCollection(collectionName)) {
+      console.debug(`[SSG][${collectionName}] Processing entry: ${entry.slug}`);
+      paths.push({
+        params: { slug: `${collectionName}/${entry.slug}` },
+        props: { entry },
+      });
+    }
+  }
+  return paths;
+}
+
+// templating
+const collectionName = Astro.props.collectionName as keyof ContentEntryMap;
+
+type Props = {
+  collectionName: keyof ContentEntryMap;
+  entry: CollectionEntry<typeof collectionName>;
+};
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout>
+  <h1>{entry.data.title}</h1>
+  <h2>{entry.data.date.toISOString()}</h2>
+  <Content />
+</Layout>

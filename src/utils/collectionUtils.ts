@@ -1,4 +1,10 @@
-import type { AnyEntryMap, CollectionEntry } from "astro:content";
+import type { GetStaticPathsResult } from "astro";
+import {
+  getCollection,
+  type AnyEntryMap,
+  type CollectionEntry,
+  type ContentEntryMap,
+} from "astro:content";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
