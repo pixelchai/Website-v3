@@ -1,22 +1,13 @@
 ---
-import type { GetStaticPathsResult } from "astro";
-import { getCollection, type CollectionEntry } from "astro:content";
-
+import { type CollectionEntry } from "astro:content";
+import { getStaticPathsForCollection } from "@/utils/collectionUtils";
 import Layout from "@/layouts/Layout.astro";
 
 // SSG
-// NB: refactor to utils if reused -- getStaticPathsForCollection(collectionName)
 export async function getStaticPaths() {
-  let paths: GetStaticPathsResult = [];
-
-  for (const entry of await getCollection("projects")) {
-    console.debug("[SSG] Processing entry:", entry.slug);
-    paths.push({ params: { slug: entry.slug }, props: { entry } });
-  }
-  return paths;
+  return await getStaticPathsForCollection("projects");
 }
 
-// template
 type Props = {
   entry: CollectionEntry<"projects">;
 };
