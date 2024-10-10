@@ -1,0 +1,38 @@
+---
+import Picture from "@/components/Picture.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { dateSorter } from "@/utils/collectionUtils";
+import type { ContentEntryMap } from "astro:content";
+
+// type for astro props
+type Props = {
+  collectionName: keyof ContentEntryMap;
+  collectionTitle: string;
+};
+
+const { collectionName, collectionTitle } = Astro.props;
+const entries = (await getCollection(collectionName)).sort(dateSorter);
+---
+
+<Layout>
+  <h1>{collectionTitle}</h1>
+  <ul>
+    {
+      entries.map((entry) => (
+        <li>
+          <div class="bg-r flex flex-col">
+            {entry.data.thumb && (
+              <Picture
+                src={entry.data.thumb}
+                alt={entry.data.title}
+                width={600}
+              />
+            )}
+            <a href={`/${collectionName}/${entry.slug}`}>{entry.data.title}</a>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
