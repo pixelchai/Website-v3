@@ -18,6 +18,7 @@ const tailwindTheme = {
   },
   colors: {
     light: "#FEFBF4",
+    mid: "#EADDC5", // mid-tone
     dark: "#624112",
     xdark: "#36322E",
 
