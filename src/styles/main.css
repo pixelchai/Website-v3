@@ -11,17 +11,24 @@
     }
 
     /* content */
-
-    /* content text */
     p {
         @apply my-3;
     }
+
+    a {
+        @apply underline;
+    }
+
+    hr {
+        @apply my-4 border-b border-dark-l;
+    }
+
     /* headings */
     h1, h2, h3, h4, h5, h6 {
         @apply font-bold mt-1;
     }
     h1, h2 {
-        @apply border-b pb-1 pt-2 border-dark-l border-dotted;
+        @apply border-b pb-1 pt-2 mb-2 border-dark-l border-dotted;
     }
     h1 {
         @apply text-3xl;
@@ -34,9 +41,6 @@
     }
     h4 {
         @apply text-lg;
-    }
-    a {
-    @apply underline;
     }
 }
 
