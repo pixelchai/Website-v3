@@ -20,7 +20,7 @@ const tailwindTheme = {
     light: "#FEFBF4",
     "light-d": "#EADDC5", // mid-tone
 
-    "dark-l": "#B6A07C", // dark lighter
+    "dark-l": "#9E8B6D", // dark lighter
     dark: "#624112",
     "dark-d": "#36322E",
 

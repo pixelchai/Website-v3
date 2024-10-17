@@ -35,24 +35,17 @@ const { Content } = await entry.render();
 ---
 
 <Layout>
-  <div class="flex flex-row">
-    <h1 class="grow text-4xl border-0 mb-1 pb-0">
-      {entry.data.title}
-    </h1>
-    <span
-      class="flex-none self-end border-0 text-base text font-bold text-dark-l"
-    >
-      {
-        entry.data.date.toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        })
-      }
-    </span>
-  </div>
-  <div class="border-0 text-base text font-normal text-dark-l italic">
-    {entry.data.subtitle}
+  <h1 class="grow text-4xl border-0 mb-1 pb-0">
+    {entry.data.title}
+  </h1>
+  <div class="border-0 text-base text font-normal text-dark-l">
+    {
+      entry.data.date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    }
   </div>
   <Content />
 </Layout>
