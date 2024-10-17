@@ -1,7 +1,9 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-
 import tailwind from "@astrojs/tailwind";
+import autolinkHeadings from "rehype-autolink-headings";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,4 +23,19 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
+  markdown: {
+    rehypePlugins: [
+      rehypeHeadingIds,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "wrap",
+          properties: {
+            ariaHidden: true,
+            tabIndex: -1,
+          },
+        },
+      ],
+    ],
+  },
 });
