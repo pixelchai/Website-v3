@@ -16,7 +16,7 @@
     }
 
     a {
-        @apply underline;
+        @apply border-b border-dark-l border-dotted hover:border-solid text-link;
     }
 
     hr {

@@ -24,6 +24,9 @@ const tailwindTheme = {
     dark: "#624112",
     "dark-d": "#36322E",
 
+    link: "#9C6500",
+    // link: "#36322E",
+
     r: "#ff0000",
     g: "#00ff00",
     b: "#0000ff",
