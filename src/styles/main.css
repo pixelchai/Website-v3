@@ -7,7 +7,7 @@
     /* (specify what 1rem should refer to) */
     :root {
         @apply text-[16px] 
-               sm:text-[18px]
+               sm:text-[17px]
     }
 
     /* content */
@@ -16,7 +16,8 @@
     }
 
     a {
-        @apply border-b border-dark-l border-dotted hover:border-solid text-link;
+        @apply text-link border-b border-link border-dotted 
+               hover:border-solid hover:text-link-d hover:border-link-d;
     }
 
     hr {

@@ -35,7 +35,7 @@ const { Content } = await entry.render();
 ---
 
 <Layout>
-  <h1>{entry.data.title}</h1>
+  <h1 class="text-4xl">{entry.data.title}</h1>
   <h2>{entry.data.date.toISOString()}</h2>
   <Content />
 </Layout>
