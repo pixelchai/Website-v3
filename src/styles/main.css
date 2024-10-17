@@ -17,7 +17,7 @@
 
     a {
         @apply text-link border-b border-link border-dotted 
-               hover:border-solid hover:text-link-d hover:border-link-d;
+               hover:border-solid hover:text-link-hov hover:border-link-hov;
     }
 
     hr {
