@@ -62,6 +62,23 @@
     :not(pre) > code {
         @apply bg-light-d border border-light-ddd rounded-sm px-1 text-sm;
     }
+
+    /* table */
+    table {
+        @apply border border-light-ddd;
+
+        thead, th {
+            @apply bg-light-dd text-left;
+        }
+
+        th, td {
+            @apply border border-light-ddd px-2 py-1;
+        }
+
+        tbody tr:nth-child(odd) {
+            @apply bg-light-d/50;
+        }
+    }
 }
 
 
