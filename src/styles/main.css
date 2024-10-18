@@ -52,7 +52,19 @@
     h4 {
         @apply text-lg;
     }
+
+    /* code */
+    pre {
+        @apply text-sm p-3 rounded max-h-[64vh];
+    }
+
+    /* inline code */
+    :not(pre) > code {
+        @apply bg-light-d border border-light-ddd rounded-sm px-1 text-sm;
+    }
 }
+
+
 
 @layer components {
     /* Page width */
@@ -80,9 +92,4 @@
                lg:py-5 
                xl:py-5; */
     }
-}
-
-/* Fix code font size */
-.astro-code{
-    @apply text-sm;
 }
