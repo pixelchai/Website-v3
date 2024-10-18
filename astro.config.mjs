@@ -18,7 +18,7 @@ export default defineConfig({
   integrations: [],
   vite: {
     css: {
-      devSourcemap: true,
+      devSourcemap: false,
       transformer: "postcss",
     },
   },
