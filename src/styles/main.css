@@ -68,7 +68,7 @@
         }
     }
     h1, h2 {
-        @apply border-b pb-1 pt-2 mb-2 border-dark-l border-dotted;
+        @apply border-b pb-1 pt-2 border-dark-l border-dotted;
     }
     h1 {
         @apply text-3xl;
@@ -130,6 +130,7 @@
         @apply my-3;
     }
 
+    /* extra margin for hr */
     hr {
         @apply my-5;
     }
