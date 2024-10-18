@@ -9,6 +9,8 @@ export default defineConfig({
   // GitHub Pages config -- see: https://docs.astro.build/en/guides/deploy/github/
   site: "https://pixelchai.com",
 
+  compressHTML: true,
+
   // prefetch
   prefetch: {
     prefetchAll: true,
