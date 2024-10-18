@@ -64,7 +64,7 @@
 
         /* heading link (anchor link) */
         a {
-            @apply border-0 text-[inherit];
+            @apply border-0 text-[inherit] hover:text-dark-l;
         }
     }
     h1, h2 {
