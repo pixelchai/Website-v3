@@ -39,9 +39,14 @@ const tailwindTheme = {
   extend,
 };
 
+const site = {
+  url: "https://pixelchai.com",
+  base: "/Website-v3",
+};
+
 const theme = {
   ...tailwindTheme,
   ...extend,
 };
 
-export { theme, tailwindTheme };
+export { theme, tailwindTheme, site };
