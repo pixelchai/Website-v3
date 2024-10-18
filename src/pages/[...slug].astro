@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import type { ContentEntryMap } from "astro:content";
+import { site } from "@/data/consts";
 
 // SSG
 export async function getStaticPaths() {
@@ -49,7 +50,9 @@ const { Content } = await entry.render();
       }
     </span>
     <span class="mx-1">&mdash;</span>
-    <a class="contentf-a" href={`/${collectionName}/`}>{collectionName}</a>
+    <a class="contentf-a" href={`${site.base}/${collectionName}/`}
+      >{collectionName}</a
+    >
   </div>
   <div class="contentf">
     <Content />

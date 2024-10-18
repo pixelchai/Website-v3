@@ -29,13 +29,15 @@ import PZLogo from "./PZLogo.astro";
     <div class="flex-0">
       <ul class="flex flex-row gap-2 justify-end items-center list-none">
         <li>
-          <NavbarLink noDescendants={true} href="/">Home</NavbarLink>
+          <NavbarLink noDescendants={true} href={`${site.base}/`}
+            >Home</NavbarLink
+          >
         </li>
         <li>
-          <NavbarLink href="/projects/">Projects</NavbarLink>
+          <NavbarLink href={`${site.base}/projects/`}>Projects</NavbarLink>
         </li>
         <li>
-          <NavbarLink href="/articles/">Articles</NavbarLink>
+          <NavbarLink href={`${site.base}/articles/`}>Articles</NavbarLink>
         </li>
       </ul>
     </div>
