@@ -15,7 +15,7 @@ export default defineConfig({
   // prefetch
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "hover",
+    defaultStrategy: "viewport",
   },
 
   integrations: [],
