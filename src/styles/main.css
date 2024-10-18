@@ -67,9 +67,7 @@
             @apply border-0 text-[inherit] hover:text-dark-l;
         }
     }
-    h1, h2 {
-        @apply border-b pb-1 pt-2 border-dark-l border-dotted;
-    }
+    
     h1 {
         @apply text-3xl;
     }
@@ -133,6 +131,11 @@
     /* extra margin for hr */
     hr {
         @apply my-5;
+    }
+
+    /* underline for h1, h2 */
+    h1, h2 {
+        @apply border-b pb-1 pt-2 border-dark-l border-dotted;
     }
 
     .astro-code {
