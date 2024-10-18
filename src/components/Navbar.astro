@@ -7,16 +7,20 @@ import PZLogo from "./PZLogo.astro";
   class="bg-light text-dark
     text-lg
     w-full h-navbar
-    flex flex-row
-    justify-start items-center
-    fixed z-50"
+    fixed z-50 shadow"
 >
-  <div
-    class="page-x
-      flex-1 flex flex-row gap-2
-      justify-start items-center"
-  >
-    <PZLogo class="h-7" />
-    <span class="text-2xl font-bold"> pixelchai </span>
+  <div class="page-x w-full h-full
+        flex flex-row items-center gap-2">
+    <!-- Logo and text -->
+    <div
+      class="grow
+          flex flex-row gap-2
+          justify-start items-center"
+    >
+      <PZLogo class="h-7" />
+      <span class="text-2xl font-bold"> pixelchai </span>
+    </div>
+    <!-- Links -->
+    <div class="flex-0">abcdef</div>
   </div>
 </nav>
