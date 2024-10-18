@@ -21,8 +21,9 @@ const tailwindTheme = {
     "light-d": "#f9f4e6",
     "light-dd": "#F6EDDA",
     "light-ddd": "#F1E3C6",
-    "light-dddd": "#d6cec2",
 
+    "dark-lll": "#d6cec2",
+    "dark-ll": "#baac97",
     "dark-l": "#9E8B6D", // dark lighter
     dark: "#624112",
     "dark-d": "#36322E",

@@ -60,19 +60,19 @@
 
     /* inline code */
     :not(pre) > code {
-        @apply bg-light-dd border border-light-dddd rounded-sm px-1 text-sm;
+        @apply bg-light-dd border border-dark-lll rounded-sm px-1 text-sm;
     }
 
     /* table */
     table {
-        @apply border border-light-dddd;
+        @apply border border-dark-lll;
 
         thead, th {
             @apply bg-light-ddd text-left;
         }
 
         th, td {
-            @apply border border-light-dddd px-2 py-1;
+            @apply border border-dark-lll px-2 py-1;
         }
 
         tbody tr:nth-child(odd) {
