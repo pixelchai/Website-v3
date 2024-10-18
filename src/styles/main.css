@@ -121,7 +121,7 @@
 @layer utilities {
     /* default a style */
     .default-a {
-        @apply border-0 text-dark hover:text-dark-l;
+        @apply border-0 text-dark hover:text-dark-ll;
     }
 
     /* contentf a style */
