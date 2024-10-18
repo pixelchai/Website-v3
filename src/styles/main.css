@@ -60,23 +60,23 @@
 
     /* inline code */
     :not(pre) > code {
-        @apply bg-light-d border border-light-ddd rounded-sm px-1 text-sm;
+        @apply bg-light-dd border border-light-dddd rounded-sm px-1 text-sm;
     }
 
     /* table */
     table {
-        @apply border border-light-ddd;
+        @apply border border-light-dddd;
 
         thead, th {
-            @apply bg-light-dd text-left;
+            @apply bg-light-ddd text-left;
         }
 
         th, td {
-            @apply border border-light-ddd px-2 py-1;
+            @apply border border-light-dddd px-2 py-1;
         }
 
         tbody tr:nth-child(odd) {
-            @apply bg-light-d/50;
+            @apply bg-light-d;
         }
     }
 }

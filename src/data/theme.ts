@@ -18,9 +18,10 @@ const tailwindTheme = {
   },
   colors: {
     light: "#FEFBF4",
-    "light-d": "#F6EDDA",
-    "light-dd": "#F1E3C6",
-    "light-ddd": "#d6cec2",
+    "light-d": "#f9f4e6",
+    "light-dd": "#F6EDDA",
+    "light-ddd": "#F1E3C6",
+    "light-dddd": "#d6cec2",
 
     "dark-l": "#9E8B6D", // dark lighter
     dark: "#624112",
