@@ -27,6 +27,15 @@
     /* headings */
     h1, h2, h3, h4, h5, h6 {
         @apply font-bold mt-1;
+
+        /* when clicking on anchor link, offset the scroll 
+            so that the navbar doesn't block everything */
+        @apply scroll-mt-navbar;
+
+        /* heading link (anchor link) */
+        a {
+            @apply border-0 text-[inherit];
+        }
     }
     h1, h2 {
         @apply border-b pb-1 pt-2 mb-2 border-dark-l border-dotted;
