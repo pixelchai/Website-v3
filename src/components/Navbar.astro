@@ -1,5 +1,8 @@
 ---
+import NavbarLink from "./NavbarLink.astro";
 import PZLogo from "./PZLogo.astro";
+
+const pathname = Astro.url.pathname;
 ---
 
 <nav
@@ -27,13 +30,13 @@ import PZLogo from "./PZLogo.astro";
     <div class="flex-0">
       <ul class="flex flex-row gap-2 justify-end items-center list-none">
         <li>
-          <a class="font" href="/">Home</a>
+          <NavbarLink selected={true} href="/">Home</NavbarLink>
         </li>
         <li>
-          <a class="font" href="/projects/">Projects</a>
+          <NavbarLink href="/projects/">Projects</NavbarLink>
         </li>
         <li>
-          <a class="font" href="/articles/">Articles</a>
+          <NavbarLink href="/articles/">Articles</NavbarLink>
         </li>
       </ul>
     </div>

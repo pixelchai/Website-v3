@@ -1,0 +1,14 @@
+---
+import type { JSX } from "astro/jsx-runtime";
+
+type Props = {
+  selected?: boolean;
+  href: string;
+} & JSX.IntrinsicElements["a"];
+
+const { selected, href, ...rest } = Astro.props;
+---
+
+<a href={href} class={"" + (selected ? "font-bold" : "")} {...rest}>
+  <slot />
+</a>
