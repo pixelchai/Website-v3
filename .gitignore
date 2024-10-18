@@ -22,10 +22,3 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
-
-# vscode setting folder
-.vscode/
-!.vscode/extensions.json
-!.vscode/launch.json
-!.vscode/settings.json
-!.vscode/tailwind_directives.json
