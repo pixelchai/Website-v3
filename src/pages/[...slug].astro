@@ -38,7 +38,7 @@ const { Content } = await entry.render();
   <h1 class="grow text-4xl border-0 mb-1 pb-0 font-bold">
     {entry.data.title}
   </h1>
-  <div class="border-0 text-base text font-normal text-dark-l contentf">
+  <div class="border-0 text-base text font-normal text-dark-l">
     <span>
       {
         entry.data.date.toLocaleDateString("en-GB", {
@@ -49,7 +49,7 @@ const { Content } = await entry.render();
       }
     </span>
     <span class="mx-1">&mdash;</span>
-    <a href={`/${collectionName}/`}>{collectionName}</a>
+    <a class="contentf-a" href={`/${collectionName}/`}>{collectionName}</a>
   </div>
   <div class="contentf">
     <Content />
