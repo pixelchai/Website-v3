@@ -41,6 +41,11 @@
 
 /* --- <content> --- */
 @layer base {
+    /* default link style */
+    a {
+        @apply default-a;
+    }
+
     p {
         @apply my-2;
     }
@@ -49,6 +54,16 @@
         @apply border-b border-dark-l;
     }
     
+    /* h1 link behaviour */
+    h1, h2, h3, h4, h5, h6 {
+        /* bold by default */
+        @apply font-bold;
+
+        /* when clicking on anchor link, offset the scroll 
+        so that the navbar doesn't block everything */
+        @apply scroll-mt-navbar;
+    }
+
     h1 {
         @apply text-3xl;
     }
@@ -103,6 +118,19 @@
     }
 }
 
+@layer utilities {
+    /* default a style */
+    .default-a {
+        @apply border-0 text-dark hover:text-dark-l;
+    }
+
+    /* contentf a style */
+    .contentf-a {
+        @apply text-link border-b border-link border-dotted 
+        hover:border-solid hover:text-link-hov hover:border-link-hov;
+    }
+}
+
 /* markdown content style formatting (content format) */
 .contentf {
     /* margin for everything */
@@ -110,20 +138,25 @@
         @apply my-3;
     }
 
+    /* link style */
+    a {
+        @apply contentf-a;
+    }
+
     /* extra margin for hr */
     hr {
         @apply my-5;
     }
 
-    /* links */
-    a {
-        @apply text-link border-b border-link border-dotted 
-               hover:border-solid hover:text-link-hov hover:border-link-hov;
-    }
-
     /* headings */
     h1, h2, h3, h4, h5, h6 {
-        @apply font-bold mt-1;
+        @apply mt-1;
+
+        /* override 'a' within h1,h2,.. should behave as default 'a'
+           even when inside .contentf */
+        a {
+            @apply default-a;
+        }
     }
 
     /* underline for h1, h2 */
@@ -138,19 +171,10 @@
 
 /* --- </content> --- */
 
+
 /* overriden (more specific) styles */
 /* applies everywhere and also in .contentf */
 .contentf, & {
 
-    /* h1 link behaviour */
-    h1, h2, h3, h4, h5, h6{
-        /* when clicking on anchor link, offset the scroll 
-        so that the navbar doesn't block everything */
-        @apply scroll-mt-navbar;
-
-        /* heading link style */
-        a {
-            @apply border-0 text-[inherit] hover:text-dark-l;
-        }
-    }
+    
 }
