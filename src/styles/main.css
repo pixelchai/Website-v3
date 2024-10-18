@@ -7,7 +7,7 @@
     /* (specify what 1rem should refer to) */
     :root {
         @apply text-[16px] 
-               sm:text-[18px]
+               sm:text-[17px]
     }
 }
 
@@ -39,7 +39,142 @@
     }
 }
 
-/* Fix code font size */
-.astro-code{
-    @apply text-sm;
+/* --- <content> --- */
+@layer base {
+    /* default link style */
+    a {
+        @apply default-a;
+    }
+
+    p {
+        @apply my-2;
+    }
+
+    hr {
+        @apply border-b border-dark-l;
+    }
+    
+    /* h1 link behaviour */
+    h1, h2, h3, h4, h5, h6 {
+        /* bold by default */
+        @apply font-bold;
+
+        /* when clicking on anchor link, offset the scroll 
+        so that the navbar doesn't block everything */
+        @apply scroll-mt-navbar;
+    }
+
+    h1 {
+        @apply text-3xl;
+    }
+    h2 {
+        @apply text-2xl;
+    }
+    h3 {
+        @apply text-xl;
+    }
+    h4 {
+        @apply text-lg;
+    }
+
+    /* code */
+    pre {
+        @apply text-sm p-3 rounded max-h-[64vh];
+    }
+
+    /* inline code */
+    :not(pre) > code {
+        @apply bg-light-dd border border-dark-lll rounded-sm px-1 text-sm;
+    }
+
+    /* table */
+    table {
+        @apply border border-dark-lll;
+
+        thead, th {
+            @apply bg-light-ddd text-left;
+        }
+
+        th, td {
+            @apply border border-dark-lll px-2 py-1;
+        }
+
+        tbody tr:nth-child(odd) {
+            @apply bg-light-d;
+        }
+    }
+
+    /* lists */
+    ul, ol {
+        @apply list-disc pl-5;
+    }
+
+    ol {
+        @apply list-decimal;
+    }
+
+    ul ul, ol ul, ul ol, ol ol {
+        @apply list-inside;
+    }
+}
+
+@layer utilities {
+    /* default a style */
+    .default-a {
+        @apply border-0 text-dark hover:text-dark-ll;
+    }
+
+    /* contentf a style */
+    .contentf-a {
+        @apply text-link border-b border-link border-dotted 
+        hover:border-solid hover:text-link-hov hover:border-link-hov;
+    }
+}
+
+/* markdown content style formatting (content format) */
+.contentf {
+    /* margin for everything */
+    & > * {
+        @apply my-3;
+    }
+
+    /* link style */
+    a {
+        @apply contentf-a;
+    }
+
+    /* extra margin for hr */
+    hr {
+        @apply my-5;
+    }
+
+    /* headings */
+    h1, h2, h3, h4, h5, h6 {
+        @apply mt-1;
+
+        /* override 'a' within h1,h2,.. should behave as default 'a'
+           even when inside .contentf */
+        a {
+            @apply default-a;
+        }
+    }
+
+    /* underline for h1, h2 */
+    h1, h2 {
+        @apply border-b pb-1 pt-2 border-dark-l border-dotted;
+    }
+
+    .astro-code {
+        @apply mb-4;
+    }
+}
+
+/* --- </content> --- */
+
+
+/* overriden (more specific) styles */
+/* applies everywhere and also in .contentf */
+.contentf, & {
+
+    
 }

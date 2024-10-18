@@ -1,0 +1,41 @@
+---
+import type { JSX } from "astro/jsx-runtime";
+
+type Props = {
+  selected?: boolean;
+  noDescendants?: boolean;
+  href: string;
+} & JSX.IntrinsicElements["a"];
+
+let { selected, href, noDescendants, ...rest } = Astro.props;
+
+function shouldSelect() {
+  // parse if selected from pathname
+  const curUrlParts = Astro.url.pathname
+    .split("/")
+    .filter((part) => part !== "");
+  const targetUrlParts = href.split("/").filter((part) => part !== "");
+
+  if (noDescendants) {
+    if (curUrlParts.length > targetUrlParts.length) {
+      return false;
+    }
+  }
+
+  for (let i = 0; i < targetUrlParts.length; i++) {
+    if (curUrlParts[i] !== targetUrlParts[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+if (!selected) {
+  selected = shouldSelect();
+}
+---
+
+<a href={href} class={"" + (selected ? "font-bold" : "")} {...rest}>
+  <slot />
+</a>

@@ -29,7 +29,7 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
                 width={600}
               />
             )}
-            <a href={`/${collectionName}/${entry.slug}`}>{entry.data.title}</a>
+            <a href={`/${collectionName}/${entry.slug}/`}>{entry.data.title}</a>
           </div>
         </li>
       ))
