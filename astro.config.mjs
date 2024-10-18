@@ -21,6 +21,9 @@ export default defineConfig({
       // https://docs.astro.build/en/guides/integrations-guide/tailwind/#applybasestyles
       // Disable, using main.css file manually
       applyBaseStyles: false,
+
+      // https://docs.astro.build/en/guides/integrations-guide/tailwind/#nesting
+      nesting: true,
     }),
   ],
   markdown: {
