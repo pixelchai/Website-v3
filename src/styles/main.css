@@ -39,10 +39,10 @@
     }
 }
 
-/* content */
+/* --- <content> --- */
 @layer base {
     p {
-        @apply my-3;
+        @apply my-2;
     }
 
     a {
@@ -51,7 +51,7 @@
     }
 
     hr {
-        @apply my-4 border-b border-dark-l;
+        @apply border-b border-dark-l;
     }
 
     /* headings */
@@ -109,4 +109,34 @@
             @apply bg-light-d;
         }
     }
+
+    /* lists */
+    ul, ol {
+        @apply list-disc pl-5;
+    }
+
+    ol {
+        @apply list-decimal;
+    }
+
+    ul ul, ol ul, ul ol, ol ol {
+        @apply list-inside;
+    }
 }
+
+/* margin for everything */
+.content {
+    & > * {
+        @apply my-3;
+    }
+
+    hr {
+        @apply my-5;
+    }
+
+    .astro-code {
+        @apply mb-4;
+    }
+}
+
+/* --- </content> --- */
