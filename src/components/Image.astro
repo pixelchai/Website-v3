@@ -78,15 +78,15 @@ const src3 = await imageSrcByWidth(6000);
 <!-- <img src={imageResult.src} alt={props.alt} /> -->
 
 <div class="image-wrapper">
-  <img src="https://placehold.co/600x400?text=1" width="600" height="400" />
-  <img src="https://placehold.co/60000x40000?text=2" width="600" height="400" />
+  <img src={src1} width="600" height="400" style="width:600px;height;400px;" />
+  <img src={src3} width="600" height="400" style="width:600px;height;400px;" />
 </div>
 
 <style>
   .image-wrapper {
     display: grid;
-    max-width: 50%;
-    margin: auto;
+    /* max-width: 50%;
+    margin: auto; */
 
     img {
       display: block;
