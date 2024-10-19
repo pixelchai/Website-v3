@@ -49,6 +49,20 @@ const imageResult = (await getImage({
 // parse out useful info
 const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
+
+// temp -- for experimentation
+const imageSrcByWidth = async (width: number) => {
+  const result = (await getImage({
+    src: importedImage,
+    format: fallBackFormat,
+    width,
+  })) as any;
+  return result.src;
+};
+
+const src1 = await imageSrcByWidth(100);
+const src2 = await imageSrcByWidth(600);
+const src3 = await imageSrcByWidth(6000);
 ---
 
 <!-- <>
@@ -64,12 +78,20 @@ const originalHeight = imageResult.options.src.height;
 <!-- <img src={imageResult.src} alt={props.alt} /> -->
 
 <div class="image-wrapper">
-  <img src="https://placehold.co/600x400?text=1" />
-  <img src="https://placehold.co/600x400?text=2" />
+  <img src="https://placehold.co/600x400?text=1" width="600" height="400" />
+  <img src="https://placehold.co/60000x40000?text=2" width="600" height="400" />
 </div>
 
 <style>
   .image-wrapper {
-    display: block;
+    display: grid;
+    max-width: 50%;
+    margin: auto;
+
+    img {
+      display: block;
+      grid-area: 1/1/1/1;
+      aspect-ratio: attr(width) / attr(height);
+    }
   }
 </style>
