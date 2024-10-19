@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^3.1.8",
     "astro": "^4.15.11",
+    "astro-m2dx": "^0.7.16",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
     "cssnano-preset-advanced": "^7.0.6",
