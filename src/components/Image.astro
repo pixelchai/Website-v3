@@ -1,24 +1,46 @@
 ---
 import type { ImageMetadata } from "astro";
 import { Picture as AstroPicture, getImage } from "astro:assets";
+import { Code } from "astro:components";
 
+// props
 interface Props {
   src: string;
-  alt: string;
+  alt?: string;
   width?: number;
   height?: number;
 }
-
 const { src, alt, ...rest } = Astro.props;
-const imageLoaders = import.meta.glob<{ default: ImageMetadata }>("/res/**/*");
-if (!imageLoaders[src]) {
-  throw new Error(`${src} not found in /res folder!`);
-}
-const importedImage = imageLoaders[src]();
+
+// import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
+const importedImage = (() => {
+  const imageLoaders = import.meta.glob<{ default: ImageMetadata }>(
+    "/res/**/*"
+  );
+
+  if (!imageLoaders[src]) {
+    throw new Error(`${src} not found in /res folder!`);
+  }
+
+  return imageLoaders[src]();
+})();
+
+// fallback format behaviour -- usually png unless original was jpg, gif or svg
+const fallBackFormat = (() => {
+  if (src.endsWith(".jpg") || src.endsWith(".jpeg")) {
+    return "jpg";
+  } else if (src.endsWith(".gif")) {
+    return "gif";
+  } else if (src.endsWith(".svg")) {
+    return "svg";
+  } else {
+    return "png";
+  }
+})();
 
 const image = await getImage({
   src: importedImage,
-  // format: "webp",
+  format: fallBackFormat,
   // width: 100,
 });
 ---
@@ -32,9 +54,5 @@ const image = await getImage({
     {...rest}
   />
 </> -->
-<pre>
-  <code>
-    {JSON.stringify(image, null, 2)}
-  </code>
-</pre>
+<Code code={JSON.stringify(image, null, 2)} lang="json" />
 <img src={image.src} alt={alt} {...rest} />
