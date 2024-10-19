@@ -18,7 +18,8 @@ const importedImage = imageLoaders[src]();
 
 const image = await getImage({
   src: importedImage,
-  formats: ["webp"],
+  // format: "webp",
+  // width: 100,
 });
 ---
 
@@ -36,3 +37,4 @@ const image = await getImage({
     {JSON.stringify(image, null, 2)}
   </code>
 </pre>
+<img src={image.src} alt={alt} {...rest} />
