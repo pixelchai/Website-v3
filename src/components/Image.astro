@@ -68,27 +68,45 @@ const src3 = await imageSrcByWidth(6000);
 <!-- <>
   <AstroPicture
     src={importedImage}
-    alt={alt}
+    alt={"a"}
     formats={["webp"]}
     densities={[0.5, 1, 1.5, 2]}
-    {...rest}
   />
 </> -->
 <Code code={JSON.stringify(imageResult, null, 2)} lang="json" />
 <!-- <img src={imageResult.src} alt={props.alt} /> -->
 
 <div class="image-wrapper">
-  <img src={src1} width="600" height="400" style="width:600px;height;400px;" />
-  <img src={src3} width="600" height="400" style="width:600px;height;400px;" />
+  <!-- <img src={src1} width="600" height="400" style="width:600px;height;400px;" /> -->
+  <!-- <img src={src3} width="600" height="400" style="width:600px;height;400px;" /> -->
+  <AstroPicture
+    src={src1}
+    width="600"
+    height="400"
+    alt={""}
+    formats={["webp"]}
+    densities={[0.5, 1, 1.5, 2]}
+  />
+  <AstroPicture
+    src={src2}
+    width="600"
+    height="400"
+    alt={""}
+    formats={["webp"]}
+    densities={[0.5, 1, 1.5, 2]}
+  />
 </div>
 
 <style>
+  img {
+    /* border: 1px solid red; */
+  }
   .image-wrapper {
     display: grid;
     /* max-width: 50%;
     margin: auto; */
 
-    img {
+    picture {
       display: block;
       grid-area: 1/1/1/1;
       aspect-ratio: attr(width) / attr(height);
