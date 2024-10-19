@@ -61,4 +61,15 @@ const originalHeight = imageResult.options.src.height;
   />
 </> -->
 <Code code={JSON.stringify(imageResult, null, 2)} lang="json" />
-<img src={imageResult.src} alt={props.alt} />
+<!-- <img src={imageResult.src} alt={props.alt} /> -->
+
+<div class="image-wrapper">
+  <img src="https://placehold.co/600x400?text=1" />
+  <img src="https://placehold.co/600x400?text=2" />
+</div>
+
+<style>
+  .image-wrapper {
+    display: block;
+  }
+</style>
