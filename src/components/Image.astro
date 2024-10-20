@@ -27,11 +27,14 @@ Potential future improvements:
 const lowQualityResolutions = [
   // max width, max height
   [100, 100],
+  [600, 600],
 ];
 
-const globalMaxWidth = 1920;
-const globalMaxHeight = 1080;
+// large numbers for basically no limit
+const globalMaxWidth = 19200;
+const globalMaxHeight = 10800;
 
+// next gen formats, in order of preference
 const nextGenFormats: string[] = ["webp"];
 
 // props
@@ -106,12 +109,12 @@ const getImageVersion = async (
     width = Math.round(maxHeight * aspectRatio);
   }
 
-  const result = (await getImage({
+  const result = await getImage({
     src: importedImage,
     format,
     width,
     height,
-  })) as any;
+  });
 
   return {
     src: result.src,
@@ -139,10 +142,10 @@ const getPicture = async (maxWidth: number, maxHeight: number) => {
   };
 };
 
-const getPictures = async () => {
+const getAllPictures = async () => {
   return {
     pictures: await Promise.all(
-      lowQualityResolutions.map(
+      [...lowQualityResolutions, [providedWidth, providedHeight]].map(
         async (resolution) => await getPicture(resolution[0], resolution[1])
       )
     ),
@@ -153,55 +156,21 @@ const getPictures = async () => {
       providedWidth,
       providedHeight,
       originalSrc: props.src,
+      alt: props.alt,
     },
   };
 };
 
-// const srcLowNextGen = await getImageVersion(100, 100, "webp");
-// const srcLowFallback = await getImageVersion(100, 100, fallbackFormat);
-
-// const srcHighNextGen = await getImageVersion(
-//   providedWidth,
-//   providedHeight,
-//   "webp"
-// );
-// const srcHighFallback = await getImageVersion(
-//   providedWidth,
-//   providedHeight,
-//   fallbackFormat
-// );
-const pictures = await getPictures();
+const imageInfo = await getAllPictures();
 ---
 
-<!-- <>
-  <AstroPicture src={importedImage} alt={"a"} formats={["webp"]} />
-</> --><!-- <Code code={JSON.stringify(imageResult, null, 2)} lang="json" /> --><!-- <img src={imageResult.src} alt={props.alt} /> -->
 <div class="image-wrapper">
-  <!-- <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
-    <source srcset={srcLowNextGen} type="image/webp" />
-    <img
-      src={srcLowFallback}
-      alt={props.alt}
-      width={providedWidth}
-      height={providedHeight}
-      loading="eager"
-    />
-  </picture>
-
-  <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
-    <source srcset={srcHighNextGen} type="image/webp" />
-    <img
-      src={srcHighFallback}
-      alt={props.alt}
-      width={providedWidth}
-      height={providedHeight}
-      loading="lazy"
-    />
-  </picture> -->
   {
-    pictures.pictures.map((picture) => {
+    imageInfo.pictures.map((picture, pictureIdx) => {
       return (
-        <picture style={`aspect-ratio: ${originalWidth} / ${originalHeight}`}>
+        <picture
+          style={`aspect-ratio: ${imageInfo.info.originalWidth} / ${imageInfo.info.originalHeight}`}
+        >
           {picture.nextGenSources.map((source) => {
             return (
               <source
@@ -214,10 +183,10 @@ const pictures = await getPictures();
           })}
           <img
             src={picture.fallbackSource.src}
-            alt={props.alt}
-            width={providedWidth}
-            height={providedHeight}
-            loading="lazy"
+            alt={imageInfo.info.alt}
+            width={imageInfo.info.providedWidth}
+            height={imageInfo.info.providedHeight}
+            loading={pictureIdx === 0 ? "eager" : "lazy"}
           />
         </picture>
       );
@@ -229,10 +198,10 @@ const pictures = await getPictures();
   .image-wrapper {
     display: grid;
 
-    /* picture {
+    picture {
       display: block;
       grid-area: 1/1/1/1;
-    } */
+    }
   }
 
   img {
