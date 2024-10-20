@@ -1,7 +1,12 @@
 ---
 import { site } from "@/data/consts";
+
+const buildYear = new Date().getFullYear();
 ---
 
 <footer class="my-2 pt-2 pb-4 text-center">
-  <span>&copy; {site.me.name}</span>
+  <span
+    >&copy; {buildYear}
+    <a href={site.base} class="contentf-a">{site.me.name}</a></span
+  >
 </footer>
