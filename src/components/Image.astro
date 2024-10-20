@@ -125,7 +125,7 @@ const srcHighFallback = await getImageVersion(
   <AstroPicture src={importedImage} alt={"a"} formats={["webp"]} />
 </> --><!-- <Code code={JSON.stringify(imageResult, null, 2)} lang="json" /> --><!-- <img src={imageResult.src} alt={props.alt} /> -->
 <div class="image-wrapper">
-  <picture>
+  <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
     <source srcset={srcLowNextGen} type="image/webp" />
     <img
       src={srcLowFallback}
@@ -136,7 +136,7 @@ const srcHighFallback = await getImageVersion(
     />
   </picture>
 
-  <picture>
+  <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
     <source srcset={srcHighNextGen} type="image/webp" />
     <img
       src={srcHighFallback}
@@ -157,7 +157,6 @@ const srcHighFallback = await getImageVersion(
     picture {
       display: block;
       grid-area: 1/1/1/1;
-      aspect-ratio: attr(width) / attr(height);
     }
   }
 
