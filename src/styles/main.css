@@ -27,8 +27,8 @@
     /* Page height */
     .page-y {
         @apply h-full 
-               py-1 
-               2xs:py-2 
+               my-1 
+               2xs:my-2 
                /* xs:py-3 
                sm:py-4 
                md:py-5 
@@ -118,8 +118,16 @@
 
 @layer utilities {
     /* default a style */
+    .default-a-no-hover {
+        @apply border-0 text-dark;
+    }
+
+    .default-a-hover {
+        @apply text-dark-ll;
+    }
+
     .default-a {
-        @apply border-0 text-dark hover:text-dark-ll;
+        @apply default-a-no-hover hover:default-a-hover;
     }
 
     /* contentf a style */
