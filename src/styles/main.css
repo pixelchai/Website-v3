@@ -16,7 +16,7 @@
     /* Single source of truth for styling the page's width, for use in navbars, etc */
     .page-x {
         @apply mx-auto 
-               max-w-screen-lg
+               max-w-page-max-w
                px-3 
                2xs:px-4 
                xs:px-5 
