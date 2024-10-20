@@ -42,10 +42,14 @@ const nextGenFormats: string[] = ["webp"];
 type Props = {
   src: string;
   alt?: string;
+
   width?: number;
   height?: number;
+
   class?: string;
   imgClass?: string;
+  pictureClass?: string;
+  sourceClass?: string;
 } & JSX.IntrinsicElements["div"];
 const props = Astro.props;
 
@@ -117,10 +121,6 @@ const [providedWidth, providedHeight, providedAspectRatio] = (() => {
 
   return [width, height, providedAspectRatio];
 })();
-
-console.log(
-  `[Image] ${props.src} Original: ${originalWidth}x${originalHeight}, Provided: ${providedWidth}x${providedHeight}`
-);
 
 // alt text
 const altText = await (async () => {
@@ -230,11 +230,13 @@ const restProps = Object.fromEntries(
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (
         <picture
+          class={props.pictureClass}
           style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
         >
           {picture.nextGenSources.map((source) => {
             return (
               <source
+                class={props.sourceClass}
                 srcset={source.src}
                 type={`image/${source.format}`}
                 width={source.width}
