@@ -1,0 +1,30 @@
+---
+title: AnswerBot
+subtitle: A search engine for parsing and answering plain English questions using NLP techniques.
+date: 2018-09-20
+
+thumb: /res/content/answerbot/demo3.png
+---
+import Image from "@/components/Image.astro";
+
+
+Is it possible to parse a natural language (plain English) question and gather relevant information for it from the internet using Natural Language Processing techniques? AnswerBot is the answer. [Code can be found here](https://github.com/pixelchai/AnswerBot).
+
+AnswerBot is, put simply, a search engine. You input a question, it parses it using the NLP techniques of Part-Of-Speech tagging and dependency parsing and then searches through Wikipedia, making use of semantic similarity calculations, to gather information to answer the input. The NLP functionalities just mentioned are provided by the Python library, [SpaCy](https://spacy.io/).
+
+# Background Information
+
+### Semantic Similarity
+
+How similar two things are in terms of the meanings of their words.
+
+### Part-Of-Speech tagging
+
+Words in some text are categorised into whether they are a noun or a verb, etc (their part of speech).
+
+### Dependency parsing
+
+In terms of linguistics, the words in a sentence can be thought of as being linked to each other as dependencies. Dependency parsing means parsing and categorising how the words in a sentence relate and link to each other.
+
+{/* ![](/res/content/answerbot/displacy-example.svg) */}
+<Image src="/res/content/answerbot/displacy-example.svg"/>

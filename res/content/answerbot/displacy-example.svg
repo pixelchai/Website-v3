@@ -1,0 +1,63 @@
+<svg version="1.1"
+    baseProfile="full"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 0 950 200" preserveAspectRatio="xMinYMax meet"
+    style="color: rgb(245, 244, 240);background: #222; font-family: sans">
+    <text fill="currentColor" text-anchor="middle" y="140">
+        <tspan x="150" fill="currentColor" data-displacy="word">The cat</tspan>
+        <tspan x="150" dy="2em" fill="currentColor" data-displacy-tag="NOUN" class="d-tag"
+            style="
+    color: #70C1B3;
+">
+            NOUN</tspan>
+    </text>
+    <text fill="currentColor" text-anchor="middle" y="140">
+        <tspan x="350" fill="currentColor" data-displacy="word">sat</tspan>
+        <tspan x="350" dy="2em" fill="currentColor" data-displacy-tag="VERB" class="d-tag"
+            style="
+    color: #F25F5C;
+">VERB</tspan>
+    </text>
+    <text fill="currentColor" text-anchor="middle" y="140">
+        <tspan x="550" fill="currentColor" data-displacy="word">on</tspan>
+        <tspan x="550" dy="2em" fill="currentColor" data-displacy-tag="ADP" class="d-tag"
+            style="
+    color: #247BA0;
+">ADP</tspan>
+    </text>
+    <text fill="currentColor" text-anchor="middle" y="140">
+        <tspan x="750" fill="currentColor" data-displacy="word">the mat.</tspan>
+        <tspan x="750" dy="2em" fill="currentColor" data-displacy-tag="NOUN" class="d-tag"
+            style="
+    color: #70C1B3;
+">NOUN</tspan>
+    </text>
+    <g>
+        <path id="arrow-0" d="M150,100 C150,0 350,0 350,100" stroke-width="2" fill="none"
+            stroke="currentColor" class="d-arc"></path>
+        <text dy="1em">
+            <textPath xlink:href="#arrow-0" startOffset="50%" fill="currentColor"
+                text-anchor="middle" class="d-label">nsubj</textPath>
+        </text>
+        <path d="M150,102 L144,92 156,92" fill="currentColor"></path>
+    </g>
+    <g>
+        <path id="arrow-1" d="M350,100 C350,0 550,0 550,100" stroke-width="2" fill="none"
+            stroke="currentColor" class="d-arc"></path>
+        <text dy="1em">
+            <textPath xlink:href="#arrow-1" startOffset="50%" fill="currentColor"
+                text-anchor="middle" class="d-label">prep</textPath>
+        </text>
+        <path d="M550,102 L556,92 544,92" fill="currentColor"></path>
+    </g>
+    <g>
+        <path id="arrow-2" d="M550,100 C550,0 750,0 750,100" stroke-width="2" fill="none"
+            stroke="currentColor" class="d-arc"></path>
+        <text dy="1em">
+            <textPath xlink:href="#arrow-2" startOffset="50%" fill="currentColor"
+                text-anchor="middle" class="d-label">pobj</textPath>
+        </text>
+        <path d="M750,102 L756,92 744,92" fill="currentColor"></path>
+    </g>
+</svg>
