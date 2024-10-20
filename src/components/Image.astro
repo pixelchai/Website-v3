@@ -238,6 +238,7 @@ const imageInfo = await getAllPictures();
             width={imageInfo.info.providedWidth}
             height={imageInfo.info.providedHeight}
             loading={pictureIdx === 0 ? "eager" : "lazy"}
+            loading="eager"
           />
         </picture>
       );
@@ -252,6 +253,14 @@ const imageInfo = await getAllPictures();
     picture {
       display: block;
       grid-area: 1/1/1/1;
+
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 
