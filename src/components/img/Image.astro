@@ -37,14 +37,14 @@ const props = Astro.props;
   .image-wrapper-unconstrained {
     display: grid;
 
-    picture {
+    :global(picture) {
       display: block;
       grid-area: 1 / 1 / 1 / 1;
 
       width: 100%;
       height: 100%;
 
-      img {
+      :global(img) {
         width: 100%;
         height: 100%;
       }
