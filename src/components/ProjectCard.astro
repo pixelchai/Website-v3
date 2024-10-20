@@ -14,15 +14,18 @@ const { entry } = Astro.props;
 const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
 ---
 
-<div class="flex flex-col bg-r">
+<div class="flex flex-col bg-r rounded overflow-hidden">
   {
     entry.data.thumb && (
       <a href={linkUrl}>
-        <Image
-          src={entry.data.thumb}
-          alt={entry.data.title}
-          width={theme.spacing["page-max-w"] / 2}
-        />
+        <div class="h-40 overflow-hidden object-cover">
+          <Image
+            src={entry.data.thumb}
+            alt={entry.data.title}
+            width={theme.spacing["page-max-w"] / 2}
+            class="object-cover overflow-hidden"
+          />
+        </div>
       </a>
     )
   }
