@@ -37,17 +37,19 @@ const { Content } = await entry.render();
 ---
 
 <Layout>
-  <h1 class="grow text-4xl border-0 mb-1 pb-0 font-bold">
-    {entry.data.title}
-  </h1>
-  <div class="border-0 text-base text font-normal text-dark-l">
-    <span>
-      {formatDate(entry.data.date)}
-    </span>
-    <span class="mx-1">&mdash;</span>
-    <a class="contentf-a" href={`${site.base}/${collectionName}/`}
-      >{collectionName}</a
-    >
+  <div class="my-4">
+    <h1 class="grow text-3xl border-0 mb-1 pb-0 font-bold">
+      {entry.data.title}
+    </h1>
+    <div class="border-0 text-base text font-normal text-dark-l">
+      <span>
+        {formatDate(entry.data.date)}
+      </span>
+      <span class="mx-1">&mdash;</span>
+      <a class="contentf-a" href={`${site.base}/${collectionName}/`}
+        >{collectionName}</a
+      >
+    </div>
   </div>
   <div class="contentf">
     <Content />
