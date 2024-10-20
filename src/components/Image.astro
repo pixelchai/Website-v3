@@ -83,15 +83,40 @@ const imageResult = (await getImage({
 // parse out useful info
 const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
-const aspectRatio = originalWidth / originalHeight;
+const originalAspectRatio = originalWidth / originalHeight;
 
-const providedWidth = Math.min(
-  Math.min(props.width || originalWidth, originalWidth),
-  globalMaxWidth
-);
-const providedHeight = Math.min(
-  Math.min(props.height || originalHeight, originalHeight),
-  globalMaxHeight
+const [providedWidth, providedHeight, providedAspectRatio] = (() => {
+  // get provided width and height
+  let width = originalWidth;
+  let height = originalHeight;
+
+  if (props.width && !props.height) {
+    width = props.width;
+    height = Math.floor(props.width / originalAspectRatio);
+  } else if (!props.width && props.height) {
+    height = props.height;
+    width = Math.floor(props.height * originalAspectRatio);
+  } else if (props.width && props.height) {
+    width = props.width;
+    height = props.height;
+  }
+
+  let providedAspectRatio = width / height;
+
+  // if the image is too large, scale it down
+  if (width > height) {
+    width = Math.min(width, globalMaxWidth);
+    height = Math.floor(Math.min(width, globalMaxWidth) / providedAspectRatio);
+  } else {
+    width = Math.floor(Math.min(height, globalMaxHeight) * providedAspectRatio);
+    height = Math.min(height, globalMaxHeight);
+  }
+
+  return [width, height, providedAspectRatio];
+})();
+
+console.log(
+  `[Image] ${props.src} Original: ${originalWidth}x${originalHeight}, Provided: ${providedWidth}x${providedHeight}`
 );
 
 // alt text
@@ -129,10 +154,10 @@ const getImageVersion = async (
   let height;
   if (originalWidth > originalHeight) {
     width = maxWidth;
-    height = Math.round(maxWidth / aspectRatio);
+    height = Math.floor(maxWidth / providedAspectRatio);
   } else {
     height = maxHeight;
-    width = Math.round(maxHeight * aspectRatio);
+    width = Math.floor(maxHeight * providedAspectRatio);
   }
 
   const result = await getImage({
@@ -178,7 +203,7 @@ const getAllPictures = async () => {
     info: {
       originalWidth,
       originalHeight,
-      aspectRatio,
+      aspectRatio: originalAspectRatio,
       providedWidth,
       providedHeight,
       originalSrc: props.src,
@@ -195,7 +220,7 @@ const imageInfo = await getAllPictures();
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (
         <picture
-          style={`aspect-ratio: ${imageInfo.info.originalWidth} / ${imageInfo.info.originalHeight}`}
+          style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
         >
           {picture.nextGenSources.map((source) => {
             return (

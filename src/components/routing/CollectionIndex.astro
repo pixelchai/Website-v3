@@ -23,13 +23,13 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
       entries.map((entry) => (
         <li>
           <div class="bg-r flex flex-col">
-            {/* {entry.data.thumb && (
+            {entry.data.thumb && (
               <Image
                 src={entry.data.thumb}
                 alt={entry.data.title}
                 width={600}
               />
-            )} */}
+            )}
             <a href={`${site.base}/${collectionName}/${entry.slug}/`}>
               {entry.data.title}
             </a>
