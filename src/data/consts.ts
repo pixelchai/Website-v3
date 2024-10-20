@@ -44,6 +44,8 @@ const site = {
   url: "https://pixelchai.com",
   base: "/Website-v3",
 
+  repoUrl: "https://github.com/pixelchai/Website-v3",
+
   me: {
     name: "pixelchai",
   },
