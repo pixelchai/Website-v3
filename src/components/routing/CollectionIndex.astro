@@ -18,7 +18,11 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
 
 <Layout>
   <h1 class="text-4xl mb-5 pb-0 font-bold text-center">{collectionTitle}</h1>
-  <div class="flex flex-col gap-4">
+  <div
+    class="grid gap-4 grid-cols-1
+  max-w-[475px] m-auto
+  sm:grid-cols-2 sm:max-w-none"
+  >
     {entries.map((entry) => <EntryCard entry={entry as any} />)}
   </div>
 </Layout>
