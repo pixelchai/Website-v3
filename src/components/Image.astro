@@ -1,7 +1,7 @@
 ---
 import type { ImageMetadata } from "astro";
-import { Picture as AstroPicture, getImage } from "astro:assets";
-import { Code } from "astro:components";
+import { getImage } from "astro:assets";
+import fs from "fs";
 
 /*
 Custom Image component.
@@ -94,6 +94,27 @@ const providedHeight = Math.min(
   globalMaxHeight
 );
 
+// alt text
+const altText = (() => {
+  // use provided alt text if available
+  if (props.alt) {
+    return props.alt;
+  }
+
+  // otherwise, look for an alt text file on disk
+  const targetPath = props.src.replace(/\.[^/.]+$/, ".alt.txt");
+  if (fs.existsSync(targetPath)) {
+    return fs.readFileSync(targetPath).toString();
+  }
+
+  // otherwise, empty string
+  console.log(
+    `[Image] Warning: No alt text found for ${props.src} ${targetPath}`
+  );
+  return "";
+})();
+
+// images computation
 const getImageVersion = async (
   maxWidth: number,
   maxHeight: number,
@@ -156,7 +177,7 @@ const getAllPictures = async () => {
       providedWidth,
       providedHeight,
       originalSrc: props.src,
-      alt: props.alt,
+      alt: altText,
     },
   };
 };
