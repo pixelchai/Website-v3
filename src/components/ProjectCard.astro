@@ -3,6 +3,7 @@ import { site } from "@/data/consts";
 import { Code } from "astro:components";
 import type { CollectionEntry } from "astro:content";
 import ConstrainedImage from "@/components/img/ConstrainedImage.astro";
+import Image from "@/components/img/Image.astro";
 import { theme } from "@/data/consts";
 
 type Props = {
@@ -14,14 +15,14 @@ const { entry } = Astro.props;
 const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
 ---
 
-<div class="flex flex-col bg-r rounded overflow-hidden">
+<div class="flex flex-col border rounded overflow-hidden">
   {
     entry.data.thumb && (
       <a href={linkUrl}>
         <ConstrainedImage
           src={entry.data.thumb}
           width={theme.spacing["page-max-w"] / 2}
-          class="image-wrapper-constrained"
+          class="w-full h-40 overflow-hidden"
         />
       </a>
     )
@@ -32,10 +33,3 @@ const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
   </a>
   <div>{entry.data.subtitle}</div>
 </div>
-
-<style>
-  .image-wrapper-constrained {
-    height: 100px;
-    width: 100%;
-  }
-</style>
