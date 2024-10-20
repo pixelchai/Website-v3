@@ -27,8 +27,8 @@
     /* Page height */
     .page-y {
         @apply h-full 
-               py-1 
-               2xs:py-2 
+               my-1 
+               2xs:my-2 
                /* xs:py-3 
                sm:py-4 
                md:py-5 

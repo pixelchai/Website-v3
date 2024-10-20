@@ -19,6 +19,8 @@ export default defineConfig({
     defaultStrategy: "viewport",
   },
 
+  devToolbar: { enabled: false },
+
   integrations: [mdx()],
 
   markdown: {

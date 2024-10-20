@@ -1,17 +1,18 @@
 ---
+import Footer from "@/components/Footer.astro";
 import Navbar from "@/components/Navbar.astro";
 import { site } from "@/data/consts";
 import "@/styles/main.css";
 ---
 
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href={`${site.base}/favicon.svg`} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Title</title>
   </head>
-  <body class="bg-light text-dark">
+  <body class="bg-light text-dark h-full">
     <!-- navbar -->
     <Navbar />
     <div class="page-x pt-navbar">
@@ -19,5 +20,6 @@ import "@/styles/main.css";
         <slot />
       </div>
     </div>
+    <Footer />
   </body>
 </html>
