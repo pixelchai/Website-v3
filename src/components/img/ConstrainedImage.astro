@@ -1,0 +1,64 @@
+---
+import type { JSX } from "astro/jsx-runtime";
+import BaseMultiresImage from "./BaseMultiresImage.astro";
+
+/*
+Constrained image component.
+In most cases, it is recommended to use the standard Image component instead in Image.astro.
+However, if you want to constrain the image to a certain viewport and expect the image to crop and enlarge to cover the container, use this component.
+object-fit: cover is used to crop the image to fit the container.
+However, the parent component must implement constraining the height and/or width of the .image-wrapper-constrained element as needed.
+It is done this way so that you may use media breakpoints if you want.
+*/
+
+type Props = {
+  src: string;
+  alt?: string;
+
+  width?: number;
+  height?: number;
+
+  class?: string;
+  imgClass?: string;
+  pictureClass?: string;
+  sourceClass?: string;
+
+  constrained?: boolean;
+} & JSX.IntrinsicElements["div"];
+const props = Astro.props;
+---
+
+<BaseMultiresImage
+  {...props}
+  class:list={["image-wrapper-constrained", props.class]}
+/>
+
+<style>
+  .image-wrapper-constrained {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+
+    height: 4rem;
+
+    picture {
+      width: 100%;
+      height: 100%;
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        padding: 0;
+        margin: 0;
+        object-fit: cover;
+
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+</style>

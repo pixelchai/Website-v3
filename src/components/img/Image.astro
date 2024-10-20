@@ -1,0 +1,53 @@
+---
+import type { JSX } from "astro/jsx-runtime";
+import BaseMultiresImage from "./BaseMultiresImage.astro";
+
+/*
+Standard (unconstrained) image component.
+Works as expected in almost all cases, apart from when you want to constrain the image to a certain viewport
+and expect the image to crop and enlarge to cover the container.
+For this behaviour, see ConstrainedImage.astro.
+
+Internally uses CSS grid to stack the multiple resolution images on top of each other.
+*/
+
+type Props = {
+  src: string;
+  alt?: string;
+
+  width?: number;
+  height?: number;
+
+  class?: string;
+  imgClass?: string;
+  pictureClass?: string;
+  sourceClass?: string;
+
+  constrained?: boolean;
+} & JSX.IntrinsicElements["div"];
+const props = Astro.props;
+---
+
+<BaseMultiresImage
+  {...props}
+  class:list={["image-wrapper-unconstrained", props.class]}
+/>
+
+<style>
+  .image-wrapper-unconstrained {
+    display: grid;
+
+    picture {
+      display: block;
+      grid-area: 1 / 1 / 1 / 1;
+
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+</style>
