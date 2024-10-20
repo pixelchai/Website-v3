@@ -80,16 +80,6 @@ const aspectRatio = originalWidth / originalHeight;
 const providedWidth = props.width || originalWidth;
 const providedHeight = props.height || originalHeight;
 
-// temp -- for experimentation
-const imageSrcByWidth = async (width: number) => {
-  const result = (await getImage({
-    src: importedImage,
-    format: fallbackFormat,
-    width,
-  })) as any;
-  return result.src;
-};
-
 const getImageVersion = async (
   maxWidth: number,
   maxHeight: number,
@@ -131,15 +121,10 @@ const srcHighFallback = await getImageVersion(
 );
 ---
 
-<>
+<!-- <>
   <AstroPicture src={importedImage} alt={"a"} formats={["webp"]} />
-</>
-<Code code={JSON.stringify(imageResult, null, 2)} lang="json" />
-<!-- <img src={imageResult.src} alt={props.alt} /> -->
-
+</> --><!-- <Code code={JSON.stringify(imageResult, null, 2)} lang="json" /> --><!-- <img src={imageResult.src} alt={props.alt} /> -->
 <div class="image-wrapper">
-  <!-- <img src={src1} width="600" height="400" style="width:600px;height;400px;" />
-  <img src={src3} width="600" height="400" style="width:600px;height;400px;" /> -->
   <picture>
     <source srcset={srcLowNextGen} type="image/webp" />
     <img
@@ -147,6 +132,7 @@ const srcHighFallback = await getImageVersion(
       alt={props.alt}
       width={providedWidth}
       height={providedHeight}
+      loading="eager"
     />
   </picture>
 
@@ -157,14 +143,12 @@ const srcHighFallback = await getImageVersion(
       alt={props.alt}
       width={providedWidth}
       height={providedHeight}
+      loading="lazy"
     />
   </picture>
 </div>
 
 <style>
-  img {
-    /* border: 1px solid red; */
-  }
   .image-wrapper {
     display: grid;
     /* max-width: 50%;
@@ -175,5 +159,9 @@ const srcHighFallback = await getImageVersion(
       grid-area: 1/1/1/1;
       aspect-ratio: attr(width) / attr(height);
     }
+  }
+
+  img {
+    /* border: 1px solid red; */
   }
 </style>
