@@ -160,7 +160,8 @@ const altText = await (async () => {
 const getImageVersion = async (
   maxWidth: number,
   maxHeight: number,
-  format: string
+  format: string,
+  inline: boolean = false
 ) => {
   let width;
   let height;
@@ -179,11 +180,31 @@ const getImageVersion = async (
     height,
   });
 
+  let src: string = result.src;
+
+  if (inline) {
+    // get base64 of image
+    const base64: string = await fetch(result.src)
+      .then((res) => res.blob())
+      .then((blob) => {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => {
+            resolve(reader.result);
+          };
+        });
+      });
+
+    src = base64;
+  }
+
   return {
-    src: result.src,
+    src,
     width,
     height,
     format,
+    inline,
   };
 };
 
