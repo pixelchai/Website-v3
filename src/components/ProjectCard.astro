@@ -5,7 +5,7 @@ import type { CollectionEntry } from "astro:content";
 import ConstrainedImage from "@/components/img/ConstrainedImage.astro";
 import Image from "@/components/img/Image.astro";
 import { theme } from "@/data/consts";
-import { formatDate } from "@/utils/markupUtils";
+import { formatDate, getYear } from "@/utils/markupUtils";
 
 type Props = {
   entry: CollectionEntry<"projects">;
@@ -31,11 +31,13 @@ const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
     )
   }
 
-  <div class="p-5">
-    <a href={linkUrl}>
-      <h2>{entry.data.title}</h2>
-    </a>
-    <div class="italic text-dark-l">{formatDate(entry.data.date)}</div>
+  <div class="p-4">
+    <div class="flex flex-row items-center justify-between gap-5">
+      <a href={linkUrl}>
+        <h2 class="inline-block">{entry.data.title}</h2>
+      </a>
+      <span class="italic text-dark-l">{getYear(entry.data.date)}</span>
+    </div>
     <div>{entry.data.subtitle}</div>
   </div>
 </div>

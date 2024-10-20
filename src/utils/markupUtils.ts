@@ -10,3 +10,7 @@ export function formatDate(date: Date): string {
     year: "numeric",
   });
 }
+
+export function getYear(date: Date): number {
+  return date.getFullYear();
+}
