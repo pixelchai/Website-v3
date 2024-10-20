@@ -5,11 +5,19 @@ import { Code } from "astro:components";
 
 /*
 Custom Image component.
-Uses native Astro API (getImage) to generate images in different resolutions and file formats.
 In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
 In this way, there is progressive image loading (lowest quality image is rendered first, then higher quality images are rendered on top).
 <picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
 Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
+
+Note: 
+- Focuses on reducing CLS (Cumulative Layout Shift).
+- Uses native Astro API (getImage) for image computation (different file formats, sizes, etc).
+
+However:
+- Picture element is used purely for providing fall-backs for next-gen image formats. 
+  Not making use of multiple density srcset functionality -- it is somewhat redundant because multiple resolutions are progressively loaded anyway.
+- Only using WebP for now as the next-gen format and not AVIF because I found that AVIF computation greatly reduces build times. (It does result in smaller images though).
 */
 
 // props
@@ -75,12 +83,7 @@ const src3 = await imageSrcByWidth(6000);
 ---
 
 <>
-  <AstroPicture
-    src={importedImage}
-    alt={"a"}
-    formats={["webp"]}
-    densities={[0.5, 1, 1.5, 2]}
-  />
+  <AstroPicture src={importedImage} alt={"a"} formats={["webp"]} />
 </>
 <Code code={JSON.stringify(imageResult, null, 2)} lang="json" />
 <!-- <img src={imageResult.src} alt={props.alt} /> -->
