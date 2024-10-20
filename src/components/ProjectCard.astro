@@ -5,6 +5,7 @@ import type { CollectionEntry } from "astro:content";
 import ConstrainedImage from "@/components/img/ConstrainedImage.astro";
 import Image from "@/components/img/Image.astro";
 import { theme } from "@/data/consts";
+import { formatDate } from "@/utils/markupUtils";
 
 type Props = {
   entry: CollectionEntry<"projects">;
@@ -15,21 +16,26 @@ const { entry } = Astro.props;
 const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
 ---
 
-<div class="flex flex-col border rounded overflow-hidden">
+<div
+  class="flex flex-col border border-dark-ll rounded overflow-hidden hover:border-dark-d hover:-translate-y-1 shadow-sm hover:shadow transition-transform"
+>
   {
     entry.data.thumb && (
-      <a href={linkUrl}>
+      <a href={linkUrl} class="">
         <ConstrainedImage
           src={entry.data.thumb}
           width={theme.spacing["page-max-w"] / 2}
-          class="w-full h-40 overflow-hidden"
+          class="w-full h-60 overflow-hidden"
         />
       </a>
     )
   }
 
-  <a href={linkUrl}>
-    <h2>{entry.data.title}</h2>
-  </a>
-  <div>{entry.data.subtitle}</div>
+  <div class="p-5">
+    <a href={linkUrl}>
+      <h2>{entry.data.title}</h2>
+    </a>
+    <div class="italic text-dark-l">{formatDate(entry.data.date)}</div>
+    <div>{entry.data.subtitle}</div>
+  </div>
 </div>
