@@ -1,4 +1,5 @@
 ---
+import { combineClasses } from "@/utils/markupUtils";
 import type { ImageMetadata } from "astro";
 import type { JSX } from "astro/jsx-runtime";
 import { getImage } from "astro:assets";
@@ -233,7 +234,7 @@ const restProps = Object.fromEntries(
 );
 ---
 
-<div class:list={["image-wrapper", props.class]} {...restProps}>
+<div class={combineClasses("image-wrapper", props.class)} {...restProps}>
   {
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (

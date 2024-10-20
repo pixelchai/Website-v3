@@ -1,6 +1,7 @@
 ---
 import type { JSX } from "astro/jsx-runtime";
 import BaseMultiresImage from "./BaseMultiresImage.astro";
+import { combineClasses } from "@/utils/markupUtils";
 
 /*
 Constrained image component.
@@ -30,7 +31,7 @@ const props = Astro.props;
 
 <BaseMultiresImage
   {...props}
-  class:list={["image-wrapper-constrained", props.class]}
+  class={combineClasses("image-wrapper-constrained", props.class)}
 />
 
 <style>
