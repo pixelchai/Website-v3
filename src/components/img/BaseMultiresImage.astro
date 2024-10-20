@@ -1,10 +1,12 @@
 ---
+import { combineClasses } from "@/utils/markupUtils";
 import type { ImageMetadata } from "astro";
+import type { JSX } from "astro/jsx-runtime";
 import { getImage } from "astro:assets";
 
 /*
 Custom Image component.
-In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
+Desired behaviour: In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
 In this way, there is progressive image loading (lowest quality image is rendered first, then higher quality images are rendered on top).
 <picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
 Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
@@ -21,6 +23,12 @@ However:
 
 Potential future improvements:
 - inline blurhash (without an additional network request)
+
+IMPORTANT:
+This is the base component, which is purely for producing the raw markup. 
+CSS and/or scripting is required to stack the multiple resolution images on top of each other as described.
+This must be implemented in the parent component.
+The reason for this is that different approaches are required depending on e.g. if you want the image to be constrained, and crop to fit the container, or if you want the image to be unconstrained and fill the container.
 */
 
 // constants
@@ -38,12 +46,20 @@ const globalMaxHeight = 4000;
 const nextGenFormats: string[] = ["webp"];
 
 // props
-interface Props {
+type Props = {
   src: string;
   alt?: string;
+
   width?: number;
   height?: number;
-}
+
+  class?: string;
+  imgClass?: string;
+  pictureClass?: string;
+  sourceClass?: string;
+
+  constrained?: boolean;
+} & JSX.IntrinsicElements["div"];
 const props = Astro.props;
 
 // import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
@@ -83,16 +99,37 @@ const imageResult = (await getImage({
 // parse out useful info
 const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
-const aspectRatio = originalWidth / originalHeight;
+const originalAspectRatio = originalWidth / originalHeight;
 
-const providedWidth = Math.min(
-  Math.min(props.width || originalWidth, originalWidth),
-  globalMaxWidth
-);
-const providedHeight = Math.min(
-  Math.min(props.height || originalHeight, originalHeight),
-  globalMaxHeight
-);
+const [providedWidth, providedHeight, providedAspectRatio] = (() => {
+  // get provided width and height
+  let width = originalWidth;
+  let height = originalHeight;
+
+  if (props.width && !props.height) {
+    width = props.width;
+    height = Math.floor(props.width / originalAspectRatio);
+  } else if (!props.width && props.height) {
+    height = props.height;
+    width = Math.floor(props.height * originalAspectRatio);
+  } else if (props.width && props.height) {
+    width = props.width;
+    height = props.height;
+  }
+
+  let providedAspectRatio = width / height;
+
+  // if the image is too large, scale it down
+  if (width > height) {
+    width = Math.min(width, globalMaxWidth);
+    height = Math.floor(Math.min(width, globalMaxWidth) / providedAspectRatio);
+  } else {
+    width = Math.floor(Math.min(height, globalMaxHeight) * providedAspectRatio);
+    height = Math.min(height, globalMaxHeight);
+  }
+
+  return [width, height, providedAspectRatio];
+})();
 
 // alt text
 const altText = await (async () => {
@@ -129,10 +166,10 @@ const getImageVersion = async (
   let height;
   if (originalWidth > originalHeight) {
     width = maxWidth;
-    height = Math.round(maxWidth / aspectRatio);
+    height = Math.floor(maxWidth / providedAspectRatio);
   } else {
     height = maxHeight;
-    width = Math.round(maxHeight * aspectRatio);
+    width = Math.floor(maxHeight * providedAspectRatio);
   }
 
   const result = await getImage({
@@ -178,7 +215,7 @@ const getAllPictures = async () => {
     info: {
       originalWidth,
       originalHeight,
-      aspectRatio,
+      aspectRatio: originalAspectRatio,
       providedWidth,
       providedHeight,
       originalSrc: props.src,
@@ -188,18 +225,27 @@ const getAllPictures = async () => {
 };
 
 const imageInfo = await getAllPictures();
+
+// get rest props
+const restProps = Object.fromEntries(
+  Object.entries(props).filter(
+    ([key]) => !["src", "alt", "width", "height"].includes(key)
+  )
+);
 ---
 
-<div class="image-wrapper">
+<div class={combineClasses("image-wrapper", props.class)} {...restProps}>
   {
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (
         <picture
-          style={`aspect-ratio: ${imageInfo.info.originalWidth} / ${imageInfo.info.originalHeight}`}
+          class={props.pictureClass}
+          style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
         >
           {picture.nextGenSources.map((source) => {
             return (
               <source
+                class={props.sourceClass}
                 srcset={source.src}
                 type={`image/${source.format}`}
                 width={source.width}
@@ -208,29 +254,17 @@ const imageInfo = await getAllPictures();
             );
           })}
           <img
+            class={props.imgClass}
             src={picture.fallbackSource.src}
             alt={imageInfo.info.alt}
             width={imageInfo.info.providedWidth}
             height={imageInfo.info.providedHeight}
             loading={pictureIdx === 0 ? "eager" : "lazy"}
+            aria-hidden={pictureIdx > 0}
+            decoding="async"
           />
         </picture>
       );
     })
   }
 </div>
-
-<style>
-  .image-wrapper {
-    display: grid;
-
-    picture {
-      display: block;
-      grid-area: 1/1/1/1;
-    }
-  }
-
-  img {
-    /* border: 1px solid red; */
-  }
-</style>

@@ -3,6 +3,7 @@ const extend = {
   // 'spacing' values can be used for height padding, margin, etc.
   spacing: {
     navbar: "4rem",
+    "page-max-w": 1024,
   },
 };
 
