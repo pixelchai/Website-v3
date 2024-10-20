@@ -26,8 +26,8 @@ Words in some text are categorised into whether they are a noun or a verb, etc (
 
 In terms of linguistics, the words in a sentence can be thought of as being linked to each other as dependencies. Dependency parsing means parsing and categorising how the words in a sentence relate and link to each other.
 
-![](/res/content/answerbot/displacy-example.svg)
-{/* <Image src="/res/content/answerbot/displacy-example.svg"/> */}
+{/* ![](/res/content/answerbot/displacy-example.svg) */}
+<Image src="/res/content/answerbot/displacy-example.svg"/>
 
 Above is a visualisation of dependency parsing and POS tagging. You can visualise your own sentences on [the DisplaCy website](https://explosion.ai/demos/displacy).
 
@@ -48,3 +48,35 @@ Internally, this structure shall be represented by a list of terms, where ‘key
 | the biggest animal ever seen in Europe | `["Europe", "animal", "biggest"]` |
 
 Note: Google Search has a feature similar to what is trying to be achieved here called `Featured Snippets` (image below), which seems to make use of a similar hierarchal structure (see underlined).
+
+![Google's Featured Snippets](https://i.snag.gy/u10vha.jpg)
+
+## Question Fixing
+
+First of all, minor pre-processing is performed upon the input to ensure the input looks like a question - making sure it ends with a `?` and starts with a capital letter.
+
+## Parsing
+
+The `question` is split into `queries` and the queries are parsed into `terms`, which are arranged into the hierarchy as described.
+
+| My Terminology | SpaCy Representation | Info                                                         |
+| -------------- | -------------------- | ------------------------------------------------------------ |
+| `question`     | `Document`           | This is the question after the [question fixing](#question-fixing) pre-processing. |
+| `query`        | `Span`               | Usually the Span represents a sentence, but it doesn’t _have_ to be a full sentence. |
+| `term`         | `Token`              |                                                              |
+
+The parsing works using a function, in which an input `Token` has all of its [dependants](#dependency-parsing) (children) traversed through, and for each child, it is decided (by considering the dependency type + POS) whether to prepend or append the child to the list (relative to the input token) and whether to omit certain terms. The function is recursively called for each of the children as well - the termination point being: when the input token has no children.
+
+The recursion is initiated with the [root token](#dependency-parsing) of a certain query (which is a `Span` object).
+
+<a href="https://github.com/pixelchai/AnswerBot/blob/master/answerbot.py#L99" target="_blank">View code</a>
+
+# Variations Generation
+
+Note on terminology: I call a group of `terms` a `group`. And a list of these `groups` is a `grouping` (but also may be called a `variation` since they can be thought of as being a variant of the hierarchal structure).
+
+## Grouping Combinations
+
+When searching for pages relevant to the parsed terms, we want to consider the different groupings of the terms for a fuller picture. E.g: both `[["animal"], ["biggest"]] ` and `[["animal", "biggst"]] `. (What if there was a page relating to ‘’biggest animals” directly?). Note: the structure is now a list __of groups__ of terms.
+
+{/* First of all, everything is grouped together into a list, then that list is split at every possible position. The spaces in-between items can be thought of ‘split positions’ or ‘places to put a comma’. Let’s say that $$1$$ means to split and $$0$$ to not. The ways of splitting, then, is simply the binary pattern up to $$2^{n-1}-1$$ where $$n​$$ is the length of the list. This is how where to split is decided. <a href="https://github.com/pixelchai/AnswerBot/blob/master/answerbot.py#L174" target="_blank">View code</a>. */}
