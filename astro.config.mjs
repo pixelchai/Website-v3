@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import { site } from "./src/data/consts";
+import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,13 +19,8 @@ export default defineConfig({
     defaultStrategy: "viewport",
   },
 
-  integrations: [],
-  vite: {
-    css: {
-      devSourcemap: false,
-      transformer: "postcss",
-    },
-  },
+  integrations: [mdx()],
+
   markdown: {
     rehypePlugins: [
       rehypeHeadingIds,
@@ -39,5 +35,12 @@ export default defineConfig({
         },
       ],
     ],
+  },
+
+  vite: {
+    css: {
+      devSourcemap: false,
+      transformer: "postcss",
+    },
   },
 });

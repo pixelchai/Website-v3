@@ -167,6 +167,11 @@
     .astro-code {
         @apply mb-4;
     }
+
+    /* styling for images within content */
+    .image-wrapper, .image-wrapper img {
+        @apply w-full;
+    }
 }
 
 /* --- </content> --- */

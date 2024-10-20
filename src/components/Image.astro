@@ -1,0 +1,236 @@
+---
+import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+
+/*
+Custom Image component.
+In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
+In this way, there is progressive image loading (lowest quality image is rendered first, then higher quality images are rendered on top).
+<picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
+Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
+Alt text is also set, either from the provided prop or from a .alt.txt file in the same directory as the image.
+
+Note: 
+- Focuses on reducing CLS (Cumulative Layout Shift).
+- Uses native Astro API (getImage) for image computation (different file formats, sizes, etc).
+
+However:
+- Picture element is used purely for providing fall-backs for next-gen image formats. 
+  Not making use of multiple density srcset functionality -- it is somewhat redundant because multiple resolutions are progressively loaded anyway.
+- Only using WebP for now as the next-gen format and not AVIF because I found that AVIF computation greatly reduces build times. (It does result in smaller images though).
+
+Potential future improvements:
+- inline blurhash (without an additional network request)
+*/
+
+// constants
+const lowQualityResolutions = [
+  // max width, max height
+  [100, 100],
+  [400, 400],
+];
+
+const globalMaxWidth = 4000;
+const globalMaxHeight = 4000;
+// (to have no limit, just set to very large numbers)
+
+// next gen formats, in order of preference
+const nextGenFormats: string[] = ["webp"];
+
+// props
+interface Props {
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+}
+const props = Astro.props;
+
+// import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
+const importedImage = (() => {
+  const imageLoaders = import.meta.glob<{ default: ImageMetadata }>(
+    "/res/**/*"
+  );
+
+  if (!imageLoaders[props.src]) {
+    throw new Error(`${props.src} not found in /res folder!`);
+  }
+
+  return imageLoaders[props.src]();
+})();
+
+// fallback format behaviour -- usually png unless original was jpg, gif or svg
+const fallbackFormat = (() => {
+  if (props.src.endsWith(".jpg") || props.src.endsWith(".jpeg")) {
+    return "jpg";
+  } else if (props.src.endsWith(".gif")) {
+    return "gif";
+  } else if (props.src.endsWith(".svg")) {
+    return "svg";
+  } else {
+    return "png";
+  }
+})();
+
+// default image
+const imageResult = (await getImage({
+  src: importedImage,
+  format: fallbackFormat,
+  width: props.width,
+  height: props.height,
+})) as any; // Astro's getImage return type is incomplete (out of my control)
+
+// parse out useful info
+const originalWidth = imageResult.options.src.width;
+const originalHeight = imageResult.options.src.height;
+const aspectRatio = originalWidth / originalHeight;
+
+const providedWidth = Math.min(
+  Math.min(props.width || originalWidth, originalWidth),
+  globalMaxWidth
+);
+const providedHeight = Math.min(
+  Math.min(props.height || originalHeight, originalHeight),
+  globalMaxHeight
+);
+
+// alt text
+const altText = await (async () => {
+  // use provided alt text if available
+  if (props.alt) {
+    return props.alt;
+  }
+
+  const altTextLoaders = import.meta.glob<{ default: string }>(
+    "/res/**/*.alt.txt",
+    {
+      query: "?raw",
+    }
+  );
+
+  // otherwise, look for an alt text file on disk
+  const targetPath = props.src.replace(/\.[^/.]+$/, ".alt.txt");
+  if (altTextLoaders[targetPath]) {
+    return (await altTextLoaders[targetPath]()).default;
+  }
+
+  // otherwise, empty string
+  console.log(`[Image] Warning: No alt text found for ${props.src}`);
+  return "";
+})();
+
+// images computation
+const getImageVersion = async (
+  maxWidth: number,
+  maxHeight: number,
+  format: string
+) => {
+  let width;
+  let height;
+  if (originalWidth > originalHeight) {
+    width = maxWidth;
+    height = Math.round(maxWidth / aspectRatio);
+  } else {
+    height = maxHeight;
+    width = Math.round(maxHeight * aspectRatio);
+  }
+
+  const result = await getImage({
+    src: importedImage,
+    format,
+    width,
+    height,
+  });
+
+  return {
+    src: result.src,
+    width,
+    height,
+    format,
+  };
+};
+
+const getPicture = async (maxWidth: number, maxHeight: number) => {
+  let nextGenSources = await Promise.all(
+    nextGenFormats.map(
+      async (format) => await getImageVersion(maxWidth, maxHeight, format)
+    )
+  );
+  let fallbackSource = await getImageVersion(
+    maxWidth,
+    maxHeight,
+    fallbackFormat
+  );
+
+  return {
+    nextGenSources,
+    fallbackSource,
+  };
+};
+
+const getAllPictures = async () => {
+  return {
+    pictures: await Promise.all(
+      [...lowQualityResolutions, [providedWidth, providedHeight]].map(
+        async (resolution) => await getPicture(resolution[0], resolution[1])
+      )
+    ),
+    info: {
+      originalWidth,
+      originalHeight,
+      aspectRatio,
+      providedWidth,
+      providedHeight,
+      originalSrc: props.src,
+      alt: altText,
+    },
+  };
+};
+
+const imageInfo = await getAllPictures();
+---
+
+<div class="image-wrapper">
+  {
+    imageInfo.pictures.map((picture, pictureIdx) => {
+      return (
+        <picture
+          style={`aspect-ratio: ${imageInfo.info.originalWidth} / ${imageInfo.info.originalHeight}`}
+        >
+          {picture.nextGenSources.map((source) => {
+            return (
+              <source
+                srcset={source.src}
+                type={`image/${source.format}`}
+                width={source.width}
+                height={source.height}
+              />
+            );
+          })}
+          <img
+            src={picture.fallbackSource.src}
+            alt={imageInfo.info.alt}
+            width={imageInfo.info.providedWidth}
+            height={imageInfo.info.providedHeight}
+            loading={pictureIdx === 0 ? "eager" : "lazy"}
+          />
+        </picture>
+      );
+    })
+  }
+</div>
+
+<style>
+  .image-wrapper {
+    display: grid;
+
+    picture {
+      display: block;
+      grid-area: 1/1/1/1;
+    }
+  }
+
+  img {
+    /* border: 1px solid red; */
+  }
+</style>
