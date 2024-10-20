@@ -1,0 +1,34 @@
+---
+import { site } from "@/data/consts";
+import { Code } from "astro:components";
+import type { CollectionEntry } from "astro:content";
+import Image from "@/components/Image.astro";
+import { theme } from "@/data/consts";
+
+type Props = {
+  entry: CollectionEntry<"projects">;
+};
+
+const { entry } = Astro.props;
+
+const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
+---
+
+<div class="flex flex-col bg-r">
+  {
+    entry.data.thumb && (
+      <a href={linkUrl}>
+        <Image
+          src={entry.data.thumb}
+          alt={entry.data.title}
+          width={theme.spacing["page-max-w"] / 2}
+        />
+      </a>
+    )
+  }
+
+  <a href={linkUrl}>
+    <h2>{entry.data.title}</h2>
+  </a>
+  <div>{entry.data.subtitle}</div>
+</div>

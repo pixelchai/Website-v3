@@ -5,6 +5,7 @@ import { getCollection } from "astro:content";
 import { dateSorter } from "@/utils/collectionUtils";
 import type { ContentEntryMap } from "astro:content";
 import { site, theme } from "@/data/consts";
+import ProjectCard from "../ProjectCard.astro";
 
 // type for astro props
 type Props = {
@@ -19,25 +20,6 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
 <Layout>
   <h1 class="text-4xl mb-5 pb-0 font-bold text-center">{collectionTitle}</h1>
   <div class="flex flex-col gap-4">
-    {
-      entries.map((entry) => (
-        <div class="flex flex-col bg-r">
-          {entry.data.thumb && (
-            <a href={`${site.base}/${collectionName}/${entry.slug}/`}>
-              <Image
-                src={entry.data.thumb}
-                alt={entry.data.title}
-                width={theme.spacing["page-max-w"] / 2}
-              />
-            </a>
-          )}
-
-          <a href={`${site.base}/${collectionName}/${entry.slug}/`}>
-            <h2>{entry.data.title}</h2>
-          </a>
-          <div>{entry.data.subtitle}</div>
-        </div>
-      ))
-    }
+    {entries.map((entry) => <ProjectCard entry={entry as any} />)}
   </div>
 </Layout>
