@@ -238,7 +238,8 @@ const imageInfo = await getAllPictures();
             width={imageInfo.info.providedWidth}
             height={imageInfo.info.providedHeight}
             loading={pictureIdx === 0 ? "eager" : "lazy"}
-            loading="eager"
+            aria-hidden={pictureIdx > 0}
+            decoding="async"
           />
         </picture>
       );
