@@ -77,8 +77,8 @@ const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
 const aspectRatio = originalWidth / originalHeight;
 
-const providedWidth = props.width || originalWidth;
-const providedHeight = props.height || originalHeight;
+const providedWidth = Math.min(props.width || originalWidth, originalWidth);
+const providedHeight = Math.min(props.height || originalHeight, originalHeight);
 
 const getImageVersion = async (
   maxWidth: number,
