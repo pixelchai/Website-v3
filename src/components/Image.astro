@@ -22,6 +22,15 @@ However:
 
 Potential future improvements:
 - inline blurhash (without an additional network request)
+
+NOTE on 'constrained' prop:
+If 'constrained' prop is set to true, the height and/or width must be absolutely constrained using CSS.
+This must be implemented correctly in the parent component.
+Setting only max-width or max-height is insufficient.
+Setting width and height to be in percentage values (e.g. 100%) is also insufficient.
+
+The default value is false, the behaviour for which is will mostly work as expected (% values work, etc)
+however, if you want to use object-fit: cover, you must use the 'constrained' prop and implement it correctly in the parent component.
 */
 
 // constants
@@ -50,6 +59,8 @@ type Props = {
   imgClass?: string;
   pictureClass?: string;
   sourceClass?: string;
+
+  constrained?: boolean;
 } & JSX.IntrinsicElements["div"];
 const props = Astro.props;
 
