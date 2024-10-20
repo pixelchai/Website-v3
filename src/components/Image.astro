@@ -102,10 +102,18 @@ const getImageVersion = async (
     width = Math.round(maxHeight * aspectRatio);
   }
 
-  console.log(`[Image] Image version ${width}x${height} ${format}`);
+  const result = (await getImage({
+    src: importedImage,
+    format,
+    width,
+    height,
+  })) as any;
+
+  console.log(`[Image] Queried image version ${width}x${height} ${format}`);
+  return result.src;
 };
 
-const src1 = await imageSrcByWidth(100);
+const src1 = await getImageVersion(100, 100, "webp");
 const src2 = await imageSrcByWidth(600);
 const src3 = await imageSrcByWidth(6000);
 ---
