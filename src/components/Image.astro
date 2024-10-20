@@ -1,0 +1,164 @@
+---
+import type { ImageMetadata } from "astro";
+import { Picture as AstroPicture, getImage } from "astro:assets";
+import { Code } from "astro:components";
+
+/*
+Custom Image component.
+In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
+In this way, there is progressive image loading (lowest quality image is rendered first, then higher quality images are rendered on top).
+<picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
+Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
+
+Note: 
+- Focuses on reducing CLS (Cumulative Layout Shift).
+- Uses native Astro API (getImage) for image computation (different file formats, sizes, etc).
+
+However:
+- Picture element is used purely for providing fall-backs for next-gen image formats. 
+  Not making use of multiple density srcset functionality -- it is somewhat redundant because multiple resolutions are progressively loaded anyway.
+- Only using WebP for now as the next-gen format and not AVIF because I found that AVIF computation greatly reduces build times. (It does result in smaller images though).
+
+Potential future improvements:
+- inline blurhash (without an additional network request)
+*/
+
+// constants
+const lowQualityResolutions = [
+  // max width, max height
+  [100, 100],
+];
+
+// props
+interface Props {
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+}
+const props = Astro.props;
+
+// import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
+const importedImage = (() => {
+  const imageLoaders = import.meta.glob<{ default: ImageMetadata }>(
+    "/res/**/*"
+  );
+
+  if (!imageLoaders[props.src]) {
+    throw new Error(`${props.src} not found in /res folder!`);
+  }
+
+  return imageLoaders[props.src]();
+})();
+
+// fallback format behaviour -- usually png unless original was jpg, gif or svg
+const fallbackFormat = (() => {
+  if (props.src.endsWith(".jpg") || props.src.endsWith(".jpeg")) {
+    return "jpg";
+  } else if (props.src.endsWith(".gif")) {
+    return "gif";
+  } else if (props.src.endsWith(".svg")) {
+    return "svg";
+  } else {
+    return "png";
+  }
+})();
+
+// default image
+const imageResult = (await getImage({
+  src: importedImage,
+  format: fallbackFormat,
+  width: props.width,
+  height: props.height,
+})) as any; // Astro's getImage return type is incomplete (out of my control)
+
+// parse out useful info
+const originalWidth = imageResult.options.src.width;
+const originalHeight = imageResult.options.src.height;
+const aspectRatio = originalWidth / originalHeight;
+
+const providedWidth = Math.min(props.width || originalWidth, originalWidth);
+const providedHeight = Math.min(props.height || originalHeight, originalHeight);
+
+const getImageVersion = async (
+  maxWidth: number,
+  maxHeight: number,
+  format: string
+) => {
+  let width;
+  let height;
+  if (originalWidth > originalHeight) {
+    width = maxWidth;
+    height = Math.round(maxWidth / aspectRatio);
+  } else {
+    height = maxHeight;
+    width = Math.round(maxHeight * aspectRatio);
+  }
+
+  const result = (await getImage({
+    src: importedImage,
+    format,
+    width,
+    height,
+  })) as any;
+
+  console.log(`[Image] Queried image version ${width}x${height} ${format}`);
+  return result.src;
+};
+
+const srcLowNextGen = await getImageVersion(100, 100, "webp");
+const srcLowFallback = await getImageVersion(100, 100, fallbackFormat);
+
+const srcHighNextGen = await getImageVersion(
+  providedWidth,
+  providedHeight,
+  "webp"
+);
+const srcHighFallback = await getImageVersion(
+  providedWidth,
+  providedHeight,
+  fallbackFormat
+);
+---
+
+<!-- <>
+  <AstroPicture src={importedImage} alt={"a"} formats={["webp"]} />
+</> --><!-- <Code code={JSON.stringify(imageResult, null, 2)} lang="json" /> --><!-- <img src={imageResult.src} alt={props.alt} /> -->
+<div class="image-wrapper">
+  <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
+    <source srcset={srcLowNextGen} type="image/webp" />
+    <img
+      src={srcLowFallback}
+      alt={props.alt}
+      width={providedWidth}
+      height={providedHeight}
+      loading="eager"
+    />
+  </picture>
+
+  <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
+    <source srcset={srcHighNextGen} type="image/webp" />
+    <img
+      src={srcHighFallback}
+      alt={props.alt}
+      width={providedWidth}
+      height={providedHeight}
+      loading="lazy"
+    />
+  </picture>
+</div>
+
+<style>
+  .image-wrapper {
+    display: grid;
+
+    picture {
+      display: block;
+      grid-area: 1/1/1/1;
+    }
+  }
+
+  img {
+    /* border: 1px solid red; */
+  }
+</style>
