@@ -8,6 +8,7 @@ In the browser, multiple <picture> elements are rendered on top of each other, w
 In this way, there is progressive image loading (lowest quality image is rendered first, then higher quality images are rendered on top).
 <picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
 Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
+Alt text is also set, either from the provided prop or from a .alt.txt file in the same directory as the image.
 
 Note: 
 - Focuses on reducing CLS (Cumulative Layout Shift).
