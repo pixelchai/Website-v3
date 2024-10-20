@@ -3,6 +3,15 @@ import type { ImageMetadata } from "astro";
 import { Picture as AstroPicture, getImage } from "astro:assets";
 import { Code } from "astro:components";
 
+/*
+Custom Image component.
+Uses native Astro API (getImage) to generate images in different resolutions and file formats.
+In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
+In this way, there is progressive image loading (lowest quality image is rendered first, then higher quality images are rendered on top).
+<picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
+Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
+*/
+
 // props
 interface Props {
   src: string;
@@ -65,36 +74,20 @@ const src2 = await imageSrcByWidth(600);
 const src3 = await imageSrcByWidth(6000);
 ---
 
-<!-- <>
+<>
   <AstroPicture
     src={importedImage}
     alt={"a"}
     formats={["webp"]}
     densities={[0.5, 1, 1.5, 2]}
   />
-</> -->
+</>
 <Code code={JSON.stringify(imageResult, null, 2)} lang="json" />
 <!-- <img src={imageResult.src} alt={props.alt} /> -->
 
 <div class="image-wrapper">
-  <!-- <img src={src1} width="600" height="400" style="width:600px;height;400px;" /> -->
-  <!-- <img src={src3} width="600" height="400" style="width:600px;height;400px;" /> -->
-  <AstroPicture
-    src={src1}
-    width="600"
-    height="400"
-    alt={""}
-    formats={["webp"]}
-    densities={[0.5, 1, 1.5, 2]}
-  />
-  <AstroPicture
-    src={src2}
-    width="600"
-    height="400"
-    alt={""}
-    formats={["webp"]}
-    densities={[0.5, 1, 1.5, 2]}
-  />
+  <img src={src1} width="600" height="400" style="width:600px;height;400px;" />
+  <img src={src3} width="600" height="400" style="width:600px;height;400px;" />
 </div>
 
 <style>
