@@ -29,6 +29,11 @@ const lowQualityResolutions = [
   [100, 100],
 ];
 
+const globalMaxWidth = 1920;
+const globalMaxHeight = 1080;
+
+const nextGenFormats: string[] = ["webp"];
+
 // props
 interface Props {
   src: string;
@@ -77,8 +82,14 @@ const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
 const aspectRatio = originalWidth / originalHeight;
 
-const providedWidth = Math.min(props.width || originalWidth, originalWidth);
-const providedHeight = Math.min(props.height || originalHeight, originalHeight);
+const providedWidth = Math.min(
+  Math.min(props.width || originalWidth, originalWidth),
+  globalMaxWidth
+);
+const providedHeight = Math.min(
+  Math.min(props.height || originalHeight, originalHeight),
+  globalMaxHeight
+);
 
 const getImageVersion = async (
   maxWidth: number,
@@ -102,30 +113,71 @@ const getImageVersion = async (
     height,
   })) as any;
 
-  console.log(`[Image] Queried image version ${width}x${height} ${format}`);
-  return result.src;
+  return {
+    src: result.src,
+    width,
+    height,
+    format,
+  };
 };
 
-const srcLowNextGen = await getImageVersion(100, 100, "webp");
-const srcLowFallback = await getImageVersion(100, 100, fallbackFormat);
+const getPicture = async (maxWidth: number, maxHeight: number) => {
+  let nextGenSources = await Promise.all(
+    nextGenFormats.map(
+      async (format) => await getImageVersion(maxWidth, maxHeight, format)
+    )
+  );
+  let fallbackSource = await getImageVersion(
+    maxWidth,
+    maxHeight,
+    fallbackFormat
+  );
 
-const srcHighNextGen = await getImageVersion(
-  providedWidth,
-  providedHeight,
-  "webp"
-);
-const srcHighFallback = await getImageVersion(
-  providedWidth,
-  providedHeight,
-  fallbackFormat
-);
+  return {
+    nextGenSources,
+    fallbackSource,
+  };
+};
+
+const getPictures = async () => {
+  return {
+    pictures: await Promise.all(
+      lowQualityResolutions.map(
+        async (resolution) => await getPicture(resolution[0], resolution[1])
+      )
+    ),
+    info: {
+      originalWidth,
+      originalHeight,
+      aspectRatio,
+      providedWidth,
+      providedHeight,
+      originalSrc: props.src,
+    },
+  };
+};
+
+// const srcLowNextGen = await getImageVersion(100, 100, "webp");
+// const srcLowFallback = await getImageVersion(100, 100, fallbackFormat);
+
+// const srcHighNextGen = await getImageVersion(
+//   providedWidth,
+//   providedHeight,
+//   "webp"
+// );
+// const srcHighFallback = await getImageVersion(
+//   providedWidth,
+//   providedHeight,
+//   fallbackFormat
+// );
+const pictures = await getPictures();
 ---
 
 <!-- <>
   <AstroPicture src={importedImage} alt={"a"} formats={["webp"]} />
 </> --><!-- <Code code={JSON.stringify(imageResult, null, 2)} lang="json" /> --><!-- <img src={imageResult.src} alt={props.alt} /> -->
 <div class="image-wrapper">
-  <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
+  <!-- <picture style=`aspect-ratio: ${originalWidth} / ${originalHeight}`>
     <source srcset={srcLowNextGen} type="image/webp" />
     <img
       src={srcLowFallback}
@@ -145,17 +197,42 @@ const srcHighFallback = await getImageVersion(
       height={providedHeight}
       loading="lazy"
     />
-  </picture>
+  </picture> -->
+  {
+    pictures.pictures.map((picture) => {
+      return (
+        <picture style={`aspect-ratio: ${originalWidth} / ${originalHeight}`}>
+          {picture.nextGenSources.map((source) => {
+            return (
+              <source
+                srcset={source.src}
+                type={`image/${source.format}`}
+                width={source.width}
+                height={source.height}
+              />
+            );
+          })}
+          <img
+            src={picture.fallbackSource.src}
+            alt={props.alt}
+            width={providedWidth}
+            height={providedHeight}
+            loading="lazy"
+          />
+        </picture>
+      );
+    })
+  }
 </div>
 
 <style>
   .image-wrapper {
     display: grid;
 
-    picture {
+    /* picture {
       display: block;
       grid-area: 1/1/1/1;
-    }
+    } */
   }
 
   img {
