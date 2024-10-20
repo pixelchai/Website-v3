@@ -206,9 +206,17 @@ const getPicture = async (maxWidth: number, maxHeight: number) => {
 };
 
 const getAllPictures = async () => {
+  let resolutions = [];
+  for (let resolution of lowQualityResolutions) {
+    if (resolution[0] < providedWidth && resolution[1] < providedHeight) {
+      resolutions.push(resolution);
+    }
+  }
+  resolutions.push([providedWidth, providedHeight]);
+
   return {
     pictures: await Promise.all(
-      [...lowQualityResolutions, [providedWidth, providedHeight]].map(
+      resolutions.map(
         async (resolution) => await getPicture(resolution[0], resolution[1])
       )
     ),
