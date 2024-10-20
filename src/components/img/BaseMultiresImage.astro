@@ -5,7 +5,7 @@ import { getImage } from "astro:assets";
 
 /*
 Custom Image component.
-In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
+Desired behaviour: In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
 In this way, there is progressive image loading (lowest quality image is rendered first, then higher quality images are rendered on top).
 <picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
 Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
@@ -23,14 +23,11 @@ However:
 Potential future improvements:
 - inline blurhash (without an additional network request)
 
-NOTE on 'constrained' prop:
-If 'constrained' prop is set to true, the height and/or width must be absolutely constrained using CSS.
-This must be implemented correctly in the parent component.
-Setting only max-width or max-height is insufficient.
-Setting width and height to be in percentage values (e.g. 100%) is also insufficient.
-
-The default value is false, the behaviour for which is will mostly work as expected (% values work, etc)
-however, if you want to use object-fit: cover, you must use the 'constrained' prop and implement it correctly in the parent component.
+IMPORTANT:
+This is the base component, which is purely for producing the raw markup. 
+CSS and/or scripting is required to stack the multiple resolution images on top of each other as described.
+This must be implemented in the parent component.
+The reason for this is that different approaches are required depending on e.g. if you want the image to be constrained, and crop to fit the container, or if you want the image to be unconstrained and fill the container.
 */
 
 // constants
@@ -270,7 +267,7 @@ const restProps = Object.fromEntries(
     })
   }
 </div>
-
+<!-- 
 <style>
   .image-wrapper {
     display: inline-block;
@@ -303,4 +300,4 @@ const restProps = Object.fromEntries(
   img {
     /* border: 1px solid red; */
   }
-</style>
+</style> -->
