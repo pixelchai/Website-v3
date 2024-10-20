@@ -118,8 +118,16 @@
 
 @layer utilities {
     /* default a style */
+    .default-a-no-hover {
+        @apply border-0 text-dark;
+    }
+
+    .default-a-hover {
+        @apply text-dark-ll;
+    }
+
     .default-a {
-        @apply border-0 text-dark hover:text-dark-ll;
+        @apply default-a-no-hover hover:default-a-hover;
     }
 
     /* contentf a style */
