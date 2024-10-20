@@ -52,7 +52,7 @@ const importedImage = (() => {
 })();
 
 // fallback format behaviour -- usually png unless original was jpg, gif or svg
-const fallBackFormat = (() => {
+const fallbackFormat = (() => {
   if (props.src.endsWith(".jpg") || props.src.endsWith(".jpeg")) {
     return "jpg";
   } else if (props.src.endsWith(".gif")) {
@@ -67,7 +67,7 @@ const fallBackFormat = (() => {
 // default image
 const imageResult = (await getImage({
   src: importedImage,
-  format: fallBackFormat,
+  format: fallbackFormat,
   width: props.width,
   height: props.height,
 })) as any; // Astro's getImage return type is incomplete (out of my control)
@@ -77,11 +77,14 @@ const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
 const aspectRatio = originalWidth / originalHeight;
 
+const providedWidth = props.width || originalWidth;
+const providedHeight = props.height || originalHeight;
+
 // temp -- for experimentation
 const imageSrcByWidth = async (width: number) => {
   const result = (await getImage({
     src: importedImage,
-    format: fallBackFormat,
+    format: fallbackFormat,
     width,
   })) as any;
   return result.src;
@@ -113,9 +116,19 @@ const getImageVersion = async (
   return result.src;
 };
 
-const src1 = await getImageVersion(100, 100, "webp");
-const src2 = await imageSrcByWidth(600);
-const src3 = await imageSrcByWidth(6000);
+const srcLowNextGen = await getImageVersion(100, 100, "webp");
+const srcLowFallback = await getImageVersion(100, 100, fallbackFormat);
+
+const srcHighNextGen = await getImageVersion(
+  providedWidth,
+  providedHeight,
+  "webp"
+);
+const srcHighFallback = await getImageVersion(
+  providedWidth,
+  providedHeight,
+  fallbackFormat
+);
 ---
 
 <>
@@ -125,8 +138,27 @@ const src3 = await imageSrcByWidth(6000);
 <!-- <img src={imageResult.src} alt={props.alt} /> -->
 
 <div class="image-wrapper">
-  <img src={src1} width="600" height="400" style="width:600px;height;400px;" />
-  <img src={src3} width="600" height="400" style="width:600px;height;400px;" />
+  <!-- <img src={src1} width="600" height="400" style="width:600px;height;400px;" />
+  <img src={src3} width="600" height="400" style="width:600px;height;400px;" /> -->
+  <picture>
+    <source srcset={srcLowNextGen} type="image/webp" />
+    <img
+      src={srcLowFallback}
+      alt={props.alt}
+      width={providedWidth}
+      height={providedHeight}
+    />
+  </picture>
+
+  <picture>
+    <source srcset={srcHighNextGen} type="image/webp" />
+    <img
+      src={srcHighFallback}
+      alt={props.alt}
+      width={providedWidth}
+      height={providedHeight}
+    />
+  </picture>
 </div>
 
 <style>
