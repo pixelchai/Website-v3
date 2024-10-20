@@ -18,7 +18,16 @@ However:
 - Picture element is used purely for providing fall-backs for next-gen image formats. 
   Not making use of multiple density srcset functionality -- it is somewhat redundant because multiple resolutions are progressively loaded anyway.
 - Only using WebP for now as the next-gen format and not AVIF because I found that AVIF computation greatly reduces build times. (It does result in smaller images though).
+
+Potential future improvements:
+- inline blurhash (without an additional network request)
 */
+
+// constants
+const lowQualityResolutions = [
+  // max width, max height
+  [100, 100],
+];
 
 // props
 interface Props {
@@ -66,6 +75,7 @@ const imageResult = (await getImage({
 // parse out useful info
 const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
+const aspectRatio = originalWidth / originalHeight;
 
 // temp -- for experimentation
 const imageSrcByWidth = async (width: number) => {
@@ -75,6 +85,24 @@ const imageSrcByWidth = async (width: number) => {
     width,
   })) as any;
   return result.src;
+};
+
+const getImageVersion = async (
+  maxWidth: number,
+  maxHeight: number,
+  format: string
+) => {
+  let width;
+  let height;
+  if (originalWidth > originalHeight) {
+    width = maxWidth;
+    height = Math.round(maxWidth / aspectRatio);
+  } else {
+    height = maxHeight;
+    width = Math.round(maxHeight * aspectRatio);
+  }
+
+  console.log(`[Image] Image version ${width}x${height} ${format}`);
 };
 
 const src1 = await imageSrcByWidth(100);
