@@ -21,21 +21,22 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
   <div class="flex flex-col gap-4">
     {
       entries.map((entry) => (
-        <a
-          class="flex flex-col bg-r"
-          href={`${site.base}/${collectionName}/${entry.slug}/`}
-        >
+        <div class="flex flex-col bg-r">
           {entry.data.thumb && (
-            <Image
-              src={entry.data.thumb}
-              alt={entry.data.title}
-              width={theme.spacing["page-max-w"] / 2}
-            />
+            <a href={`${site.base}/${collectionName}/${entry.slug}/`}>
+              <Image
+                src={entry.data.thumb}
+                alt={entry.data.title}
+                width={theme.spacing["page-max-w"] / 2}
+              />
+            </a>
           )}
 
-          <h2>{entry.data.title}</h2>
+          <a href={`${site.base}/${collectionName}/${entry.slug}/`}>
+            <h2>{entry.data.title}</h2>
+          </a>
           <div>{entry.data.subtitle}</div>
-        </a>
+        </div>
       ))
     }
   </div>
