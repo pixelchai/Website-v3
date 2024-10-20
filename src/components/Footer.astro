@@ -1,12 +1,11 @@
 ---
 import { site } from "@/data/consts";
-import { promisify } from "util";
-import { exec } from "child_process";
+import { getExecStdout } from "@/utils/misc";
 
 const buildYear = new Date().getFullYear();
-const commitShortHash = promisify(exec)("git rev-parse --short HEAD")
-  .then((res) => res.stdout.trim())
-  .catch(() => "unknown");
+
+const commitShortHash = await getExecStdout("git rev-parse --short HEAD");
+const commitHash = await getExecStdout("git rev-parse HEAD");
 ---
 
 <footer class="my-2 pb-6 pt-8 text-center contentf">
@@ -14,7 +13,7 @@ const commitShortHash = promisify(exec)("git rev-parse --short HEAD")
     >&copy; {buildYear}
     <a href={site.base}>{site.me.name}</a>
     &middot;
-    <a href={"/"}>Source code</a>
-    &middot; commit <a href="/">{commitShortHash}</a>
+    <a href={"/"}>source code</a>
+    (commit: <a href="/">{commitShortHash}</a>)
   </span>
 </footer>
