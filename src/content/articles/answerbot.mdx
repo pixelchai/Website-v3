@@ -26,5 +26,25 @@ Words in some text are categorised into whether they are a noun or a verb, etc (
 
 In terms of linguistics, the words in a sentence can be thought of as being linked to each other as dependencies. Dependency parsing means parsing and categorising how the words in a sentence relate and link to each other.
 
-{/* ![](/res/content/answerbot/displacy-example.svg) */}
-<Image src="/res/content/answerbot/displacy-example.svg"/>
+![](/res/content/answerbot/displacy-example.svg)
+{/* <Image src="/res/content/answerbot/displacy-example.svg"/> */}
+
+Above is a visualisation of dependency parsing and POS tagging. You can visualise your own sentences on [the DisplaCy website](https://explosion.ai/demos/displacy).
+
+Note: there is one word from which all other words are linked either directly or indirectly. This is called the `root`. In this case, it’s the word “sat”.
+
+# Question Parsing
+
+What needs to be extracted from the input is terms, categorised into being either ’detail’ or ‘keywords’.
+
+When does a ‘detail’ stop being just additional information and start being a ‘keyword’, though? It isn’t as binary as you might first think - and resolving terms to be strictly either may result in a less complete representation of the question and so in inaccuracies. For this reason, I decided to take a fuzzy approach and arrange the terms into a linear hierarchal list (aka: a spectrum) of relative ‘detail’-ness (dependency/importance) instead.
+
+Internally, this structure shall be represented by a list of terms, where ‘keyword’-like terms emerge at the left and the ‘detail’-like emerge at the right.
+
+| Natural Language                       | Abstract Hierarchy                |
+| -------------------------------------- | --------------------------------- |
+| Obama’s age                            | `["Obama", "age"]`                |
+| Obama’s dad’s age                      | `["Obama", "dad", "age"]`         |
+| the biggest animal ever seen in Europe | `["Europe", "animal", "biggest"]` |
+
+Note: Google Search has a feature similar to what is trying to be achieved here called `Featured Snippets` (image below), which seems to make use of a similar hierarchal structure (see underlined).
