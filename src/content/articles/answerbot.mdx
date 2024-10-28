@@ -5,8 +5,6 @@ date: 2018-09-20
 
 thumb: /res/content/answerbot/demo3.png
 ---
-import Image from "@/components/img/Image.astro";
-
 
 Is it possible to parse a natural language (plain English) question and gather relevant information for it from the internet using Natural Language Processing techniques? AnswerBot is the answer. [Code can be found here](https://github.com/pixelchai/AnswerBot).
 
@@ -26,8 +24,7 @@ Words in some text are categorised into whether they are a noun or a verb, etc (
 
 In terms of linguistics, the words in a sentence can be thought of as being linked to each other as dependencies. Dependency parsing means parsing and categorising how the words in a sentence relate and link to each other.
 
-{/* ![](/res/content/answerbot/displacy-example.svg) */}
-<Image src="/res/content/answerbot/displacy-example.svg"/>
+![](/res/content/answerbot/displacy-example.svg)
 
 Above is a visualisation of dependency parsing and POS tagging. You can visualise your own sentences on [the DisplaCy website](https://explosion.ai/demos/displacy).
 
@@ -49,7 +46,7 @@ Internally, this structure shall be represented by a list of terms, where ‘key
 
 Note: Google Search has a feature similar to what is trying to be achieved here called `Featured Snippets` (image below), which seems to make use of a similar hierarchal structure (see underlined).
 
-![Google's Featured Snippets](https://i.snag.gy/u10vha.jpg)
+![](/res/content/answerbot/google-featured-snippets.jpg)
 
 ## Question Fixing
 

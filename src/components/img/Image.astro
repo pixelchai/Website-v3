@@ -1,7 +1,7 @@
 ---
-import type { JSX } from "astro/jsx-runtime";
 import BaseMultiresImage from "./BaseMultiresImage.astro";
 import { combineClasses } from "@/utils/markupUtils";
+import type { Props } from "./BaseMultiresImage.astro";
 
 /*
 Standard (unconstrained) image component.
@@ -12,20 +12,6 @@ For this behaviour, see ConstrainedImage.astro.
 Internally uses CSS grid to stack the multiple resolution images on top of each other.
 */
 
-type Props = {
-  src: string;
-  alt?: string;
-
-  width?: number;
-  height?: number;
-
-  class?: string;
-  imgClass?: string;
-  pictureClass?: string;
-  sourceClass?: string;
-
-  constrained?: boolean;
-} & JSX.IntrinsicElements["div"];
 const props = Astro.props;
 ---
 
