@@ -1,9 +1,9 @@
 ---
 import { combineClasses } from "@/utils/markupUtils";
-import type { ImageMetadata } from "astro";
+import type { ImageMetadata, LocalImageService } from "astro";
 import type { JSX } from "astro/jsx-runtime";
 import { getConfiguredImageService, getImage } from "astro:assets";
-
+import fs from "node:fs";
 /*
 Custom Image component.
 Desired behaviour: In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
@@ -198,13 +198,6 @@ const getImageVersion = async (
   if (inline) {
     // get base64 of image
     // const fullUrl = Astro.url.origin + result.src;
-    const transformOptions = {
-      src: props.src,
-      width,
-      height,
-      format: "webp",
-      quality: 75,
-    };
 
     // try {
     //   const response = await fetch(fullUrl);
@@ -218,9 +211,38 @@ const getImageVersion = async (
     //   console.error(`[Image] Error fetching ${fullUrl}: ${error}`);
     // }
 
-    const { data } = await (
-      (await getConfiguredImageService()) as any
-    ).transform(transformOptions);
+    let originalImagePath =
+      "/" + (await importedImage).default.src.replace("/@fs/", "");
+    // console.log(await importedImage);
+    // delete everything after ?
+    originalImagePath = originalImagePath.split("?")[0];
+
+    let originalImage = await fs.promises.readFile(originalImagePath);
+
+    const imageService =
+      (await getConfiguredImageService()) as LocalImageService;
+
+    const { data, format } = await imageService.transform(
+      originalImage,
+      {
+        src: originalImagePath,
+        width,
+        height,
+        format: "webp",
+        quality: 75,
+      },
+      {
+        domains: [],
+        remotePatterns: [],
+        service: {
+          config: {},
+          entrypoint: "",
+        },
+      }
+    );
+
+    const base64string = Buffer.from(data).toString("base64");
+    src = `data:image/webp;base64,${base64string}`;
   }
 
   return {
