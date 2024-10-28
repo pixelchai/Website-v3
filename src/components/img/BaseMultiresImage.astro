@@ -4,6 +4,7 @@ import type { ImageMetadata, LocalImageService } from "astro";
 import type { JSX } from "astro/jsx-runtime";
 import { getConfiguredImageService, getImage } from "astro:assets";
 import fs from "node:fs";
+
 /*
 Custom Image component.
 Desired behaviour: In the browser, multiple <picture> elements are rendered on top of each other, with the lowest resolution first.
@@ -213,6 +214,9 @@ const getImageVersion = async (
 
     // let originalImagePath =
     //   "/" + (await importedImage).default.src.replace("/@fs/", "");
+
+    const ba = await importedImage;
+    console.log(ba.default.src);
     let originalImagePath = "/files/Coding/WebExp/Website-v3" + props.src;
     // console.log(await importedImage);
     // delete everything after ?
