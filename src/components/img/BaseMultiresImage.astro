@@ -350,3 +350,43 @@ const restProps = Object.fromEntries(
     })
   }
 </div>
+
+<script>
+  // NB: this script runs once per page, not per component instance
+  // thus here we handle all instances of this component on the page
+
+  const elms = document.querySelectorAll(".image-wrapper");
+  elms.forEach((elm) => {
+    const pictures = elm.querySelectorAll("picture");
+
+    let prevPicture: HTMLPictureElement | null = null;
+    pictures.forEach((picture, i) => {
+      const img = picture.querySelector("img");
+      if (!img) {
+        return;
+      }
+
+      const onLoadCallback = () => {
+        console.log("loaded", picture);
+        picture.style.visibility = "visible";
+
+        // if (prevPicture) {
+        //   prevPicture.style.visibility = "hidden";
+        // }
+      };
+      if (img.complete) {
+        onLoadCallback();
+      } else {
+        // while loading, set to hidden
+        // (don't show the image until it's fully loaded -- workaround for Firefox)
+        // (in Firefox, the image has an undesirable white background while loading
+        // whereas in Chrome, the background is transparent)
+        // set css in JavaScript so that we fall back to default behaviour if JS is disabled
+        picture.style.visibility = "hidden";
+        img.addEventListener("load", onLoadCallback);
+      }
+
+      prevPicture = picture;
+    });
+  });
+</script>
