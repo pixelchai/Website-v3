@@ -17,20 +17,21 @@ const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
 ---
 
 <div
-  class="flex flex-col border border-dark-ll rounded overflow-hidden hover:border-dark-d hover:-translate-y-1 shadow-sm hover:shadow transition-transform"
+  class="flex flex-row
+   border border-dark-ll rounded overflow-hidden hover:border-dark-d hover:-translate-y-1 shadow-sm hover:shadow transition-transform"
 >
   {
     entry.data.thumb && (
       <a href={linkUrl} class="">
         <ConstrainedImage
           src={entry.data.thumb}
-          maxWidth={theme.spacing["page-max-w"] * 0.65}
-          class="w-full h-60 overflow-hidden"
+          class="w-[12rem] h-full overflow-hidden"
+          style="aspect-ratio: unset;"
         />
       </a>
     )
   }
-  <a href={linkUrl} class="hover:default-a-no-hover">
+  <a href={linkUrl} class="hover:default-a-no-hover flex-grow">
     <div class="p-4">
       <div class="flex flex-row items-center justify-between gap-4">
         <h2 class="inline-block">{entry.data.title}</h2>
