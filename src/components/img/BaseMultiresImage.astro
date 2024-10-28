@@ -1,8 +1,10 @@
 ---
 import { combineClasses } from "@/utils/markupUtils";
-import type { ImageMetadata } from "astro";
+import { getProjectRootPath } from "@/utils/misc";
+import type { ImageMetadata, LocalImageService } from "astro";
 import type { JSX } from "astro/jsx-runtime";
-import { getImage } from "astro:assets";
+import { getConfiguredImageService, getImage } from "astro:assets";
+import fs from "node:fs";
 
 /*
 Custom Image component.
@@ -11,10 +13,12 @@ In this way, there is progressive image loading (lowest quality image is rendere
 <picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
 Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
 Alt text is also set, either from the provided prop or from a .alt.txt file in the same directory as the image.
+To minimise network requests and CLS, the lowest quality image is inlined as a base64 string.
 
 Note: 
 - Focuses on reducing CLS (Cumulative Layout Shift).
 - Uses native Astro API (getImage) for image computation (different file formats, sizes, etc).
+- Lowest quality image is inlined.
 
 However:
 - Picture element is used purely for providing fall-backs for next-gen image formats. 
@@ -22,7 +26,7 @@ However:
 - Only using WebP for now as the next-gen format and not AVIF because I found that AVIF computation greatly reduces build times. (It does result in smaller images though).
 
 Potential future improvements:
-- inline blurhash (without an additional network request)
+- remove low quality images from the DOM once they are loaded using JavaScript (possibly improve accessibility, SEO and memory usage)
 
 IMPORTANT:
 This is the base component, which is purely for producing the raw markup. 
@@ -34,12 +38,13 @@ The reason for this is that different approaches are required depending on e.g. 
 // constants
 const lowQualityResolutions = [
   // max width, max height
-  [100, 100],
+  [20, 20],
   [400, 400],
 ];
 
 // next gen formats, in order of preference
 const nextGenFormats: string[] = ["webp"];
+const inlineFormat: string = "webp";
 
 // props
 type Props = {
@@ -166,11 +171,48 @@ const altText = await (async () => {
   return "";
 })();
 
+// direct image computation using LocalImageService directly
+// NOTE: does not use Astro's image cache when generating images
+const getImageTransformationBase64 = async (
+  width: number,
+  height: number,
+  format: string,
+  quality: number = 60
+) => {
+  const originalImagePath = getProjectRootPath() + props.src;
+  const originalImage = await fs.promises.readFile(originalImagePath);
+
+  const imageService = (await getConfiguredImageService()) as LocalImageService;
+
+  const transformResult = await imageService.transform(
+    originalImage,
+    {
+      src: originalImagePath,
+      width,
+      height,
+      format,
+      quality,
+    },
+    {
+      domains: [],
+      remotePatterns: [],
+      service: {
+        config: {},
+        entrypoint: "",
+      },
+    }
+  );
+
+  const base64string = Buffer.from(transformResult.data).toString("base64");
+  return `data:image/${transformResult.format};base64,${base64string}`;
+};
+
 // images computation
 const getImageVersion = async (
   maxWidth: number,
   maxHeight: number,
-  format: string
+  format: string,
+  inline: boolean = false
 ) => {
   let width;
   let height;
@@ -189,25 +231,42 @@ const getImageVersion = async (
     height,
   });
 
+  let src: string = result.src;
+
+  if (inline) {
+    // get base64 of image
+    try {
+      src = await getImageTransformationBase64(width, height, format);
+    } catch (e) {
+      console.error(`[Image] Error inlining image: ${e}`);
+      // as a fallback, the original src is used (in theory the same image, just non-inlined)
+    }
+  }
+
   return {
-    src: result.src,
+    src,
     width,
     height,
     format,
+    inline,
   };
 };
 
-const getPicture = async (maxWidth: number, maxHeight: number) => {
+const getPicture = async (
+  maxWidth: number,
+  maxHeight: number,
+  inline: boolean = false
+) => {
+  // if inline, no 'nextGenSources'
   let nextGenSources = await Promise.all(
-    nextGenFormats.map(
+    (inline ? [] : nextGenFormats).map(
       async (format) => await getImageVersion(maxWidth, maxHeight, format)
     )
   );
-  let fallbackSource = await getImageVersion(
-    maxWidth,
-    maxHeight,
-    fallbackFormat
-  );
+
+  let fallbackSource = !inline
+    ? await getImageVersion(maxWidth, maxHeight, fallbackFormat)
+    : await getImageVersion(maxWidth, maxHeight, inlineFormat, true);
 
   return {
     nextGenSources,
@@ -227,7 +286,8 @@ const getAllPictures = async () => {
   return {
     pictures: await Promise.all(
       resolutions.map(
-        async (resolution) => await getPicture(resolution[0], resolution[1])
+        async (resolution, i) =>
+          await getPicture(resolution[0], resolution[1], i === 0)
       )
     ),
     info: {
@@ -260,7 +320,10 @@ const restProps = Object.fromEntries(
   {
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (
-        <picture class={props.pictureClass}>
+        <picture
+          class={props.pictureClass}
+          style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
+        >
           {picture.nextGenSources.map((source) => {
             return (
               <source
