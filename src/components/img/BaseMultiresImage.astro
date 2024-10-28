@@ -40,6 +40,7 @@ const lowQualityResolutions = [
 
 // next gen formats, in order of preference
 const nextGenFormats: string[] = ["webp"];
+const inlineFormat: string = "avif";
 
 // props
 type Props = {
@@ -193,20 +194,21 @@ const getImageVersion = async (
   let src: string = result.src;
 
   if (inline) {
-    // get base64 of image
-    const base64: string = await fetch(result.src)
-      .then((res) => res.blob())
-      .then((blob) => {
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(blob);
-          reader.onloadend = () => {
-            resolve(reader.result);
-          };
-        });
-      });
+    // // get base64 of image
+    // const base64: string = await fetch(result.src)
+    //   .then((res) => res.blob())
+    //   .then((blob) => {
+    //     return new Promise((resolve) => {
+    //       const reader = new FileReader();
+    //       reader.readAsDataURL(blob);
+    //       reader.onloadend = () => {
+    //         resolve(reader.result);
+    //       };
+    //     });
+    //   });
 
-    src = base64;
+    src =
+      "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAgADBf/EABYBAQEBAAAAAAAAAAAAAAAAAAECBP/aAAwDAQACEAMQAAAB66ZJwnOb/8QAGhABAAMAAwAAAAAAAAAAAAAAAQACERMhMf/aAAgBAQABBQJp2bnIMPCNTf/EABgRAAIDAAAAAAAAAAAAAAAAAAABERJB/9oACAEDAQE/AcHaT//EABURAQEAAAAAAAAAAAAAAAAAAAAi/9oACAECAQE/AVP/xAAaEAACAgMAAAAAAAAAAAAAAAAAAREhIDGB/9oACAEBAAY/ApT4XWGj/8QAGxABAAICAwAAAAAAAAAAAAAAAQARITFRYXH/2gAIAQEAAT8hSuqeIlitwy2t9TQzKlhcI//aAAwDAQACAAMAAAAQey//xAAXEQADAQAAAAAAAAAAAAAAAAAAASER/9oACAEDAQE/EFRm1R//xAAYEQADAQEAAAAAAAAAAAAAAAAAESEBQf/aAAgBAgEBPxBVmRw//8QAHBABAAICAwEAAAAAAAAAAAAAAQARITFBUWGR/9oACAEBAAE/ELCcgo27ipp21h+VxEoxHTyNWbozAElqt+xAAG5//9k=";
   }
 
   return {
@@ -218,17 +220,21 @@ const getImageVersion = async (
   };
 };
 
-const getPicture = async (maxWidth: number, maxHeight: number) => {
+const getPicture = async (
+  maxWidth: number,
+  maxHeight: number,
+  inline: boolean = false
+) => {
+  // if inline, no 'nextGenSources'
   let nextGenSources = await Promise.all(
-    nextGenFormats.map(
+    (inline ? [] : nextGenFormats).map(
       async (format) => await getImageVersion(maxWidth, maxHeight, format)
     )
   );
-  let fallbackSource = await getImageVersion(
-    maxWidth,
-    maxHeight,
-    fallbackFormat
-  );
+
+  let fallbackSource = !inline
+    ? await getImageVersion(maxWidth, maxHeight, fallbackFormat)
+    : await getImageVersion(maxWidth, maxHeight, inlineFormat, true);
 
   return {
     nextGenSources,
@@ -248,7 +254,8 @@ const getAllPictures = async () => {
   return {
     pictures: await Promise.all(
       resolutions.map(
-        async (resolution) => await getPicture(resolution[0], resolution[1])
+        async (resolution, i) =>
+          await getPicture(resolution[0], resolution[1], i === 0)
       )
     ),
     info: {
