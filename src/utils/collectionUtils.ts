@@ -1,3 +1,4 @@
+import ContentImage from "@/components/img/ContentImage.astro";
 import type { GetStaticPathsResult } from "astro";
 import {
   getCollection,
@@ -24,4 +25,10 @@ export function dateSorter<C extends keyof AnyEntryMap>(
   } else {
     return a.slug.localeCompare(b.slug);
   }
+}
+
+export function getContentComponents() {
+  return {
+    img: ContentImage,
+  };
 }
