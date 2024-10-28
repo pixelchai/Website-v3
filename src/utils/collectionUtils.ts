@@ -1,4 +1,4 @@
-import ContentImage from "@/components/img/ContentImage.astro";
+import Img from "@/components/markdown/Img.astro";
 import type { GetStaticPathsResult } from "astro";
 import {
   getCollection,
@@ -29,6 +29,6 @@ export function dateSorter<C extends keyof AnyEntryMap>(
 
 export function getContentComponents() {
   return {
-    img: ContentImage,
+    img: Img,
   };
 }
