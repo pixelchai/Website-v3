@@ -38,13 +38,13 @@ The reason for this is that different approaches are required depending on e.g. 
 // constants
 const lowQualityResolutions = [
   // max width, max height
-  [20, 20],
+  [30, 30],
   [400, 400],
 ];
 
 // next gen formats, in order of preference
 const nextGenFormats: string[] = ["webp"];
-const inlineFormat: string = "avif";
+const inlineFormat: string = "webp";
 
 // props
 type Props = {
@@ -177,7 +177,7 @@ const getImageTransformationBase64 = async (
   width: number,
   height: number,
   format: string,
-  quality: number = 75
+  quality: number = 60
 ) => {
   const originalImagePath = getProjectRootPath() + props.src;
   const originalImage = await fs.promises.readFile(originalImagePath);
@@ -343,6 +343,7 @@ const restProps = Object.fromEntries(
             height={imageInfo.info.providedHeight}
             loading={pictureIdx === 0 ? "eager" : "lazy"}
             aria-hidden={pictureIdx > 0}
+            style={pictureIdx === 0 ? `image-rendering: pixelated;` : ""}
             decoding="async"
           />
         </picture>
