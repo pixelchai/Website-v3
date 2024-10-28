@@ -1,0 +1,42 @@
+---
+import { site } from "@/data/consts";
+import { Code } from "astro:components";
+import type { CollectionEntry } from "astro:content";
+import ConstrainedImage from "@/components/img/ConstrainedImage.astro";
+import Image from "@/components/img/Image.astro";
+import { theme } from "@/data/consts";
+import { formatDate, getYear } from "@/utils/markupUtils";
+
+type Props = {
+  entry: CollectionEntry<"projects">;
+};
+
+const { entry } = Astro.props;
+
+const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
+---
+
+<div
+  class="flex flex-col border border-dark-ll rounded overflow-hidden hover:border-dark-d hover:-translate-y-1 shadow-sm hover:shadow transition-transform"
+>
+  {
+    entry.data.thumb && (
+      <a href={linkUrl} class="">
+        <ConstrainedImage
+          src={entry.data.thumb}
+          maxWidth={theme.spacing["page-max-w"] * 0.65}
+          class="w-full h-60 overflow-hidden"
+        />
+      </a>
+    )
+  }
+  <a href={linkUrl} class="hover:default-a-no-hover">
+    <div class="p-4">
+      <div class="flex flex-row items-center justify-between gap-4">
+        <h2 class="inline-block">{entry.data.title}</h2>
+        <span class="italic text-dark-l">{getYear(entry.data.date)}</span>
+      </div>
+      <div>{entry.data.subtitle}</div>
+    </div>
+  </a>
+</div>

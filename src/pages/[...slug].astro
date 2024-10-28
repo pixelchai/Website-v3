@@ -3,6 +3,8 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import type { ContentEntryMap } from "astro:content";
 import { site } from "@/data/consts";
+import { formatDate } from "@/utils/markupUtils";
+import { getContentComponents } from "@/utils/collectionUtils";
 
 // SSG
 export async function getStaticPaths() {
@@ -36,25 +38,21 @@ const { Content } = await entry.render();
 ---
 
 <Layout>
-  <h1 class="grow text-4xl border-0 mb-1 pb-0 font-bold">
-    {entry.data.title}
-  </h1>
-  <div class="border-0 text-base text font-normal text-dark-l">
-    <span>
-      {
-        entry.data.date.toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        })
-      }
-    </span>
-    <span class="mx-1">&mdash;</span>
-    <a class="contentf-a" href={`${site.base}/${collectionName}/`}
-      >{collectionName}</a
-    >
+  <div class="my-4">
+    <h1 class="grow text-3xl border-0 mb-1 pb-0 font-bold">
+      {entry.data.title}
+    </h1>
+    <div class="border-0 text-base text font-normal text-dark-l">
+      <span>
+        {formatDate(entry.data.date)}
+      </span>
+      <span class="mx-1">&mdash;</span>
+      <a class="contentf-a" href={`${site.base}/${collectionName}/`}
+        >{collectionName}</a
+      >
+    </div>
   </div>
   <div class="contentf">
-    <Content />
+    <Content components={getContentComponents()} />
   </div>
 </Layout>

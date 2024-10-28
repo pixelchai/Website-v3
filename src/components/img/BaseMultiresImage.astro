@@ -38,10 +38,6 @@ const lowQualityResolutions = [
   [400, 400],
 ];
 
-const globalMaxWidth = 4000;
-const globalMaxHeight = 4000;
-// (to have no limit, just set to very large numbers)
-
 // next gen formats, in order of preference
 const nextGenFormats: string[] = ["webp"];
 
@@ -53,13 +49,16 @@ type Props = {
   width?: number;
   height?: number;
 
+  maxWidth?: number;
+  maxHeight?: number;
+
   class?: string;
   imgClass?: string;
   pictureClass?: string;
   sourceClass?: string;
-
-  constrained?: boolean;
 } & JSX.IntrinsicElements["div"];
+export type { Props };
+
 const props = Astro.props;
 
 // import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
@@ -101,6 +100,17 @@ const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
 const originalAspectRatio = originalWidth / originalHeight;
 
+// fix maxWidth and maxHeight values
+const [maxWidth, maxHeight]: [number, number] = (() => {
+  if (!props.maxWidth && props.maxHeight) {
+    return [Math.floor(props.maxHeight * originalAspectRatio), props.maxHeight];
+  } else if (props.maxWidth && !props.maxHeight) {
+    return [props.maxWidth, Math.floor(props.maxWidth / originalAspectRatio)];
+  } else {
+    return [props.maxWidth || 4000, props.maxHeight || 4000];
+  }
+})();
+
 const [providedWidth, providedHeight, providedAspectRatio] = (() => {
   // get provided width and height
   let width = originalWidth;
@@ -121,11 +131,11 @@ const [providedWidth, providedHeight, providedAspectRatio] = (() => {
 
   // if the image is too large, scale it down
   if (width > height) {
-    width = Math.min(width, globalMaxWidth);
-    height = Math.floor(Math.min(width, globalMaxWidth) / providedAspectRatio);
+    width = Math.min(width, maxWidth || 0);
+    height = Math.floor(Math.min(width, maxWidth) / providedAspectRatio);
   } else {
-    width = Math.floor(Math.min(height, globalMaxHeight) * providedAspectRatio);
-    height = Math.min(height, globalMaxHeight);
+    width = Math.floor(Math.min(height, maxHeight) * providedAspectRatio);
+    height = Math.min(height, maxHeight);
   }
 
   return [width, height, providedAspectRatio];
@@ -263,14 +273,15 @@ const restProps = Object.fromEntries(
 );
 ---
 
-<div class={combineClasses("image-wrapper", props.class)} {...restProps}>
+<div
+  class={combineClasses("image-wrapper", props.class)}
+  style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
+  {...restProps}
+>
   {
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (
-        <picture
-          class={props.pictureClass}
-          style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
-        >
+        <picture class={props.pictureClass}>
           {picture.nextGenSources.map((source) => {
             return (
               <source
