@@ -1,8 +1,10 @@
 ---
 import { combineClasses } from "@/utils/markupUtils";
-import type { ImageMetadata } from "astro";
+import { getProjectRootPath } from "@/utils/misc";
+import type { ImageMetadata, LocalImageService } from "astro";
 import type { JSX } from "astro/jsx-runtime";
-import { getImage } from "astro:assets";
+import { getConfiguredImageService, getImage } from "astro:assets";
+import fs from "node:fs";
 
 /*
 Custom Image component.
@@ -42,7 +44,7 @@ const lowQualityResolutions = [
 
 // next gen formats, in order of preference
 const nextGenFormats: string[] = ["webp"];
-const inlineFormat: string = "avif";
+const inlineFormat: string = "webp";
 
 // props
 type Props = {
@@ -169,6 +171,42 @@ const altText = await (async () => {
   return "";
 })();
 
+// direct image computation using LocalImageService directly
+// NOTE: does not use Astro's image cache when generating images
+const getImageTransformationBase64 = async (
+  width: number,
+  height: number,
+  format: string,
+  quality: number = 60
+) => {
+  const originalImagePath = getProjectRootPath() + props.src;
+  const originalImage = await fs.promises.readFile(originalImagePath);
+
+  const imageService = (await getConfiguredImageService()) as LocalImageService;
+
+  const transformResult = await imageService.transform(
+    originalImage,
+    {
+      src: originalImagePath,
+      width,
+      height,
+      format,
+      quality,
+    },
+    {
+      domains: [],
+      remotePatterns: [],
+      service: {
+        config: {},
+        entrypoint: "",
+      },
+    }
+  );
+
+  const base64string = Buffer.from(transformResult.data).toString("base64");
+  return `data:image/${transformResult.format};base64,${base64string}`;
+};
+
 // images computation
 const getImageVersion = async (
   maxWidth: number,
@@ -197,18 +235,11 @@ const getImageVersion = async (
 
   if (inline) {
     // get base64 of image
-    const fullUrl = "http://localhost:4321" + result.src;
-
     try {
-      const response = await fetch(fullUrl);
-      if (response.ok) {
-        const buffer = await response.arrayBuffer();
-        src = `data:${response.headers.get("content-type")};base64,${Buffer.from(buffer).toString("base64")}`;
-      } else {
-        throw new Error(`Failed to fetch ${fullUrl}: ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error(`[Image] Error fetching ${fullUrl}: ${error}`);
+      src = await getImageTransformationBase64(width, height, format);
+    } catch (e) {
+      console.error(`[Image] Error inlining image: ${e}`);
+      // as a fallback, the original src is used (in theory the same image, just non-inlined)
     }
   }
 
