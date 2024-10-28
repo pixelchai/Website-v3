@@ -211,8 +211,9 @@ const getImageVersion = async (
     //   console.error(`[Image] Error fetching ${fullUrl}: ${error}`);
     // }
 
-    let originalImagePath =
-      "/" + (await importedImage).default.src.replace("/@fs/", "");
+    // let originalImagePath =
+    //   "/" + (await importedImage).default.src.replace("/@fs/", "");
+    let originalImagePath = "/files/Coding/WebExp/Website-v3" + props.src;
     // console.log(await importedImage);
     // delete everything after ?
     originalImagePath = originalImagePath.split("?")[0];
