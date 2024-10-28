@@ -1,5 +1,6 @@
 ---
 import { combineClasses } from "@/utils/markupUtils";
+import { getProjectRootPath } from "@/utils/misc";
 import type { ImageMetadata, LocalImageService } from "astro";
 import type { JSX } from "astro/jsx-runtime";
 import { getConfiguredImageService, getImage } from "astro:assets";
@@ -170,6 +171,42 @@ const altText = await (async () => {
   return "";
 })();
 
+// direct image computation using LocalImageService directly
+// NOTE: does not use Astro's image cache when generating images
+const getImageTransformationBase64 = async (
+  width: number,
+  height: number,
+  format: string,
+  quality: number = 75
+) => {
+  const originalImagePath = getProjectRootPath() + props.src;
+  const originalImage = await fs.promises.readFile(originalImagePath);
+
+  const imageService = (await getConfiguredImageService()) as LocalImageService;
+
+  const transformResult = await imageService.transform(
+    originalImage,
+    {
+      src: originalImagePath,
+      width,
+      height,
+      format,
+      quality,
+    },
+    {
+      domains: [],
+      remotePatterns: [],
+      service: {
+        config: {},
+        entrypoint: "",
+      },
+    }
+  );
+
+  const base64string = Buffer.from(transformResult.data).toString("base64");
+  return `data:image/${transformResult.format};base64,${base64string}`;
+};
+
 // images computation
 const getImageVersion = async (
   maxWidth: number,
@@ -198,56 +235,12 @@ const getImageVersion = async (
 
   if (inline) {
     // get base64 of image
-    // const fullUrl = Astro.url.origin + result.src;
-
-    // try {
-    //   const response = await fetch(fullUrl);
-    //   if (response.ok) {
-    //     const buffer = await response.arrayBuffer();
-    //     src = `data:${response.headers.get("content-type")};base64,${Buffer.from(buffer).toString("base64")}`;
-    //   } else {
-    //     throw new Error(`Failed to fetch ${fullUrl}: ${response.statusText}`);
-    //   }
-    // } catch (error) {
-    //   console.error(`[Image] Error fetching ${fullUrl}: ${error}`);
-    // }
-
-    // let originalImagePath =
-    //   "/" + (await importedImage).default.src.replace("/@fs/", "");
-
-    const ba = await importedImage;
-    console.log(ba.default.src);
-    let originalImagePath = "/files/Coding/WebExp/Website-v3" + props.src;
-    // console.log(await importedImage);
-    // delete everything after ?
-    originalImagePath = originalImagePath.split("?")[0];
-
-    let originalImage = await fs.promises.readFile(originalImagePath);
-
-    const imageService =
-      (await getConfiguredImageService()) as LocalImageService;
-
-    const { data, format } = await imageService.transform(
-      originalImage,
-      {
-        src: originalImagePath,
-        width,
-        height,
-        format: "webp",
-        quality: 75,
-      },
-      {
-        domains: [],
-        remotePatterns: [],
-        service: {
-          config: {},
-          entrypoint: "",
-        },
-      }
-    );
-
-    const base64string = Buffer.from(data).toString("base64");
-    src = `data:image/webp;base64,${base64string}`;
+    try {
+      src = await getImageTransformationBase64(width, height, format);
+    } catch (e) {
+      console.error(`[Image] Error inlining image: ${e}`);
+      // as a fallback, the original src is used (in theory the same image, just non-inlined)
+    }
   }
 
   return {

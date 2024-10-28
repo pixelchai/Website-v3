@@ -1,7 +1,8 @@
 import { promisify } from "util";
 import { exec } from "child_process";
 import { fileURLToPath } from "node:url";
-import { dirname } from "path";
+import { dirname, resolve } from "path";
+import { existsSync } from "fs";
 
 export async function getExecStdout(cmd: string) {
   try {
@@ -13,17 +14,20 @@ export async function getExecStdout(cmd: string) {
 }
 
 export function getProjectRootPath(): string {
-  const curFilename = fileURLToPath(import.meta.url);
+  /**
+   * Get the project root path -- the path where package.json is located.
+   */
+  let cur = dirname(fileURLToPath(import.meta.url));
 
-  let rootPath = dirname(curFilename);
-  // go upwards until we find package.json
-  while (!rootPath.endsWith("/src")) {
-    rootPath = dirname(rootPath);
-
-    if (rootPath === "/") {
-      throw new Error("Could not find project root path");
+  // go up until we find package.json
+  while (!existsSync(resolve(cur, "package.json"))) {
+    const parent = resolve(cur, "..");
+    if (parent === cur) {
+      throw new Error(
+        "Could not find project root path. Could not find package.json in parent directories.",
+      );
     }
+    cur = parent;
   }
-
-  return rootPath;
+  return cur;
 }
