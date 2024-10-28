@@ -360,20 +360,21 @@ const restProps = Object.fromEntries(
     const pictures = elm.querySelectorAll("picture");
 
     let prevPicture: HTMLPictureElement | null = null;
-    pictures.forEach((picture, i) => {
+    pictures.forEach((picture, pictureIdx) => {
       const img = picture.querySelector("img");
       if (!img) {
         return;
       }
 
       const onLoadCallback = () => {
-        console.log("loaded", picture);
+        console.log("loaded", pictureIdx, picture);
         picture.style.visibility = "visible";
 
-        // if (prevPicture) {
-        //   prevPicture.style.visibility = "hidden";
-        // }
+        if (!prevPicture) {
+          return;
+        }
       };
+
       if (img.complete) {
         onLoadCallback();
       } else {
@@ -382,8 +383,10 @@ const restProps = Object.fromEntries(
         // (in Firefox, the image has an undesirable white background while loading
         // whereas in Chrome, the background is transparent)
         // set css in JavaScript so that we fall back to default behaviour if JS is disabled
-        picture.style.visibility = "hidden";
-        img.addEventListener("load", onLoadCallback);
+        if (pictureIdx > 0) {
+          picture.style.visibility = "hidden";
+          img.addEventListener("load", onLoadCallback);
+        }
       }
 
       prevPicture = picture;
