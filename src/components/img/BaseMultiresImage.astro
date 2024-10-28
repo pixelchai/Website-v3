@@ -61,10 +61,6 @@ export type { Props };
 
 const props = Astro.props;
 
-// default maxWidth and maxHeight values
-const maxWidth = props.maxWidth || 4000;
-const maxHeight = props.maxHeight || 4000;
-
 // import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
 const importedImage = (() => {
   const imageLoaders = import.meta.glob<{ default: ImageMetadata }>(
@@ -103,6 +99,22 @@ const imageResult = (await getImage({
 const originalWidth = imageResult.options.src.width;
 const originalHeight = imageResult.options.src.height;
 const originalAspectRatio = originalWidth / originalHeight;
+
+// fix maxWidth and maxHeight values
+const [maxWidth, maxHeight] = (() => {
+  if (!props.maxWidth && !props.maxHeight) {
+    // fallback
+    return [4000, 4000];
+  } else {
+    if (!props.maxWidth && props.maxHeight) {
+      return [props.maxHeight * originalAspectRatio, props.maxHeight];
+    } else if (props.maxWidth && !props.maxHeight) {
+      return [props.maxWidth, props.maxWidth / originalAspectRatio];
+    } else {
+      return [props.maxWidth, props.maxHeight];
+    }
+  }
+})();
 
 const [providedWidth, providedHeight, providedAspectRatio] = (() => {
   // get provided width and height

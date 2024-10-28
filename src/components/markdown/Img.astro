@@ -5,4 +5,8 @@ import { combineClasses } from "@/utils/markupUtils";
 const props = Astro.props as any;
 ---
 
-<Image class={combineClasses("contentf-lim-h", props.class)} {...props} />
+<Image
+  class={combineClasses("contentf-lim-h", props.class)}
+  maxHeight={510}
+  {...props}
+/>
