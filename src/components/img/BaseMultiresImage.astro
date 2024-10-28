@@ -245,14 +245,15 @@ const restProps = Object.fromEntries(
 );
 ---
 
-<div class={combineClasses("image-wrapper", props.class)} {...restProps}>
+<div
+  class={combineClasses("image-wrapper", props.class)}
+  style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
+  {...restProps}
+>
   {
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (
-        <picture
-          class={props.pictureClass}
-          style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
-        >
+        <picture class={props.pictureClass}>
           {picture.nextGenSources.map((source) => {
             return (
               <source
