@@ -358,8 +358,8 @@ const restProps = Object.fromEntries(
   const elms = document.querySelectorAll(".image-wrapper");
   elms.forEach((elm) => {
     const pictures = elm.querySelectorAll("picture");
+    const picturesDict = new Map<number, HTMLPictureElement>();
 
-    let prevPicture: HTMLPictureElement | null = null;
     pictures.forEach((picture, pictureIdx) => {
       const img = picture.querySelector("img");
       if (!img) {
@@ -370,26 +370,34 @@ const restProps = Object.fromEntries(
         console.log("loaded", pictureIdx, picture);
         picture.style.visibility = "visible";
 
-        if (!prevPicture) {
+        if (pictureIdx <= 0) {
           return;
+        }
+
+        const prevPicture = picturesDict.get(pictureIdx - 1);
+        if (prevPicture) {
+          // remove from DOM after a delay
+          setTimeout(() => {
+            prevPicture.remove();
+          }, 500);
         }
       };
 
-      if (img.complete) {
-        onLoadCallback();
-      } else {
-        // while loading, set to hidden
-        // (don't show the image until it's fully loaded -- workaround for Firefox)
-        // (in Firefox, the image has an undesirable white background while loading
-        // whereas in Chrome, the background is transparent)
-        // set css in JavaScript so that we fall back to default behaviour if JS is disabled
-        if (pictureIdx > 0) {
+      if (pictureIdx > 0) {
+        if (img.complete) {
+          onLoadCallback();
+        } else {
+          // while loading, set to hidden
+          // (don't show the image until it's fully loaded -- workaround for Firefox)
+          // (in Firefox, the image has an undesirable white background while loading
+          // whereas in Chrome, the background is transparent)
+          // set css in JavaScript so that we fall back to default behaviour if JS is disabled
           picture.style.visibility = "hidden";
           img.addEventListener("load", onLoadCallback);
         }
       }
 
-      prevPicture = picture;
+      picturesDict.set(pictureIdx, picture);
     });
   });
 </script>
