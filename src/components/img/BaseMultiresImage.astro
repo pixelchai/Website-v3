@@ -11,10 +11,12 @@ In this way, there is progressive image loading (lowest quality image is rendere
 <picture> elements are used instead of <img> elements, so that multiple file formats can be used. The browser will choose the newest format it supports.
 Currently this WebP, but will fallback on older browsers to png (or jpg, gif, svg if the original image was in that format).
 Alt text is also set, either from the provided prop or from a .alt.txt file in the same directory as the image.
+To minimise network requests and CLS, the lowest quality image is inlined as a base64 string.
 
 Note: 
 - Focuses on reducing CLS (Cumulative Layout Shift).
 - Uses native Astro API (getImage) for image computation (different file formats, sizes, etc).
+- Lowest quality image is inlined.
 
 However:
 - Picture element is used purely for providing fall-backs for next-gen image formats. 
@@ -22,7 +24,7 @@ However:
 - Only using WebP for now as the next-gen format and not AVIF because I found that AVIF computation greatly reduces build times. (It does result in smaller images though).
 
 Potential future improvements:
-- inline blurhash (without an additional network request)
+- remove low quality images from the DOM once they are loaded using JavaScript (possibly improve accessibility, SEO and memory usage)
 
 IMPORTANT:
 This is the base component, which is purely for producing the raw markup. 
