@@ -46,7 +46,7 @@ const globalMaxHeight = 4000;
 const nextGenFormats: string[] = ["webp"];
 
 // props
-type Props = {
+export type Props = {
   src: string;
   alt?: string;
 
@@ -57,8 +57,6 @@ type Props = {
   imgClass?: string;
   pictureClass?: string;
   sourceClass?: string;
-
-  constrained?: boolean;
 } & JSX.IntrinsicElements["div"];
 const props = Astro.props;
 

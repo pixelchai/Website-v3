@@ -2,6 +2,7 @@
 import type { JSX } from "astro/jsx-runtime";
 import BaseMultiresImage from "./BaseMultiresImage.astro";
 import { combineClasses } from "@/utils/markupUtils";
+import type { Props } from "./BaseMultiresImage.astro";
 
 /*
 Constrained image component.
@@ -12,20 +13,6 @@ However, the parent component must implement constraining the height and/or widt
 It is done this way so that you may use media breakpoints if you want.
 */
 
-type Props = {
-  src: string;
-  alt?: string;
-
-  width?: number;
-  height?: number;
-
-  class?: string;
-  imgClass?: string;
-  pictureClass?: string;
-  sourceClass?: string;
-
-  constrained?: boolean;
-} & JSX.IntrinsicElements["div"];
 const props = Astro.props;
 ---
 
