@@ -36,7 +36,7 @@ The reason for this is that different approaches are required depending on e.g. 
 // constants
 const lowQualityResolutions = [
   // max width, max height
-  [100, 100],
+  [20, 20],
   [400, 400],
 ];
 
@@ -289,7 +289,10 @@ const restProps = Object.fromEntries(
   {
     imageInfo.pictures.map((picture, pictureIdx) => {
       return (
-        <picture class={props.pictureClass}>
+        <picture
+          class={props.pictureClass}
+          style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
+        >
           {picture.nextGenSources.map((source) => {
             return (
               <source
