@@ -24,7 +24,7 @@ const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
       <a href={linkUrl} class="">
         <ConstrainedImage
           src={entry.data.thumb}
-          width={theme.spacing["page-max-w"] / 2}
+          maxWidth={theme.spacing["page-max-w"] * 0.75}
           class="w-full h-60 overflow-hidden"
         />
       </a>
