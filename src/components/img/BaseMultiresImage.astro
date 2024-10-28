@@ -101,18 +101,13 @@ const originalHeight = imageResult.options.src.height;
 const originalAspectRatio = originalWidth / originalHeight;
 
 // fix maxWidth and maxHeight values
-const [maxWidth, maxHeight] = (() => {
-  if (!props.maxWidth && !props.maxHeight) {
-    // fallback
-    return [4000, 4000];
+const [maxWidth, maxHeight]: [number, number] = (() => {
+  if (!props.maxWidth && props.maxHeight) {
+    return [props.maxHeight * originalAspectRatio, props.maxHeight];
+  } else if (props.maxWidth && !props.maxHeight) {
+    return [props.maxWidth, props.maxWidth / originalAspectRatio];
   } else {
-    if (!props.maxWidth && props.maxHeight) {
-      return [props.maxHeight * originalAspectRatio, props.maxHeight];
-    } else if (props.maxWidth && !props.maxHeight) {
-      return [props.maxWidth, props.maxWidth / originalAspectRatio];
-    } else {
-      return [props.maxWidth, props.maxHeight];
-    }
+    return [props.maxWidth || 4000, props.maxHeight || 4000];
   }
 })();
 
@@ -136,7 +131,7 @@ const [providedWidth, providedHeight, providedAspectRatio] = (() => {
 
   // if the image is too large, scale it down
   if (width > height) {
-    width = Math.min(width, maxWidth);
+    width = Math.min(width, maxWidth || 0);
     height = Math.floor(Math.min(width, maxWidth) / providedAspectRatio);
   } else {
     width = Math.floor(Math.min(height, maxHeight) * providedAspectRatio);
