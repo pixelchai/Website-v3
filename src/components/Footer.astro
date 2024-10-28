@@ -9,15 +9,18 @@ const commitHash = await getExecStdout("git rev-parse HEAD");
 ---
 
 <footer class="my-2 pb-6 pt-8 text-center contentf">
-  <span
-    >&copy; {buildYear}
-    <a href={site.base}>{site.me.name}</a>
-    <br />
-    <small>
-      <a href={`${site.repoUrl}`}>source code</a>
-      (commit: <a href={`${site.repoUrl}/commit/${commitShortHash}`}
-        >{commitShortHash}</a
-      >)</small
-    >
-  </span>
+  <div>
+    <div>
+      &copy; {buildYear}
+      <a href={site.base}>{site.me.name}</a>
+    </div>
+    <div>
+      <small>
+        <a href={`${site.repoUrl}`}>source code</a>
+        (commit: <a href={`${site.repoUrl}/commit/${commitShortHash}`}
+          >{commitShortHash}</a
+        >)</small
+      >
+    </div>
+  </div>
 </footer>
