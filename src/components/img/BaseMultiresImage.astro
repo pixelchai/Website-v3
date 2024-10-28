@@ -197,7 +197,7 @@ const getImageVersion = async (
 
   if (inline) {
     // get base64 of image
-    const fullUrl = Astro.url.origin + result.src;
+    const fullUrl = "http://localhost:4321" + result.src;
 
     try {
       const response = await fetch(fullUrl);
