@@ -103,9 +103,9 @@ const originalAspectRatio = originalWidth / originalHeight;
 // fix maxWidth and maxHeight values
 const [maxWidth, maxHeight]: [number, number] = (() => {
   if (!props.maxWidth && props.maxHeight) {
-    return [props.maxHeight * originalAspectRatio, props.maxHeight];
+    return [Math.floor(props.maxHeight * originalAspectRatio), props.maxHeight];
   } else if (props.maxWidth && !props.maxHeight) {
-    return [props.maxWidth, props.maxWidth / originalAspectRatio];
+    return [props.maxWidth, Math.floor(props.maxWidth / originalAspectRatio)];
   } else {
     return [props.maxWidth || 4000, props.maxHeight || 4000];
   }
