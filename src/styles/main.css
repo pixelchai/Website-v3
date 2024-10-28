@@ -135,6 +135,11 @@
         @apply text-link border-b border-link border-dotted 
         hover:border-solid hover:text-link-hov hover:border-link-hov;
     }
+
+    /* limit height -- useful for images/figures */
+    .contentf-lim-h {
+        @apply !w-auto max-h-[30rem] mx-auto;
+    }
 }
 
 /* markdown content style formatting (content format) */

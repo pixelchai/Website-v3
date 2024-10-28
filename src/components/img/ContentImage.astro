@@ -8,10 +8,4 @@ import { combineClasses } from "@/utils/markupUtils";
 const props = Astro.props as any;
 ---
 
-<Image class={combineClasses("content-image", props.class)} {...props} />
-
-<style>
-  .content-image {
-    @apply w-auto max-h-[30rem] mx-auto;
-  }
-</style>
+<Image class={combineClasses("contentf-lim-h", props.class)} {...props} />
