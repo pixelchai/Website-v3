@@ -17,9 +17,11 @@ const commitHash = await getExecStdout("git rev-parse HEAD");
     <div class="contentf">
       <small>
         <a href={`${site.repoUrl}`}>source code</a>
-        (commit: <a href={`${site.repoUrl}/commit/${commitHash}`}
-          >{commitShortHash}</a
-        >)
+        <span class="max-[270px]:hidden">
+          (commit: <a href={`${site.repoUrl}/commit/${commitHash}`}
+            >{commitShortHash}</a
+          >)
+        </span>
       </small>
     </div>
   </div>
