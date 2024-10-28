@@ -143,7 +143,7 @@ const [providedWidth, providedHeight, providedAspectRatio] = (() => {
     height = Math.min(height, maxHeight);
   }
 
-  return [width, height, providedAspectRatio];
+  return [Math.floor(width), Math.floor(height), providedAspectRatio];
 })();
 
 // alt text
@@ -307,7 +307,8 @@ const imageInfo = await getAllPictures();
 // get rest props
 const restProps = Object.fromEntries(
   Object.entries(props).filter(
-    ([key]) => !["src", "alt", "width", "height"].includes(key)
+    ([key]) =>
+      !["src", "alt", "width", "height", "maxWidth", "maxHeight"].includes(key)
   )
 );
 ---
