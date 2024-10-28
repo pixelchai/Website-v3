@@ -42,7 +42,7 @@ const lowQualityResolutions = [
 const nextGenFormats: string[] = ["webp"];
 
 // props
-export type Props = {
+type Props = {
   src: string;
   alt?: string;
 
@@ -57,6 +57,8 @@ export type Props = {
   pictureClass?: string;
   sourceClass?: string;
 } & JSX.IntrinsicElements["div"];
+export type { Props };
+
 const props = Astro.props;
 
 // default maxWidth and maxHeight values
