@@ -38,10 +38,6 @@ const lowQualityResolutions = [
   [400, 400],
 ];
 
-const globalMaxWidth = 4000;
-const globalMaxHeight = 4000;
-// (to have no limit, just set to very large numbers)
-
 // next gen formats, in order of preference
 const nextGenFormats: string[] = ["webp"];
 
@@ -53,12 +49,19 @@ export type Props = {
   width?: number;
   height?: number;
 
+  maxWidth?: number;
+  maxHeight?: number;
+
   class?: string;
   imgClass?: string;
   pictureClass?: string;
   sourceClass?: string;
 } & JSX.IntrinsicElements["div"];
 const props = Astro.props;
+
+// default maxWidth and maxHeight values
+const maxWidth = props.maxWidth || 4000;
+const maxHeight = props.maxHeight || 4000;
 
 // import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
 const importedImage = (() => {
@@ -119,11 +122,11 @@ const [providedWidth, providedHeight, providedAspectRatio] = (() => {
 
   // if the image is too large, scale it down
   if (width > height) {
-    width = Math.min(width, globalMaxWidth);
-    height = Math.floor(Math.min(width, globalMaxWidth) / providedAspectRatio);
+    width = Math.min(width, maxWidth);
+    height = Math.floor(Math.min(width, maxWidth) / providedAspectRatio);
   } else {
-    width = Math.floor(Math.min(height, globalMaxHeight) * providedAspectRatio);
-    height = Math.min(height, globalMaxHeight);
+    width = Math.floor(Math.min(height, maxHeight) * providedAspectRatio);
+    height = Math.min(height, maxHeight);
   }
 
   return [width, height, providedAspectRatio];
