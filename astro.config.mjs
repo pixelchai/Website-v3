@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, sharpImageService } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import { site } from "./src/data/consts";
@@ -19,6 +19,12 @@ export default defineConfig({
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "viewport",
+  },
+
+  image: {
+    service: sharpImageService({
+      limitInputPixels: 100000000000, // see issue #14
+    }),
   },
 
   devToolbar: { enabled: false },
@@ -52,5 +58,8 @@ export default defineConfig({
 
   redirects: {
     "/tmpredirect": "/articles/answerbot/",
+
+    "/projects/answerbot": `${site.base}/articles/answerbot/`,
+    "/web/rgxc": `${site.base}/articles/rgxc/`,
   },
 });

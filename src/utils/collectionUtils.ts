@@ -1,4 +1,3 @@
-import Img from "@/components/markdown/Img.astro";
 import type { GetStaticPathsResult } from "astro";
 import {
   getCollection,
@@ -6,6 +5,9 @@ import {
   type CollectionEntry,
   type ContentEntryMap,
 } from "astro:content";
+import YouTube from "@/components/YouTube.astro";
+import Img from "@/components/markdown/Img.astro";
+import Image from "@/components/img/Image.astro";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
@@ -30,5 +32,9 @@ export function dateSorter<C extends keyof AnyEntryMap>(
 export function getContentComponents() {
   return {
     img: Img,
+    Img,
+    Image,
+
+    YouTube,
   };
 }
