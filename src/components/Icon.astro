@@ -1,4 +1,5 @@
 ---
+import { combineClasses } from "@/utils/markupUtils";
 import type { JSX } from "astro/jsx-runtime";
 
 export type IconId = "github";
@@ -29,5 +30,6 @@ const icon = iconData[id];
   xmlns="http://www.w3.org/2000/svg"
   viewBox={`0 0 ${icon.width} ${icon.height}`}
   set:html={icon.body}
+  class={combineClasses(rest.class, "icon")}
   {...rest}
 />
