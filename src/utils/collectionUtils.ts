@@ -8,8 +8,8 @@ import {
 import YouTube from "@/components/YouTube.astro";
 import Img from "@/components/markdown/Img.astro";
 import Image from "@/components/img/Image.astro";
-import { Code } from "astro:components";
-import Debug from "@/components/Debug.astro";
+import { Code, Debug } from "astro:components";
+import type { IconId } from "@/components/Icon.astro";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
@@ -44,9 +44,23 @@ export function getContentComponents() {
   };
 }
 
-export function getEntryLinks(entry: any) {
+// frontmatter links may be incomplete or shorthand versions
+// but they will be completed by the function below
+// the completed link types is defined:
+export type CompleteLink = {
+  title: string;
+  url: string;
+
+  // up to implementing components to decide how to handle no icon
+  // (because behaviour may possibly be different depending on the context)
+  icon?: IconId;
+};
+
+export function getEntryLinks(entry: any): CompleteLink[] {
+  let ret: CompleteLink[] = [];
   if (!entry.data.links) {
-    return [];
+    return ret;
   }
+
   return entry.data.links;
 }

@@ -69,25 +69,18 @@ const links = getEntryLinks(entry);
 
   <!-- linksbox -->
   <Debug {entry} />
-  <div>
-    <ul>
+  <div class="">
+    <ul class="flex flex-col">
       {
-        // links.map((link: any) => (
-        //   <li class="my-2">
-        //     <a
-        //       class="contentf-a
-        //     hover:text-primary
-        //     hover:underline
-        //     transition-colors
-        //     duration-200"
-        //       href={link.url}
-        //     >
-        //       <Icon id={link.icon} class="mr-1" />
-        //       {link.text}
-        //     </a>
-        //   </li>
-        // )
-        // )
+        links.map((link) => (
+          <li class="my-2">
+            <a href={link.url}>
+              {link.icon && <Icon id={link.icon} class="" />}
+
+              {link.title}
+            </a>
+          </li>
+        ))
       }
     </ul>
   </div>
