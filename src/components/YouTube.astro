@@ -3,13 +3,18 @@
 import type { JSX } from "astro/jsx-runtime";
 import "lite-youtube-embed/src/lite-yt-embed.css";
 
-export type Props = {
+export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string;
-  posterQuality?: 'max' | 'high' | 'default' | 'low';
-} & JSX.IntrinsicElements["div"];
+  poster?: string;
+  posterQuality?: "max" | "high" | "default" | "low";
+  params?: string;
+  playlabel?: string;
+}
 
 const props = Astro.props as Props;
 
 const videoId = props.id;
-const posterFile = 
+const posterFile = "";
 ---
+
+<> </>

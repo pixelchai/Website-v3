@@ -1,3 +1,4 @@
+import YouTube from "@/components/YouTube.astro";
 import Img from "@/components/markdown/Img.astro";
 import type { GetStaticPathsResult } from "astro";
 import {
@@ -30,5 +31,6 @@ export function dateSorter<C extends keyof AnyEntryMap>(
 export function getContentComponents() {
   return {
     img: Img,
+    YouTube,
   };
 }
