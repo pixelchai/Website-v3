@@ -7,6 +7,15 @@ const commonSchema = {
 
   thumb: z.string().optional(),
   draft: z.boolean().optional(),
+  links: z
+    .array(
+      z.object({
+        title: z.string(),
+        url: z.string(),
+        icon: z.string().optional(),
+      }),
+    )
+    .optional(),
 };
 
 export const collections = {

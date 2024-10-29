@@ -4,8 +4,9 @@ import Layout from "@/layouts/Layout.astro";
 import type { ContentEntryMap } from "astro:content";
 import { site } from "@/data/consts";
 import { formatDate } from "@/utils/markupUtils";
-import { getContentComponents } from "@/utils/collectionUtils";
+import { getContentComponents, getEntryLinks } from "@/utils/collectionUtils";
 import Icon from "@/components/Icon.astro";
+import { Debug } from "astro:components";
 
 // SSG
 export async function getStaticPaths() {
@@ -44,9 +45,13 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+// links
+const links = getEntryLinks(entry);
 ---
 
 <Layout>
+  <!-- title and meta -->
   <div class="my-4">
     <h1 class="grow text-3xl border-0 mb-1 pb-0 font-bold">
       {entry.data.title}
@@ -62,11 +67,28 @@ const { Content } = await entry.render();
     </div>
   </div>
 
+  <!-- linksbox -->
+  <Debug {entry} />
   <div>
     <ul>
-      <li>
-        <Icon id="github" class="icon" /> hello
-      </li>
+      {
+        // links.map((link: any) => (
+        //   <li class="my-2">
+        //     <a
+        //       class="contentf-a
+        //     hover:text-primary
+        //     hover:underline
+        //     transition-colors
+        //     duration-200"
+        //       href={link.url}
+        //     >
+        //       <Icon id={link.icon} class="mr-1" />
+        //       {link.text}
+        //     </a>
+        //   </li>
+        // )
+        // )
+      }
     </ul>
   </div>
 

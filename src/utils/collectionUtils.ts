@@ -43,3 +43,10 @@ export function getContentComponents() {
     YouTube,
   };
 }
+
+export function getEntryLinks(entry: any) {
+  if (!entry.data.links) {
+    return [];
+  }
+  return entry.data.links;
+}
