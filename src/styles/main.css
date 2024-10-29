@@ -140,6 +140,11 @@
     .contentf-lim-y {
         @apply !w-auto max-h-[30rem] mx-auto;
     }
+
+    /* limit width */
+    .contentf-lim-x {
+        @apply w-full max-w-[45rem] mx-auto;
+    }
 }
 
 /* markdown content style formatting (content format) */
