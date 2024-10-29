@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, squooshImageService } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import { site } from "./src/data/consts";
@@ -19,6 +19,10 @@ export default defineConfig({
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "viewport",
+  },
+
+  image: {
+    service: squooshImageService(),
   },
 
   devToolbar: { enabled: false },
