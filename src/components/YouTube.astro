@@ -2,6 +2,7 @@
 // Adapted from: https://github.com/delucis/astro-embed/blob/main/packages/astro-embed-youtube/YouTube.astro
 import type { JSX } from "astro/jsx-runtime";
 import "lite-youtube-embed/src/lite-yt-embed.css";
+// import "lite-youtube-embed/src/lite-yt-embed.js";
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string;
@@ -43,8 +44,6 @@ const href = `https://youtube.com/watch?v=${videoid}`;
     <span class="lyt-visually-hidden">{attrs.playlabel}</span>
   </a>
 </lite-youtube>
-
-<script src="lite-youtube-embed"></script>
 
 <style is:global>
   lite-youtube > iframe {
