@@ -23,7 +23,7 @@ export default defineConfig({
 
   image: {
     service: sharpImageService({
-      limitInputPixels: 100000000000,
+      limitInputPixels: 100000000000, // see issue #14
     }),
   },
 
