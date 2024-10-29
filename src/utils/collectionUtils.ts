@@ -32,7 +32,9 @@ export function dateSorter<C extends keyof AnyEntryMap>(
 export function getContentComponents() {
   return {
     img: Img,
+    Img,
     Image,
+
     YouTube,
   };
 }
