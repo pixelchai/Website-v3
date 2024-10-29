@@ -6,6 +6,7 @@ import {
   type CollectionEntry,
   type ContentEntryMap,
 } from "astro:content";
+import YouTube from "@/components/YouTube.astro";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
@@ -30,5 +31,6 @@ export function dateSorter<C extends keyof AnyEntryMap>(
 export function getContentComponents() {
   return {
     img: Img,
+    YouTube,
   };
 }
