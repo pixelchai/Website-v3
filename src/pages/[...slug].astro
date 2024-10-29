@@ -5,6 +5,7 @@ import type { ContentEntryMap } from "astro:content";
 import { site } from "@/data/consts";
 import { formatDate } from "@/utils/markupUtils";
 import { getContentComponents } from "@/utils/collectionUtils";
+import Icon from "@/components/Icon.astro";
 
 // SSG
 export async function getStaticPaths() {
@@ -49,6 +50,7 @@ const { Content } = await entry.render();
   <div class="my-4">
     <h1 class="grow text-3xl border-0 mb-1 pb-0 font-bold">
       {entry.data.title}
+      <Icon id="github" />
     </h1>
     <div class="border-0 text-base text font-normal text-dark-l">
       <span>

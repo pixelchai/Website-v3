@@ -10,6 +10,11 @@
                sm:text-[17px]
                overflow-x-hidden;
     }
+
+    /* Icons */
+    .icon {
+        @apply inline-block align-middle w-6 h-6;
+    }
 }
 
 @layer components {
