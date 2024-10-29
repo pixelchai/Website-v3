@@ -52,5 +52,8 @@ export default defineConfig({
 
   redirects: {
     "/tmpredirect": "/articles/answerbot/",
+
+    "/projects/answerbot": `${site.base}/articles/answerbot/`,
+    "/web/rgxc": `${site.base}/articles/rgxc/`,
   },
 });
