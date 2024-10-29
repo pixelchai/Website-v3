@@ -1,0 +1,19 @@
+---
+import { Code } from "astro:components";
+
+const props = Astro.props as any;
+
+let data = {};
+if (props.data) {
+  data = props.data;
+}
+if (props) {
+  data = props;
+}
+---
+
+<Code lang="json" code={JSON.stringify(props, null, 2)} />
+
+<script define:vars={{ data }}>
+  console.log(data);
+</script>

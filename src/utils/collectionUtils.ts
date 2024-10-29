@@ -8,6 +8,8 @@ import {
 import YouTube from "@/components/YouTube.astro";
 import Img from "@/components/markdown/Img.astro";
 import Image from "@/components/img/Image.astro";
+import { Code } from "astro:components";
+import Debug from "@/components/Debug.astro";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
@@ -34,6 +36,9 @@ export function getContentComponents() {
     img: Img,
     Img,
     Image,
+
+    Code,
+    Debug,
 
     YouTube,
   };
