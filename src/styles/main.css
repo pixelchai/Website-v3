@@ -137,7 +137,7 @@
     }
 
     /* limit height -- useful for images/figures */
-    .contentf-lim-h {
+    .contentf-lim-y {
         @apply !w-auto max-h-[30rem] mx-auto;
     }
 }
