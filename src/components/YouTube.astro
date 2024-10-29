@@ -6,3 +6,8 @@ const props = Astro.props as Props;
 ---
 
 <YouTubeExt {...props} />
+<style is:global>
+  lite-youtube {
+    max-width: none;
+  }
+</style>
