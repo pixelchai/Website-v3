@@ -76,4 +76,103 @@ Note on terminology: I call a group of `terms` a `group`. And a list of these `g
 
 When searching for pages relevant to the parsed terms, we want to consider the different groupings of the terms for a fuller picture. E.g: both `[["animal"], ["biggest"]] ` and `[["animal", "biggst"]] `. (What if there was a page relating to ‘’biggest animals” directly?). Note: the structure is now a list __of groups__ of terms.
 
-{/* First of all, everything is grouped together into a list, then that list is split at every possible position. The spaces in-between items can be thought of ‘split positions’ or ‘places to put a comma’. Let’s say that $$1$$ means to split and $$0$$ to not. The ways of splitting, then, is simply the binary pattern up to $$2^{n-1}-1$$ where $$n​$$ is the length of the list. This is how where to split is decided. <a href="https://github.com/pixelchai/AnswerBot/blob/master/answerbot.py#L174" target="_blank">View code</a>. */}
+First of all, everything is grouped together into a list, then that list is split at every possible position. The spaces in-between items can be thought of ‘split positions’ or ‘places to put a comma’. Let’s say that $$1$$ means to split and $$0$$ to not. The ways of splitting, then, is simply the binary pattern up to $$2^{n-1}-1$$ where $$n​$$ is the length of the list. This is how where to split is decided. <a href="https://github.com/pixelchai/AnswerBot/blob/master/answerbot.py#L174" target="_blank">View code</a>.
+
+### Example:
+
+```
+list:            0   1   2   3
+split positions:   0   1   2
+```
+
+Note: the number of different `split positions` is always one less than the length of the list because the only valid split positions are those in-between two elements.
+
+Possible split positions (Binary pattern up to $$2^{4-1}-1$$):
+
+```
+000
+001
+010
+011
+100
+101
+110
+111
+```
+
+Splitting a string `abcd` based on these positions:
+
+```
+abcd
+abc,d
+ab,cd
+ab,c,d
+a,bcd
+a,bc,d
+a,b,cd
+a,b,c,d
+```
+
+## Grouping Permutations
+
+For every grouping of the terms, we also want to consider all the different ways of ordering them too. E.g: `[["country"], ["home"]]` should be considered as well as `[["home"], ["country"]]`.
+
+This is done using the standard-library `itertools`‘s `permutation` function. [View code](https://github.com/pixelchai/AnswerBot/blob/master/answerbot.py#L204).
+
+# Searching
+
+## Candidate Searching
+
+Initially, the first group (which may consist of one or more keywords) of each of the different groupings are run through the Wikipedia search API (I used the python wrapper library called `wikipedia` for this) to get some initial candidate pages.
+
+The titles of the candidates then have the semantic similarity between them and the group of terms calculated (provided by SpaCy)  to serve as a metric for relevancy, and those under a certain threshold are discarded.
+
+Relevancy metric (want to maximise) for a given page $$p$$ and grouping $$g$$:
+
+$$
+s(p_t,g_0)
+$$
+
+Where $$s(..,..)$$ is spacy’s semantic similarity function, and $$p_t$$ corresponds to the page’s title. NB: $$g_0$$ corresponds to the 0-th group of the grouping (the first group).
+
+Only the titles are used for the elimination because getting the entire content for each candidate, given the amount of candidates at this stage, will mean a large number of additional API requests to be made to Wikipedia, which should be minimised because sending and receiving data over the internet takes a relatively long time (also, excessive requests to Wikipedia is not very nice to their servers).
+
+After the elimination, the contents of all the remaining pages are then downloaded through the API, and are kept in order of their relevancy levels - their “score”.
+
+## Page Ranking
+
+Now that we have the contents, for each grouping, each page is ranked in terms of relevancy to the _specific_ grouping. This is, again, done with SpaCy’s semantic similarity calculation functionality, however this time, the _whole contents_ of each page are considered.
+
+Ranking metric (want to maximise) for a given page:
+
+$$
+\frac{\sum _i^{l\:}\:s\left(p_c,g_i\right)}{l}+s\left(p_t,g_0\right)
+$$
+
+Where $$p_c$$ is the page’s content, and $$l$$ is the length of the grouping.
+
+## Data Searching
+
+Now we want to find sentences, given a list of input sentences, that maximise relevancy to the groupings.
+
+Remember that a `grouping` is a list of `groups` of terms. The list of `groups` in every `grouping` is iterated over, and all the sentences in the given input sentences are ranked by their relevancy to the `group`. All but the top (certain number of) sentences are then discarded. The remaining sentences is the list of sentences that is operated on in the next iteration (the scope). In this fashion, by eliminating less relevant sentences for each group, the most relevant sentences for each `grouping` are selected.
+
+The relevancy metric for a certain `group` of terms and a sentence is composed of two metrics:
+
+1. the semantic similarity (provided by SpaCy) between the group and the sentence
+2. The sentence has the same keywords parsing and arranging algorithm performed upon it as the one used on input questions (described in the [question parsing section](#parsing)). The metric is then the average semantic similarity between each keyword extracted from the sentence and the group.
+
+The 2<sup>nd</sup> metric is weighted (halved).
+
+The relevancy metric of a sentence to a given `group` $$a$$ and sentence $$x$$ can be represented as (want to maximise):
+
+$$
+\sum _i^l\:s\left(x,\:a_i\right)+\frac{1}{2}\left(\sum _i^l\:\left(\frac{\sum _j^k\:s\left(a_i,\:p\left(x\right)_j\right)}{k}\right)\right)
+$$
+
+Where $$p(..)$$ is the parsing algorithm, that returns a list of keywords of length $$k$$.
+
+
+# Demonstration
+
+A demonstration of the final program running. [You can find it here](https://github.com/pixelchai/AnswerBot).
