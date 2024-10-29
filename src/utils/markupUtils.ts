@@ -1,4 +1,6 @@
-export function combineClasses(...classes: (string | undefined)[]): string {
+export function combineClasses(
+  ...classes: (string | undefined | null)[]
+): string {
   // combine string of clases (separated by space) and remove undefined values, remove duplicates
   return Array.from(
     new Set(classes.filter(Boolean).flatMap((cls) => cls!.split(" "))),
