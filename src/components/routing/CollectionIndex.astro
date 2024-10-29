@@ -25,6 +25,15 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
   max-w-[475px] m-auto
   sm:grid-cols-2 sm:max-w-none"
   >
-    {entries.map((entry) => <EntryCard entry={entry as any} />)}
+    {
+      entries
+        .filter((entry) => {
+          if (entry.data.draft) {
+            return false;
+          }
+          return true;
+        })
+        .map((entry) => <EntryCard entry={entry as any} />)
+    }
   </div>
 </Layout>

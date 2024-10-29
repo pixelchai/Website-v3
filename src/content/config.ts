@@ -6,6 +6,7 @@ const commonSchema = {
   date: z.date(),
 
   thumb: z.string().optional(),
+  draft: z.boolean().optional(),
 };
 
 export const collections = {

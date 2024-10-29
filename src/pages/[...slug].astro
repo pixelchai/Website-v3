@@ -16,6 +16,14 @@ export async function getStaticPaths() {
   for (const collectionName of collections) {
     for (const entry of await getCollection(collectionName)) {
       console.debug(`[SSG][${collectionName}] Processing entry: ${entry.slug}`);
+
+      if (entry.data.draft) {
+        console.debug(
+          `[SSG][${collectionName}] Skipped draft entry: ${entry.slug}`
+        );
+        continue;
+      }
+
       paths.push({
         params: { slug: `${collectionName}/${entry.slug}` },
         props: { entry, collectionName },
