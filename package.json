@@ -16,6 +16,7 @@
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
     "cssnano-preset-advanced": "^7.0.6",
+    "lite-youtube-embed": "^0.3.3",
     "postcss": "^8.4.47",
     "postcss-combine-duplicated-selectors": "^10.0.3",
     "postcss-combine-media-query": "^1.0.1",

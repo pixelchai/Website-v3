@@ -1,0 +1,15 @@
+---
+// Adapted from: https://github.com/delucis/astro-embed/blob/main/packages/astro-embed-youtube/YouTube.astro
+import type { JSX } from "astro/jsx-runtime";
+import "lite-youtube-embed/src/lite-yt-embed.css";
+
+export type Props = {
+  id: string;
+  posterQuality?: 'max' | 'high' | 'default' | 'low';
+} & JSX.IntrinsicElements["div"];
+
+const props = Astro.props as Props;
+
+const videoId = props.id;
+const posterFile = 
+---
