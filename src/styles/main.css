@@ -8,6 +8,7 @@
     :root {
         @apply text-[16px] 
                sm:text-[17px]
+               overflow-x-hidden;
     }
 }
 
