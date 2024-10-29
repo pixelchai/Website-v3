@@ -49,4 +49,8 @@ export default defineConfig({
       transformer: "postcss",
     },
   },
+
+  redirects: {
+    "/tmpredirect": "/articles/answerbot/",
+  },
 });
