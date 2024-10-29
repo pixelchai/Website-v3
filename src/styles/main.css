@@ -13,7 +13,7 @@
 
     /* Icons */
     .icon {
-        @apply inline-block align-middle w-6 h-6;
+        @apply inline-block align-middle w-5 h-5;
     }
 }
 
@@ -107,19 +107,6 @@
             @apply bg-light-d;
         }
     }
-
-    /* lists */
-    ul, ol {
-        @apply list-disc pl-5;
-    }
-
-    ol {
-        @apply list-decimal;
-    }
-
-    ul ul, ol ul, ul ol, ol ol {
-        @apply list-inside;
-    }
 }
 
 @layer utilities {
@@ -165,6 +152,19 @@
     /* link style */
     a {
         @apply contentf-a;
+    }
+
+    /* lists */
+    ul, ol {
+        @apply list-disc pl-5;
+    }
+
+    ol {
+        @apply list-decimal;
+    }
+
+    ul ul, ol ul, ul ol, ol ol {
+        @apply list-inside;
     }
 
     /* extra margin for hr */

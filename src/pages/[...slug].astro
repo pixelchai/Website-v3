@@ -50,7 +50,6 @@ const { Content } = await entry.render();
   <div class="my-4">
     <h1 class="grow text-3xl border-0 mb-1 pb-0 font-bold">
       {entry.data.title}
-      <Icon id="video" />
     </h1>
     <div class="border-0 text-base text font-normal text-dark-l">
       <span>
@@ -62,6 +61,15 @@ const { Content } = await entry.render();
       >
     </div>
   </div>
+
+  <div>
+    <ul>
+      <li>
+        <Icon id="github" class="icon" /> hello
+      </li>
+    </ul>
+  </div>
+
   <div class="contentf">
     <Content components={getContentComponents()} />
   </div>
