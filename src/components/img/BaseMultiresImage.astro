@@ -61,6 +61,8 @@ type Props = {
   imgClass?: string;
   pictureClass?: string;
   sourceClass?: string;
+
+  topLevelAspectRatio?: boolean;
 } & JSX.IntrinsicElements["div"];
 export type { Props };
 
@@ -315,7 +317,9 @@ const restProps = Object.fromEntries(
 
 <div
   class={combineClasses("image-wrapper", props.class)}
-  style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
+  style={props.topLevelAspectRatio
+    ? `aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`
+    : ""}
   {...restProps}
 >
   {
