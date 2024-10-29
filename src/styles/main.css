@@ -136,14 +136,16 @@
         hover:border-solid hover:text-link-hov hover:border-link-hov;
     }
 
-    /* limit height -- useful for images/figures */
-    .contentf-lim-y {
-        @apply !w-auto max-h-[30rem] mx-auto;
-    }
+    .contentf {
+        /* limit height -- useful for images/figures */
+        .contentf-lim-y {
+            @apply !w-auto max-h-[30rem] mx-auto;
+        }
 
-    /* limit width */
-    .contentf-lim-x {
-        @apply w-full max-w-[45rem] mx-auto;
+        /* limit width */
+        .contentf-lim-x {
+            @apply w-full max-w-[45rem] mx-auto;
+        }
     }
 }
 
