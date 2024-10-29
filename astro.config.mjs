@@ -4,6 +4,8 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import { site } from "./src/data/consts";
 import mdx from "@astrojs/mdx";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,6 +26,7 @@ export default defineConfig({
   integrations: [mdx()],
 
   markdown: {
+    remarkPlugins: [remarkMath],
     rehypePlugins: [
       rehypeHeadingIds,
       [
@@ -36,6 +39,7 @@ export default defineConfig({
           },
         },
       ],
+      rehypeKatex,
     ],
   },
 
@@ -44,5 +48,9 @@ export default defineConfig({
       devSourcemap: false,
       transformer: "postcss",
     },
+  },
+
+  redirects: {
+    "/tmpredirect": "/articles/answerbot/",
   },
 });

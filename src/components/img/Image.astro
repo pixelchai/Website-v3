@@ -18,6 +18,7 @@ const props = Astro.props;
 <BaseMultiresImage
   {...props}
   class={combineClasses("image-wrapper-unconstrained", props.class)}
+  topLevelAspectRatio={true}
 />
 
 <style>

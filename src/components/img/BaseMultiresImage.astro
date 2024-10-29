@@ -61,6 +61,8 @@ type Props = {
   imgClass?: string;
   pictureClass?: string;
   sourceClass?: string;
+
+  topLevelAspectRatio?: boolean;
 } & JSX.IntrinsicElements["div"];
 export type { Props };
 
@@ -143,7 +145,7 @@ const [providedWidth, providedHeight, providedAspectRatio] = (() => {
     height = Math.min(height, maxHeight);
   }
 
-  return [width, height, providedAspectRatio];
+  return [Math.floor(width), Math.floor(height), providedAspectRatio];
 })();
 
 // alt text
@@ -307,14 +309,17 @@ const imageInfo = await getAllPictures();
 // get rest props
 const restProps = Object.fromEntries(
   Object.entries(props).filter(
-    ([key]) => !["src", "alt", "width", "height"].includes(key)
+    ([key]) =>
+      !["src", "alt", "width", "height", "maxWidth", "maxHeight"].includes(key)
   )
 );
 ---
 
 <div
   class={combineClasses("image-wrapper", props.class)}
-  style={`aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`}
+  style={props.topLevelAspectRatio
+    ? `aspect-ratio: ${imageInfo.info.providedWidth} / ${imageInfo.info.providedHeight}`
+    : ""}
   {...restProps}
 >
   {
