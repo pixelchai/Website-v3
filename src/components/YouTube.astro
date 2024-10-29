@@ -1,0 +1,8 @@
+---
+import { YouTube as YouTubeExt } from "@astro-community/astro-embed-youtube";
+
+export type Props = Parameters<typeof YouTubeExt>[0];
+const props = Astro.props as Props;
+---
+
+<YouTubeExt {...props} />

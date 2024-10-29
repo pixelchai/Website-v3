@@ -6,7 +6,7 @@ import {
   type CollectionEntry,
   type ContentEntryMap,
 } from "astro:content";
-import { YouTube } from "@astro-community/astro-embed-youtube";
+import YouTube from "@/components/YouTube.astro";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
