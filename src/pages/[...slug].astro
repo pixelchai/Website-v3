@@ -74,7 +74,7 @@ const links = getEntryLinks(entry);
         links.map((link) => (
           <li class="">
             <a class="flex flex-row items-center" href={link.url}>
-              {link.icon && <Icon id={link.icon} class="mr-1" />}
+              <Icon id={link.icon ?? "link"} class="mr-1" />
 
               <span>{link.title}</span>
             </a>

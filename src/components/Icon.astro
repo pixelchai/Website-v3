@@ -2,7 +2,7 @@
 import { combineClasses } from "@/utils/markupUtils";
 import type { JSX } from "astro/jsx-runtime";
 
-export type IconId = "github";
+export type IconId = keyof typeof iconData;
 
 type Props = {
   id: IconId;
@@ -11,9 +11,8 @@ export type { Props };
 
 const { id, ...rest } = Astro.props;
 
-// icons sourced from https://icon-sets.iconify.design/?query=github in 'iconifyIcon' format
+// icons sourced from https://icon-sets.iconify.design/ in 'iconifyIcon' format
 // although I am not using iconify directly (just using the svg data)
-// mainly use material icons
 
 export const iconData = {
   // mdi-github
@@ -27,6 +26,12 @@ export const iconData = {
     width: 48,
     height: 48,
     body: '<path fill="currentColor" d="M10.25 8A6.25 6.25 0 0 0 4 14.25v19.5A6.25 6.25 0 0 0 10.25 40h27.5A6.25 6.25 0 0 0 44 33.75v-19.5A6.25 6.25 0 0 0 37.75 8zM6.5 14.25a3.75 3.75 0 0 1 3.75-3.75h27.5a3.75 3.75 0 0 1 3.75 3.75v19.5a3.75 3.75 0 0 1-3.75 3.75h-27.5a3.75 3.75 0 0 1-3.75-3.75zM18 18v12a1.5 1.5 0 0 0 2.218 1.317l11-6a1.5 1.5 0 0 0 0-2.634l-11-6A1.5 1.5 0 0 0 18 18" />',
+  },
+  // mingcute:link
+  link: {
+    width: 24,
+    height: 24,
+    body: '<g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" /><path fill="currentColor" d="m17.303 9.524l3.182 3.182a5.5 5.5 0 1 1-7.778 7.778l-1.06-1.06a1.5 1.5 0 1 1 2.12-2.122l1.062 1.061a2.5 2.5 0 0 0 3.535-3.536l-3.182-3.182a2.5 2.5 0 0 0-2.681-.56q-.242.096-.454.196l-.464.217c-.62.28-1.097.4-1.704-.206c-.872-.872-.646-1.677.417-2.41a5.5 5.5 0 0 1 7.007.642m-6.01-6.01l1.06 1.06a1.5 1.5 0 0 1-2.12 2.122l-1.061-1.06A2.5 2.5 0 1 0 5.636 9.17l3.182 3.182a2.5 2.5 0 0 0 2.681.56q.242-.096.454-.196l.464-.217c.62-.28 1.098-.4 1.704.206c.872.872.646 1.677-.417 2.41a5.5 5.5 0 0 1-7.007-.642l-3.182-3.182a5.5 5.5 0 1 1 7.778-7.778Z" /></g>',
   },
 };
 
