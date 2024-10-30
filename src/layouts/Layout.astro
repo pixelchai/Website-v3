@@ -8,14 +8,20 @@ export type Props = {
   title?: string;
   description?: string;
 };
+
+const props = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href={`${site.base}/favicon.svg`} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Title</title>
+
+    <title>
+      {props.title ? `${props.title} — ${site.title}` : site.title}
+    </title>
+    <meta name="description" content={props.description || site.description} />
 
     <!-- Katex -->
     <link

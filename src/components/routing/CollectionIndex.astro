@@ -17,7 +17,7 @@ const { collectionName, collectionTitle } = Astro.props;
 const entries = (await getCollection(collectionName)).sort(dateSorter);
 ---
 
-<Layout>
+<Layout title={collectionTitle}>
   <h1 class="text-3xl mb-10 pb-0 font-bold text-center">
     {collectionTitle}
   </h1>
