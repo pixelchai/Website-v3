@@ -31,3 +31,10 @@ export function getProjectRootPath(): string {
   }
   return cur;
 }
+
+export function addTrailingSlash(url: string): string {
+  if (!url.endsWith("/")) {
+    url += "/";
+  }
+  return url;
+}

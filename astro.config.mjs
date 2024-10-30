@@ -13,6 +13,9 @@ export default defineConfig({
   site: site.url,
   base: site.base,
 
+  // GitHub pages automatically 301 redirects to trailing slash -- use this setting to be more strictly comply to this
+  trailingSlash: "always",
+
   compressHTML: true,
 
   // prefetch

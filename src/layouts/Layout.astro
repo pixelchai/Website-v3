@@ -3,14 +3,39 @@ import Footer from "@/components/Footer.astro";
 import Navbar from "@/components/Navbar.astro";
 import { site } from "@/data/consts";
 import "@/styles/main.css";
+import { addTrailingSlash } from "@/utils/misc";
+
+export type Props = {
+  title?: string;
+  description?: string;
+};
+
+const props = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href={`${site.base}/favicon.svg`} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Title</title>
+
+    <!-- SEO -->
+    <title>
+      {props.title ? `${props.title} — ${site.title}` : site.title}
+    </title>
+    <meta name="description" content={props.description || site.description} />
+    <link
+      rel="canonical"
+      href={site.url + addTrailingSlash(Astro.url.pathname)}
+    />
+    {
+      site.keywords && (
+        <meta name="keywords" content={site.keywords.join(", ")} />
+      )
+    }
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content={site.me.name} />
+    <meta name="generator" content={Astro.generator} />
 
     <!-- Katex -->
     <link

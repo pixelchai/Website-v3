@@ -50,7 +50,7 @@ const { Content } = await entry.render();
 const links = getEntryLinks(entry);
 ---
 
-<Layout>
+<Layout title={entry.data.title} description={entry.data.subtitle}>
   <!-- title and meta -->
   <div class="my-4">
     <h1 class="grow text-3xl border-0 mb-1 pb-0 font-bold">
