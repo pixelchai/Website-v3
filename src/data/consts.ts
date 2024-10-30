@@ -43,12 +43,14 @@ const tailwindTheme = {
 const site = {
   url: "https://pixelchai.com",
   base: "/Website-v3",
-
-  links: {
-    github: "https://github.com/pixelchai",
-  },
-
   repoUrl: "https://github.com/pixelchai/Website-v3",
+
+  title: "pixelchai",
+  description: "A curation of my projects, writings, and more",
+
+  socials: {
+    github: "pixelchai",
+  },
 
   me: {
     name: "pixelchai",

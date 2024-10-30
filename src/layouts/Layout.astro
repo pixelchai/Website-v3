@@ -3,6 +3,11 @@ import Footer from "@/components/Footer.astro";
 import Navbar from "@/components/Navbar.astro";
 import { site } from "@/data/consts";
 import "@/styles/main.css";
+
+export type Props = {
+  title?: string;
+  description?: string;
+};
 ---
 
 <html lang="en">
