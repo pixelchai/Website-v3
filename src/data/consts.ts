@@ -47,6 +47,16 @@ const site = {
 
   title: "pixelchai",
   description: "A curation of my projects, writings, and more",
+  keywords: [
+    "pixelchai",
+    "portfolio",
+    "projects",
+    "blog",
+    "personal website",
+    "software engineer",
+    "software developer",
+    "coding",
+  ],
 
   socials: {
     github: "pixelchai",
