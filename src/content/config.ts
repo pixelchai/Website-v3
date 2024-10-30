@@ -9,11 +9,14 @@ const commonSchema = {
   draft: z.boolean().optional(),
   links: z
     .array(
-      z.object({
-        title: z.string(),
-        url: z.string(),
-        icon: z.string().optional(),
-      }),
+      z.union([
+        z.object({
+          title: z.string(),
+          url: z.string(),
+          icon: z.string().optional(),
+        }),
+        z.record(z.string(), z.string()),
+      ]),
     )
     .optional(),
 };
