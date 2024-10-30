@@ -33,6 +33,9 @@ const props = Astro.props;
         <meta name="keywords" content={site.keywords.join(", ")} />
       )
     }
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content={site.me.name} />
+    <meta name="generator" content={Astro.generator} />
 
     <!-- Katex -->
     <link

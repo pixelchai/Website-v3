@@ -58,12 +58,12 @@ const site = {
     "coding",
   ],
 
-  socials: {
-    github: "pixelchai",
-  },
-
   me: {
     name: "pixelchai",
+    socials: {
+      email: "pixelchaidev@gmail.com",
+      github: "pixelchai",
+    },
   },
 };
 
