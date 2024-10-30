@@ -3,7 +3,7 @@ import Footer from "@/components/Footer.astro";
 import Navbar from "@/components/Navbar.astro";
 import { site } from "@/data/consts";
 import "@/styles/main.css";
-import { canonicaliseUrl } from "@/utils/misc";
+import { addTrailingSlash } from "@/utils/misc";
 
 export type Props = {
   title?: string;
@@ -23,7 +23,10 @@ const props = Astro.props;
       {props.title ? `${props.title} — ${site.title}` : site.title}
     </title>
     <meta name="description" content={props.description || site.description} />
-    <link rel="canonical" href={canonicaliseUrl(Astro.url.href)} />
+    <link
+      rel="canonical"
+      href={site.url + addTrailingSlash(Astro.url.pathname)}
+    />
 
     <!-- Katex -->
     <link
