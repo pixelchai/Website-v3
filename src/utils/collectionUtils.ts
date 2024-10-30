@@ -115,5 +115,5 @@ export function getEntryLinks(entry: any): CompleteLink[] {
     }
   }
 
-  return entry.data.links;
+  return ret;
 }

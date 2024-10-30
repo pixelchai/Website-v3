@@ -16,6 +16,23 @@ Anyway (old -> new):
 - `image`: `thumb`
 - `feature`: I think I will do the home page bespoke, so this is not needed
 - `description`: `subtitle`
-- `links`: new link format
+- `links`: see below
+
+**Links**:
+Links should either be in the format:
+```yaml
+links:
+    -   title: titleHere
+        url: urlHere
+        icon: iconId
+```
+
+or, in shorthand:
+```yaml
+links:
+    - iconIdHere: urlHere
+```
+
+It will look for the default text to go with the icon.
 
 images should be stored in `res/content/<slug>/` rather than `passets/<#>/` (I can't believe I numbered stuff like that rather than using the slug, not very good for maintainability).
