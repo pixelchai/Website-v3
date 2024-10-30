@@ -2,6 +2,9 @@
 title: MonoGame Pong With AI
 subtitle: Pong using MonoGame, with visual AI.
 date: 2018-12-31
+
+links:
+  - github: https://github.com/pixelchai/Pong
 ---
 
 ## Structure
