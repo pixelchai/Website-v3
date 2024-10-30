@@ -68,14 +68,13 @@ const links = getEntryLinks(entry);
   </div>
 
   <!-- linksbox -->
-  <div class="text-lg">
+  <div class="text-lg p-2 px-3 border border-dotted">
     <ul class="">
       {
         links.map((link) => (
           <li class="">
             <a class="flex flex-row items-center w-fit" href={link.url}>
               <Icon id={link.icon ?? "link"} class="mr-1" />
-
               <span>{link.title}</span>
             </a>
           </li>
