@@ -2,6 +2,9 @@
 title: Tetris
 subtitle: A simple tetris game implementation in Python.
 date: 2018-12-31 9:30:00
+
+links:
+  - github: https://github.com/pixelchai/Tetris
 ---
 
 The implementation is split into two different parts: the internal game model - [tetris.py](https://github.com/pixelchai/Tetris/blob/master/tetris.py), which is independent of all graphics and is the core of the game, and the graphics engine - [gfx_engine.py](https://github.com/pixelchai/Tetris/blob/master/gfx_engine.py) which provides a user interface to the internal game model, as well as handling drawing and graphics-related stuff through the use of PyGame.

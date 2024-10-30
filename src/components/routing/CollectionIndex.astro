@@ -5,6 +5,7 @@ import { dateSorter } from "@/utils/collectionUtils";
 import type { ContentEntryMap } from "astro:content";
 import { site, theme } from "@/data/consts";
 import EntryCard from "../EntryCard.astro";
+import Icon from "../Icon.astro";
 
 // type for astro props
 type Props = {
@@ -25,6 +26,15 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
   max-w-[475px] m-auto
   sm:grid-cols-2 sm:max-w-none"
   >
-    {entries.map((entry) => <EntryCard entry={entry as any} />)}
+    {
+      entries
+        .filter((entry) => {
+          if (entry.data.draft) {
+            return false;
+          }
+          return true;
+        })
+        .map((entry) => <EntryCard entry={entry as any} />)
+    }
   </div>
 </Layout>

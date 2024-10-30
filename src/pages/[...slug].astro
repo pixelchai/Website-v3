@@ -4,7 +4,9 @@ import Layout from "@/layouts/Layout.astro";
 import type { ContentEntryMap } from "astro:content";
 import { site } from "@/data/consts";
 import { formatDate } from "@/utils/markupUtils";
-import { getContentComponents } from "@/utils/collectionUtils";
+import { getContentComponents, getEntryLinks } from "@/utils/collectionUtils";
+import Icon from "@/components/Icon.astro";
+import { Debug } from "astro:components";
 
 // SSG
 export async function getStaticPaths() {
@@ -16,6 +18,14 @@ export async function getStaticPaths() {
   for (const collectionName of collections) {
     for (const entry of await getCollection(collectionName)) {
       console.debug(`[SSG][${collectionName}] Processing entry: ${entry.slug}`);
+
+      if (entry.data.draft) {
+        console.debug(
+          `[SSG][${collectionName}] Skipped draft entry: ${entry.slug}`
+        );
+        continue;
+      }
+
       paths.push({
         params: { slug: `${collectionName}/${entry.slug}` },
         props: { entry, collectionName },
@@ -35,9 +45,13 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+// links
+const links = getEntryLinks(entry);
 ---
 
 <Layout>
+  <!-- title and meta -->
   <div class="my-4">
     <h1 class="grow text-3xl border-0 mb-1 pb-0 font-bold">
       {entry.data.title}
@@ -52,6 +66,25 @@ const { Content } = await entry.render();
       >
     </div>
   </div>
+
+  <!-- linksbox -->
+  {
+    links.length > 0 && (
+      <div class="text-lg p-2 px-3 border border-dotted border-x-0">
+        <ul class="flex flex-col gap-0.5">
+          {links.map((link) => (
+            <li class="">
+              <a class="flex flex-row items-center w-fit" href={link.url}>
+                <Icon id={link.icon ?? "link"} class="mr-1 w-5 h-5" />
+                <span>{link.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
   <div class="contentf">
     <Content components={getContentComponents()} />
   </div>

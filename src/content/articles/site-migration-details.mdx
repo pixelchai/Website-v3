@@ -1,0 +1,38 @@
+---
+title: Website v2 to v3 Migration Details
+subtitle: Some technical details, and notes for myself.
+date: 2024-10-29
+
+draft: true
+---
+
+I was meaning to write up some quick notes for myself on the subtle changes I have made in the way I am formatting my site when migrating from v2 (the Jekyll version) to v3 (with AstroJS). Most relevant is the differences in the frontmatter -- variable names, conventions, etc.
+
+A funny thing I realised is that I could include these notes in this website itself, and this can serve as a test document during development. This is an easteregg of sorts since I don't think I will un-draft (and thus publish) this article, but it will be accessible in the source code.
+
+Anyway (old -> new):
+
+- `redirect_from`: Use redirects in astro.config.mjs
+- `image`: `thumb`
+- `feature`: I think I will do the home page bespoke, so this is not needed
+- `description`: `subtitle`
+- `links`: see below
+
+**Links**:
+Links should either be in the format:
+```yaml
+links:
+    -   title: titleHere
+        url: urlHere
+        icon: iconId
+```
+
+or, in shorthand:
+```yaml
+links:
+    - iconIdHere: urlHere
+```
+
+It will look for the default text to go with the icon.
+
+images should be stored in `res/content/<slug>/` rather than `passets/<#>/` (I can't believe I numbered stuff like that rather than using the slug, not very good for maintainability).
