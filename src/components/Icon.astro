@@ -1,6 +1,7 @@
 ---
 import { combineClasses } from "@/utils/markupUtils";
 import type { JSX } from "astro/jsx-runtime";
+import type { string } from "astro:schema";
 
 export type IconId = keyof typeof iconData;
 
@@ -47,6 +48,19 @@ export const iconNameData: Record<IconId, string> = {
   video: "Video",
   link: "Link",
   youtube: "YouTube",
+};
+
+export type ShortHandEntry = {
+  title: string;
+  icon: IconId;
+};
+
+export const shortHandMap: Record<string, ShortHandEntry> = {
+  gh: { title: "GitHub", icon: "github" },
+  github: { title: "GitHub", icon: "github" },
+
+  yt: { title: "YouTube", icon: "youtube" },
+  youtube: { title: "YouTube", icon: "youtube" },
 };
 
 const icon = iconData[id];

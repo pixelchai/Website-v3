@@ -62,6 +62,8 @@ export type CompleteLink = {
   icon?: IconId;
 };
 
+export const linkShorthandMap: Record<string, Omit<CompleteLink, "url">> = {};
+
 export function getEntryLinks(entry: any): CompleteLink[] {
   let ret: CompleteLink[] = [];
   if (!entry.data.links) {
