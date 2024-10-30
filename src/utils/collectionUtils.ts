@@ -9,7 +9,7 @@ import YouTube from "@/components/YouTube.astro";
 import Img from "@/components/markdown/Img.astro";
 import Image from "@/components/img/Image.astro";
 import { Code, Debug } from "astro:components";
-import { iconData, type IconId } from "@/components/Icon.astro";
+import { iconData, iconNameData, type IconId } from "@/components/Icon.astro";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
@@ -62,10 +62,6 @@ export type CompleteLink = {
   icon?: IconId;
 };
 
-const linkShorthands: Record<string, Omit<CompleteLink, "url">> = {
-  github:
-};
-
 export function getEntryLinks(entry: any): CompleteLink[] {
   let ret: CompleteLink[] = [];
   if (!entry.data.links) {
@@ -89,6 +85,33 @@ export function getEntryLinks(entry: any): CompleteLink[] {
       }
 
       ret.push(link);
+    } else {
+      const linkEntries = Object.entries(link);
+      if (linkEntries.length !== 1) {
+        console.error(
+          `Link object: ${JSON.stringify(link)} has invalid format`,
+        );
+        continue;
+      }
+
+      const [icon, url] = linkEntries[0] as [IconId, string];
+      if (!(icon in iconNameData)) {
+        console.error(`Could not find icon name for icon ID: ${icon}`);
+        continue;
+      }
+
+      const title = iconNameData[icon];
+
+      if (!url) {
+        console.error(`Link title: ${title} has no URL`);
+        continue;
+      }
+
+      ret.push({
+        title,
+        url,
+        icon,
+      });
     }
   }
 
