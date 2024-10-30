@@ -31,3 +31,10 @@ export function getProjectRootPath(): string {
   }
   return cur;
 }
+
+export function canonicaliseUrl(url: string): string {
+  if (!url.endsWith("/")) {
+    url += "/";
+  }
+  return url;
+}
