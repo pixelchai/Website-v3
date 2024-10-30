@@ -9,7 +9,12 @@ import YouTube from "@/components/YouTube.astro";
 import Img from "@/components/markdown/Img.astro";
 import Image from "@/components/img/Image.astro";
 import { Code, Debug } from "astro:components";
-import { iconData, iconNameData, type IconId } from "@/components/Icon.astro";
+import {
+  iconData,
+  shortHandMap,
+  type IconId,
+  type ShortHandEntry,
+} from "@/components/Icon.astro";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
@@ -62,8 +67,6 @@ export type CompleteLink = {
   icon?: IconId;
 };
 
-export const linkShorthandMap: Record<string, Omit<CompleteLink, "url">> = {};
-
 export function getEntryLinks(entry: any): CompleteLink[] {
   let ret: CompleteLink[] = [];
   if (!entry.data.links) {
@@ -96,13 +99,13 @@ export function getEntryLinks(entry: any): CompleteLink[] {
         continue;
       }
 
-      const [icon, url] = linkEntries[0] as [IconId, string];
-      if (!(icon in iconNameData)) {
-        console.error(`Could not find icon name for icon ID: ${icon}`);
+      const [shorthand, url] = linkEntries[0] as [IconId, string];
+      if (!(shorthand in shortHandMap)) {
+        console.error(`Could not find icon name for icon ID: ${shorthand}`);
         continue;
       }
 
-      const title = iconNameData[icon];
+      const { title, icon } = shortHandMap[shorthand];
 
       if (!url) {
         console.error(`Link title: ${title} has no URL`);
