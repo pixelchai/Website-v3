@@ -6,6 +6,7 @@ import ConstrainedImage from "@/components/img/ConstrainedImage.astro";
 import Image from "@/components/img/Image.astro";
 import { theme } from "@/data/consts";
 import { formatDate, getYear } from "@/utils/markupUtils";
+import { getEntryDefaultLinkUrl } from "@/utils/collectionUtils";
 
 type Props = {
   entry: CollectionEntry<"projects">;
@@ -13,7 +14,7 @@ type Props = {
 
 const { entry } = Astro.props;
 
-const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
+const [linkUrl, newTab] = getEntryDefaultLinkUrl(entry);
 ---
 
 <div
@@ -21,7 +22,11 @@ const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
 >
   {
     entry.data.thumb && (
-      <a href={linkUrl} class="">
+      <a
+        href={linkUrl}
+        target={newTab ? "_blank" : ""}
+        rel={newTab ? "noopener noreferrer" : ""}
+      >
         <ConstrainedImage
           src={entry.data.thumb}
           maxWidth={theme.spacing["page-max-w"] * 0.65}
