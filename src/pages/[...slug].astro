@@ -7,8 +7,8 @@ import { formatDate } from "@/utils/markupUtils";
 import {
   getContentComponents,
   getEntryLinks,
+  getWipMessage,
   shouldOmitBuild,
-  shouldOmitContent,
 } from "@/utils/collectionUtils";
 import Icon from "@/components/Icon.astro";
 import { Debug } from "astro:components";
@@ -51,7 +51,7 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const omitContent = shouldOmitContent(entry);
+const wipMessage = getWipMessage(entry);
 
 // links
 const links = getEntryLinks(entry);
@@ -97,6 +97,6 @@ const links = getEntryLinks(entry);
   }
 
   <div class="contentf">
-    {!omitContent && <Content components={getContentComponents()} />}
+    {wipMessage ?? <Content components={getContentComponents()} />}
   </div>
 </Layout>

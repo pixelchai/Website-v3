@@ -65,6 +65,9 @@ const site = {
       github: "pixelchai",
     },
   },
+
+  defaultWipMessage:
+    "This page is a work in progress. More information coming soon, please check back later!",
 };
 
 const theme = {

@@ -166,10 +166,16 @@ export function shouldOmitIndex(entry: any): boolean {
   return entry.data.omit || entry.data.omitIndex;
 }
 
-export function shouldOmitContent(entry: any): boolean {
-  return entry.data.omit || entry.data.omitContent;
-}
-
 export function shouldOmitBuild(entry: any): boolean {
   return entry.data.omit || entry.data.omitBuild;
+}
+
+export function getWipMessage(entry: any): string | undefined {
+  if (!entry.data.wipMessage) {
+    return undefined;
+  }
+  if (entry.data.wipMessage == "default") {
+    return site.defaultWipMessage;
+  }
+  return entry.data.wipMessage;
 }
