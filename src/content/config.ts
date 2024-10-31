@@ -6,7 +6,12 @@ const commonSchema = {
   date: z.date(),
 
   thumb: z.string().optional(),
-  draft: z.boolean().optional(),
+
+  omitIndex: z.boolean().optional(), // do not show in collection listings
+  omitContent: z.boolean().optional(), // do not show content
+  omitBuild: z.boolean().optional(), // do not build route
+  omit: z.boolean().optional(), // omits everything
+
   links: z
     .array(
       z.union([

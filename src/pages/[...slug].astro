@@ -4,7 +4,12 @@ import Layout from "@/layouts/Layout.astro";
 import type { ContentEntryMap } from "astro:content";
 import { site } from "@/data/consts";
 import { formatDate } from "@/utils/markupUtils";
-import { getContentComponents, getEntryLinks } from "@/utils/collectionUtils";
+import {
+  getContentComponents,
+  getEntryLinks,
+  shouldOmitBuild,
+  shouldOmitContent,
+} from "@/utils/collectionUtils";
 import Icon from "@/components/Icon.astro";
 import { Debug } from "astro:components";
 import A from "@/components/primitives/A.astro";
@@ -20,9 +25,9 @@ export async function getStaticPaths() {
     for (const entry of await getCollection(collectionName)) {
       console.debug(`[SSG][${collectionName}] Processing entry: ${entry.slug}`);
 
-      if (entry.data.draft) {
+      if (shouldOmitBuild(entry)) {
         console.debug(
-          `[SSG][${collectionName}] Skipped draft entry: ${entry.slug}`
+          `[SSG][${collectionName}] Skipped omitBuild entry: ${entry.slug}`
         );
         continue;
       }
@@ -46,6 +51,7 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+const omitContent = shouldOmitContent(entry);
 
 // links
 const links = getEntryLinks(entry);
@@ -91,6 +97,6 @@ const links = getEntryLinks(entry);
   }
 
   <div class="contentf">
-    <Content components={getContentComponents()} />
+    {!omitContent && <Content components={getContentComponents()} />}
   </div>
 </Layout>

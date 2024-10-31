@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
-import { dateSorter } from "@/utils/collectionUtils";
+import { dateSorter, shouldOmitIndex } from "@/utils/collectionUtils";
 import type { ContentEntryMap } from "astro:content";
 import { site, theme } from "@/data/consts";
 import EntryCard from "../EntryCard.astro";
@@ -29,7 +29,7 @@ const entries = (await getCollection(collectionName)).sort(dateSorter);
     {
       entries
         .filter((entry) => {
-          if (entry.data.draft) {
+          if (shouldOmitIndex(entry)) {
             return false;
           }
           return true;

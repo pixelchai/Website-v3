@@ -161,3 +161,15 @@ export function getEntryDefaultLinkUrl(entry: any): [string, boolean] {
   );
   return [pageUrl, false];
 }
+
+export function shouldOmitIndex(entry: any): boolean {
+  return entry.data.omit || entry.data.omitIndex;
+}
+
+export function shouldOmitContent(entry: any): boolean {
+  return entry.data.omit || entry.data.omitContent;
+}
+
+export function shouldOmitBuild(entry: any): boolean {
+  return entry.data.omit || entry.data.omitBuild;
+}
