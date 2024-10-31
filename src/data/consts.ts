@@ -66,8 +66,12 @@ const site = {
     },
   },
 
-  defaultWipMessage:
-    "This page is a work in progress. More information coming soon, please check back later!",
+  defaultWipMessages: {
+    default:
+      "This page is a work in progress. More information coming soon, please check back later!",
+    migration:
+      "This page is currently in progress of being migrated from an earlier version of this website. The original is accessible at the archive linked above. Otherwise, please check back later!",
+  },
 };
 
 const theme = {
