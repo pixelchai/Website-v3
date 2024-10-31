@@ -51,7 +51,7 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const wipMessage = getWipMessage(entry);
+const wipMessage = entry.data.wipMessage;
 
 // links
 const links = getEntryLinks(entry);
@@ -97,6 +97,27 @@ const links = getEntryLinks(entry);
   }
 
   <div class="contentf">
-    {wipMessage ?? <Content components={getContentComponents()} />}
+    {
+      wipMessage ? (
+        <p>
+          {(() => {
+            if (wipMessage == "default") {
+              return "This page is a work in progress. More information coming soon, please check back later!";
+            }
+
+            if (wipMessage == "migration") {
+              // TODO
+              // let ret = "test";
+              // return <a href="//example.com">hey thisis a link</a>;
+              return "This page is currently in the process of being migrated from an earlier version of this website. The original is accessible at the archive linked above. Otherwise, please check back later!";
+            }
+
+            return wipMessage;
+          })()}
+        </p>
+      ) : (
+        <Content components={getContentComponents()} />
+      )
+    }
   </div>
 </Layout>

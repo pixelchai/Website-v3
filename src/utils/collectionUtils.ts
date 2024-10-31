@@ -169,15 +169,3 @@ export function shouldOmitIndex(entry: any): boolean {
 export function shouldOmitBuild(entry: any): boolean {
   return entry.data.omit || entry.data.omitBuild;
 }
-
-export function getWipMessage(entry: any): string | undefined {
-  if (!entry.data.wipMessage) {
-    return undefined;
-  }
-  if (entry.data.wipMessage in site.defaultWipMessages) {
-    const defaultWipMessages: { [key: string]: string } =
-      site.defaultWipMessages;
-    return defaultWipMessages[entry.data.wipMessage];
-  }
-  return entry.data.wipMessage;
-}
