@@ -25,6 +25,7 @@ links:
     -   title: titleHere
         url: urlHere
         icon: iconId
+        id: idhere
 ```
 
 or, in shorthand:
@@ -34,5 +35,8 @@ links:
 ```
 
 It will look for the default text to go with the icon.
+
+The `id` is for uniquely identifying a particular link, so that link can be set to the default link.
+It will fallback to the icon if no id is provided (if the icon is provided).
 
 images should be stored in `res/content/<slug>/` rather than `passets/<#>/` (I can't believe I numbered stuff like that rather than using the slug, not very good for maintainability).

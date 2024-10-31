@@ -6,6 +6,8 @@ import ConstrainedImage from "@/components/img/ConstrainedImage.astro";
 import Image from "@/components/img/Image.astro";
 import { theme } from "@/data/consts";
 import { formatDate, getYear } from "@/utils/markupUtils";
+import { getEntryDefaultLinkUrl } from "@/utils/collectionUtils";
+import A from "@/components/primitives/A.astro";
 
 type Props = {
   entry: CollectionEntry<"projects">;
@@ -13,7 +15,7 @@ type Props = {
 
 const { entry } = Astro.props;
 
-const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
+const [linkUrl, newTab] = getEntryDefaultLinkUrl(entry);
 ---
 
 <div
@@ -21,16 +23,16 @@ const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
 >
   {
     entry.data.thumb && (
-      <a href={linkUrl} class="">
+      <A href={linkUrl} newTab={newTab}>
         <ConstrainedImage
           src={entry.data.thumb}
           maxWidth={theme.spacing["page-max-w"] * 0.65}
           class="w-full h-60 overflow-hidden"
         />
-      </a>
+      </A>
     )
   }
-  <a href={linkUrl} class="hover:default-a-no-hover">
+  <A href={linkUrl} newTab={newTab} class="hover:default-a-no-hover">
     <div class="p-4">
       <div class="flex flex-row items-center justify-between gap-4">
         <h2 class="inline-block">{entry.data.title}</h2>
@@ -38,5 +40,5 @@ const linkUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
       </div>
       <div>{entry.data.subtitle}</div>
     </div>
-  </a>
+  </A>
 </div>

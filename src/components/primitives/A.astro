@@ -1,0 +1,23 @@
+---
+import type { JSX } from "astro/jsx-runtime";
+
+// 'a' tag, but allows for easily customising whether to open in new tab
+// refactored for reduced code duplication (particularly of security-related attributes noopener and noreferrer)
+
+type Props = {
+  href: string;
+  newTab?: boolean;
+} & JSX.IntrinsicElements["a"];
+export type { Props };
+
+const { href, newTab, ...rest } = Astro.props;
+---
+
+<a
+  href={href}
+  target={newTab ? "_blank" : ""}
+  rel={newTab ? "noopener noreferrer" : ""}
+  {...rest}
+>
+  <slot />
+</a>

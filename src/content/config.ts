@@ -14,11 +14,13 @@ const commonSchema = {
           title: z.string(),
           url: z.string(),
           icon: z.string().optional(),
+          id: z.string().optional(),
         }),
         z.record(z.string(), z.string()),
       ]),
     )
     .optional(),
+  defaultLink: z.string().optional(),
 };
 
 export const collections = {

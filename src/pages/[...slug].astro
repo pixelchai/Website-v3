@@ -7,6 +7,7 @@ import { formatDate } from "@/utils/markupUtils";
 import { getContentComponents, getEntryLinks } from "@/utils/collectionUtils";
 import Icon from "@/components/Icon.astro";
 import { Debug } from "astro:components";
+import A from "@/components/primitives/A.astro";
 
 // SSG
 export async function getStaticPaths() {
@@ -74,15 +75,14 @@ const links = getEntryLinks(entry);
         <ul class="flex flex-col gap-0.5">
           {links.map((link) => (
             <li class="">
-              <a
+              <A
                 class="flex flex-row items-center w-fit"
                 href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                newTab={true}
               >
                 <Icon id={link.icon ?? "link"} class="mr-1 w-5 h-5" />
                 <span>{link.title}</span>
-              </a>
+              </A>
             </li>
           ))}
         </ul>

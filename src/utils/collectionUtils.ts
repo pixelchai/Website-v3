@@ -15,6 +15,7 @@ import {
   type IconId,
   type ShortHandEntry,
 } from "@/components/Icon.astro";
+import { site } from "@/data/consts";
 
 type CollectionEntryWithDate<C extends keyof AnyEntryMap> =
   CollectionEntry<C> & {
@@ -62,6 +63,9 @@ export type CompleteLink = {
   // properly as needed.
   url: string;
 
+  // id for the link -- used for uniquely referring to the link
+  id?: string;
+
   // up to implementing components to decide how to handle no icon
   // (because behaviour may possibly be different depending on the context)
   icon?: IconId;
@@ -75,7 +79,11 @@ export function getEntryLinks(entry: any): CompleteLink[] {
 
   const links = entry.data.links;
   for (let link of links) {
+    let newLink: CompleteLink;
+
     if (link.title) {
+      // classic style
+
       // further validation
       if (!link.url) {
         console.error(`Link title: ${link.title} has no URL`);
@@ -89,8 +97,9 @@ export function getEntryLinks(entry: any): CompleteLink[] {
         continue;
       }
 
-      ret.push(link);
+      newLink = link;
     } else {
+      // shorthand style
       const linkEntries = Object.entries(link);
       if (linkEntries.length !== 1) {
         console.error(
@@ -112,13 +121,43 @@ export function getEntryLinks(entry: any): CompleteLink[] {
         continue;
       }
 
-      ret.push({
+      newLink = {
         title,
         url,
         icon,
-      });
+      };
     }
+
+    // id falls back to icon if available and id is not provided
+    // otherwise, the link is not referenceable
+    if (newLink.icon && !newLink.id) {
+      newLink.id = newLink.icon;
+    }
+    ret.push(newLink);
   }
 
   return ret;
+}
+
+export function getEntryDefaultLinkUrl(entry: any): [string, boolean] {
+  /**
+   * Returns: [url, shouldOpenInNewTab]
+   */
+  const pageUrl = `${site.base}/${entry.collection}/${entry.slug}/`;
+  if (!entry.data.defaultLink) {
+    return [pageUrl, false];
+  }
+
+  // get link id -> url
+  const links = getEntryLinks(entry);
+  for (let link of links) {
+    if (link.id === entry.data.defaultLink) {
+      return [link.url, true];
+    }
+  }
+
+  console.error(
+    `Could not find default link with ID: ${entry.data.defaultLink} for ${pageUrl}`,
+  );
+  return [pageUrl, false];
 }
