@@ -74,7 +74,12 @@ const links = getEntryLinks(entry);
         <ul class="flex flex-col gap-0.5">
           {links.map((link) => (
             <li class="">
-              <a class="flex flex-row items-center w-fit" href={link.url}>
+              <a
+                class="flex flex-row items-center w-fit"
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Icon id={link.icon ?? "link"} class="mr-1 w-5 h-5" />
                 <span>{link.title}</span>
               </a>
