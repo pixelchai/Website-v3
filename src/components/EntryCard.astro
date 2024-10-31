@@ -23,7 +23,7 @@ const [linkUrl, newTab] = getEntryDefaultLinkUrl(entry);
 >
   {
     entry.data.thumb && (
-      <A href={linkUrl} newTab>
+      <A href={linkUrl} newTab={newTab}>
         <ConstrainedImage
           src={entry.data.thumb}
           maxWidth={theme.spacing["page-max-w"] * 0.65}
@@ -32,7 +32,7 @@ const [linkUrl, newTab] = getEntryDefaultLinkUrl(entry);
       </A>
     )
   }
-  <A href={linkUrl} newTab class="hover:default-a-no-hover">
+  <A href={linkUrl} newTab={newTab} class="hover:default-a-no-hover">
     <div class="p-4">
       <div class="flex flex-row items-center justify-between gap-4">
         <h2 class="inline-block">{entry.data.title}</h2>
