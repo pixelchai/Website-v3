@@ -5,6 +5,7 @@ import type { ImageMetadata, LocalImageService } from "astro";
 import type { JSX } from "astro/jsx-runtime";
 import { getConfiguredImageService, getImage } from "astro:assets";
 import fs from "node:fs";
+import path from "node:path";
 
 /*
 Custom Image component.
@@ -48,7 +49,8 @@ const inlineFormat: string = "webp";
 
 // props
 type Props = {
-  src: string;
+  // sometimes (e.g. when using relative paths in .mdx files), src is an ImageData object
+  src: string | ImageMetadata;
   alt?: string;
 
   width?: number;
@@ -68,26 +70,50 @@ export type { Props };
 
 const props = Astro.props;
 
-// import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
-const importedImage = (() => {
-  const imageLoaders = import.meta.glob<{ default: ImageMetadata }>(
-    "/res/**/*"
-  );
+// parse src if it is an ImageMetadata object, otherwise use as-is
+// TODO: refactor/code cleanup
+let src: string;
+// if src is a string, use it directly
+if (typeof props.src === "string") {
+  src = props.src;
+} else {
+  // if src is an ImageMetadata object, extract the 'normal' src from it
+  const originalSrc = props.src.src;
 
-  if (!imageLoaders[props.src]) {
-    throw new Error(`${props.src} not found in /res folder!`);
+  // TODO: may not work on Windows !!
+  const srcPrefix = path.join("/@fs", getProjectRootPath());
+
+  if (!originalSrc.startsWith(srcPrefix)) {
+    throw new Error(`Invalid src: ${originalSrc}`);
   }
 
-  return imageLoaders[props.src]();
+  src = originalSrc.slice(srcPrefix.length);
+
+  // drop ?query strings
+  src = src.split("?")[0];
+}
+
+// import image. Adapted from: https://docs.astro.build/en/recipes/dynamically-importing-images/
+const importedImage = (() => {
+  const imageLoaders = {
+    ...import.meta.glob<{ default: ImageMetadata }>("/res/**/*"),
+    ...import.meta.glob<{ default: ImageMetadata }>("/src/content/**/*"),
+  };
+
+  if (!imageLoaders[src]) {
+    throw new Error(`${src} not found in /res folder!`);
+  }
+
+  return imageLoaders[src]();
 })();
 
 // fallback format behaviour -- usually png unless original was jpg, gif or svg
 const fallbackFormat = (() => {
-  if (props.src.endsWith(".jpg") || props.src.endsWith(".jpeg")) {
+  if (src.endsWith(".jpg") || src.endsWith(".jpeg")) {
     return "jpg";
-  } else if (props.src.endsWith(".gif")) {
+  } else if (src.endsWith(".gif")) {
     return "gif";
-  } else if (props.src.endsWith(".svg")) {
+  } else if (src.endsWith(".svg")) {
     return "svg";
   } else {
     return "png";
@@ -163,13 +189,13 @@ const altText = await (async () => {
   );
 
   // otherwise, look for an alt text file on disk
-  const targetPath = props.src.replace(/\.[^/.]+$/, ".alt.txt");
+  const targetPath = src.replace(/\.[^/.]+$/, ".alt.txt");
   if (altTextLoaders[targetPath]) {
     return (await altTextLoaders[targetPath]()).default;
   }
 
   // otherwise, empty string
-  console.log(`[Image] Warning: No alt text found for ${props.src}`);
+  console.log(`[Image] Warning: No alt text found for ${src}`);
   return "";
 })();
 
@@ -181,7 +207,7 @@ const getImageTransformationBase64 = async (
   format: string,
   quality: number = 60
 ) => {
-  const originalImagePath = getProjectRootPath() + props.src;
+  const originalImagePath = getProjectRootPath() + src;
   const originalImage = await fs.promises.readFile(originalImagePath);
 
   const imageService = (await getConfiguredImageService()) as LocalImageService;
